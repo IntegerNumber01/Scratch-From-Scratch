@@ -19,4 +19,8 @@ public class Sprite {
         // implement moving in direction facing
     }
 
+    public void goTo(int myX, int myY) {
+        x = myX;
+        y = myY;
+    }
 }
