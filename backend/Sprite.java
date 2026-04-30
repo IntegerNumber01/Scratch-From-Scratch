@@ -23,4 +23,20 @@ public class Sprite {
         x = myX;
         y = myY;
     }
+
+    public void turnLeft(int deg) {
+        dir -= deg;
+    }
+    
+    public void turnRight(int deg) {
+        dir += deg;
+    }
+
+    public void pointInDirection(int deg) {
+        dir = deg;
+    }
+
+    public void changeX(int myX) {
+        
+    }
 }
