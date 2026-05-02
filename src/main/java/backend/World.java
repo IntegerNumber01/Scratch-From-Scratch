@@ -8,6 +8,7 @@ public class World {
         
     }
 
+    //gives the list of sprites to gui 
     public ArrayList<Sprite> getSprites()
     {
         return sprites ; 

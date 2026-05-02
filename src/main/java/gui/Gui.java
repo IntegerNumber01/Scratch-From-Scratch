@@ -23,6 +23,7 @@ public class Gui
         sprites = world.getSprites(); 
     }
 
+    //use the other helper methods to make the whole gui work
     public void refresh_and_draw(Stage stage)
     {   
         //makes the whole window that will be created accessible
@@ -34,7 +35,7 @@ public class Gui
         AnimationTimer timer = new AnimationTimer() 
         {
             @Override
-            public void handle(long now) 
+            public void handle(long time) 
             {
                 draw(pane);
             }
@@ -42,17 +43,20 @@ public class Gui
         timer.start();
     }
 
+    //draws all sprites
     public void draw()
     {
+        //calls the draw one sprite method for every sprite in the world obj
         for(Sprite sprite: sprites)
         {
             drawSprite(pane, sprite) ; 
         }
     }
 
+    // draws one sprite
     public void drawSprite(Pane pane, Sprite sprite)
     {
-        
+
     }
     
 }
