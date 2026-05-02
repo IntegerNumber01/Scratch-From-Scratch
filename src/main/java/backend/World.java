@@ -7,4 +7,9 @@ public class World {
     public World() {
         
     }
+
+    public ArrayList<Sprite> getSprites()
+    {
+        return sprites ; 
+    }
 }
