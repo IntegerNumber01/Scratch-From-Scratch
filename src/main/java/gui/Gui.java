@@ -42,7 +42,7 @@ public class Gui
             @Override
             public void handle(long time) 
             {
-                if(world_of_sprites.end())
+                if(world_of_sprites.end)
                 {
                     timer.stop() ; 
                     return ; 
