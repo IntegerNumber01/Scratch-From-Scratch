@@ -1,3 +1,6 @@
+import backend.Parser;
+import backend.World;
+import gui.Gui;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -16,5 +19,10 @@ public class main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+
+        World world = new World();
+        Gui gui = new Gui(world);
+        Parser parser = new Parser(world);
+
     }
 }
