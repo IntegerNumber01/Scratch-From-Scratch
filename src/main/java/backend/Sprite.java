@@ -15,6 +15,31 @@ public class Sprite {
         dir = 0;
     }
 
+    public String getName()
+    {
+        return name ; 
+    }
+
+    public int getX()
+    {
+        return x ; 
+    }
+
+    public int getY()
+    {
+        return y ; 
+    }
+
+    public int getSize()
+    {
+        return size ; 
+    }
+
+    public int getDir()
+    {
+        return dir ; 
+    }
+
     public void move(int steps) {
         // implement moving in direction facing
     }
@@ -39,4 +64,5 @@ public class Sprite {
     public void changeX(int myX) {
         
     }
+
 }
