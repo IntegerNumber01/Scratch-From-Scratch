@@ -1,4 +1,4 @@
-package src.main.java.gui;
+package gui;
 
 import java.util.ArrayList;
 
