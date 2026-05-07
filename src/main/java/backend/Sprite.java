@@ -6,7 +6,7 @@ public class Sprite {
     private int y;
     private int size;
     private int dir;
-    
+
     public Sprite(String name, int x, int y, int size) {
         this.name = name;
         this.x = x;
@@ -17,27 +17,27 @@ public class Sprite {
 
     public String getName()
     {
-        return name ; 
+        return name ;
     }
 
     public int getX()
     {
-        return x ; 
+        return x ;
     }
 
     public int getY()
     {
-        return y ; 
+        return y ;
     }
 
     public int getSize()
     {
-        return size ; 
+        return size ;
     }
 
     public int getDir()
     {
-        return dir ; 
+        return dir ;
     }
 
     public void move(int steps) {
@@ -52,7 +52,7 @@ public class Sprite {
     public void turnLeft(int deg) {
         dir -= deg;
     }
-    
+
     public void turnRight(int deg) {
         dir += deg;
     }
@@ -62,7 +62,7 @@ public class Sprite {
     }
 
     public void changeX(int myX) {
-        
+        x += myX;
     }
 
 }

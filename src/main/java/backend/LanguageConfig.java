@@ -1,0 +1,40 @@
+package backend;
+
+import java.util.Set;
+
+public final class LanguageConfig {
+    private LanguageConfig() {
+    }
+
+    public static final Set<String> ACTION_COMMANDS = Set.of(
+        "move",
+        "goTo",
+        "turnRight",
+        "turnLeft",
+        "pointInDirection",
+        "changeX"
+    );
+
+    public static final Set<String> BLOCK_COMMANDS = Set.of(
+        "if",
+        "repeat",
+        "forever"
+    );
+
+    public static final Set<String> EVENTS = Set.of(
+        "when_flag_clicked",
+        "when_clicked"
+    );
+
+    public static boolean isActionCommand(String name) {
+        return ACTION_COMMANDS.contains(name);
+    }
+
+    public static boolean isBlockCommand(String name) {
+        return BLOCK_COMMANDS.contains(name);
+    }
+
+    public static boolean isEvent(String name) {
+        return EVENTS.contains(name);
+    }
+}

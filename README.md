@@ -53,5 +53,8 @@ Add this to `.vscode/settings.json`:
 mvn javafx:run
 ```
 
+## Language settings
+1. The `LanguageConfig.java` file has all the commands that should be working
+
 ## Reference
 - scratch.mit.edu

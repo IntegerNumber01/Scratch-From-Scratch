@@ -1,0 +1,3 @@
+when_flag_clicked:
+    set_x(0)
+    goto(100, 10)
