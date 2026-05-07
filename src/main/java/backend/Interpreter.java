@@ -2,7 +2,9 @@ package backend;
 
 public class Interpreter
 {
-    public Interpreter() {
+    private Program program;
 
+    public Interpreter(Program program) {
+        this.program = program;
     }
 }

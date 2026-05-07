@@ -46,4 +46,14 @@ public class Command
 
         return false;
     }
+
+    public String toString() {
+        String ans = "COMMAND[" + name + ", " + args.toString() +"]\n";
+        
+        for (Command child : children) {
+            ans += "    " + child.toString();
+        }
+
+        return ans;
+    }
 }
