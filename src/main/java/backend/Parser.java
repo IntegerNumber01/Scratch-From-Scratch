@@ -59,10 +59,13 @@ public class Parser {
         int indentLevel = 0;
         int expectedIndentLevel = 0; // this is updated when we expect a new indent after a repeat/if statemetn
         int prevIndentLevel = -1;
+        // stores the latest command block at each indent level
+        ArrayList<Command> blockStack = new ArrayList<Command>();
+        
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            System.out.println(line); // prove file loading works
+            // System.out.println(line); // prove file loading works
 
             prevIndentLevel = indentLevel;
             indentLevel = checkIndentLevel(line);
@@ -79,6 +82,7 @@ public class Parser {
             } else if (indentLevel == expectedIndentLevel) { // commands or conditions/statements
                 currentCommand = parseCommand(line);
                 currentScript.addCommand(currentCommand);
+                blockStack.get(indentLevel).addChild(currentCommand); // add this command to the latest block command
 
                 if (currentCommand.isBlock()) { // if a block command
                     expectedIndentLevel += 1;
@@ -86,6 +90,7 @@ public class Parser {
             } else if (indentLevel == prevIndentLevel - 1) { // exited block
                 currentScript.addCommand(currentCommand);
                 expectedIndentLevel -= 1;
+                blockStack.set(prevIndentLevel, null);
             }
         }
 
