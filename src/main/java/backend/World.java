@@ -3,9 +3,11 @@ import java.util.*;
 
 public class World {
     private ArrayList<Sprite> sprites;
+    private boolean end ; 
 
     public World() {
         sprites = new ArrayList<Sprite>();
+        end = false ; 
     }
 
     //gives the list of sprites to gui 
@@ -13,4 +15,15 @@ public class World {
     {
         return sprites ; 
     }
+
+    public boolean getEnd() {
+        return end ; 
+    }
+
+    public void setEnd()
+    {
+        end = true ;  
+    }
+
+    
 }

@@ -1,10 +1,12 @@
 package gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import backend.Sprite;
 import backend.World;
 
+import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Scene;
@@ -21,6 +23,8 @@ public class Gui
 {
     private ArrayList<Sprite> sprites ;
     private World world_of_sprites ;
+    private AnimationTimer timer ; 
+    private HashMap<String, Image> all_images ; 
 
     public Gui(World world)
     {
@@ -37,12 +41,12 @@ public class Gui
         stage.setScene(scene) ; 
 
         //runs the constant refreshes over and over 
-        AnimationTimer timer = new AnimationTimer() 
+        timer = new AnimationTimer() 
         {
             @Override
             public void handle(long time) 
             {
-                if(world_of_sprites.end)
+                if(world_of_sprites.getEnd())
                 {
                     timer.stop() ; 
                     return ; 
@@ -68,7 +72,7 @@ public class Gui
     public void drawSprite(Pane pane, Sprite sprite)
     {
         //makes an image based off the file name then prepares it for drawing
-        Image image = new Image(sprite.getName()) ; 
+        Image image = new Image("SBgame/"+ sprite.getName().substring(0,sprite.getName().length() - 1)+"/" + sprite.getName()) ; 
         ImageView image_drawn = new ImageView(image) ; 
 
         //sets x and y to sprites given x and y
