@@ -10,6 +10,11 @@ public class World {
         end = false ; 
     }
 
+    public void addSprite(Sprite sprite)
+    {
+        sprites.add(sprite) ; 
+    }
+
     //gives the list of sprites to gui 
     public ArrayList<Sprite> getSprites()
     {

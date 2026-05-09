@@ -1,7 +1,6 @@
 package gui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.* ; 
 
 import backend.Sprite;
 import backend.World;
@@ -24,7 +23,6 @@ public class Gui
     private ArrayList<Sprite> sprites ;
     private World world_of_sprites ;
     private AnimationTimer timer ; 
-    private HashMap<String, Image> all_images ; 
 
     public Gui(World world)
     {
