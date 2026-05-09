@@ -32,6 +32,9 @@ public class Parser {
     }
 
 
+    /*
+    Parses a line of code directly from the user .scratch file and converts it into a Command object with parameters. For example, "move(10)" would be converted into a Command with name "move" and args ["10"]
+    */
     private Command parseCommand(String cmd) {
         int openParen = cmd.indexOf('(');
         int closeParen = cmd.indexOf(')');
@@ -49,6 +52,11 @@ public class Parser {
         return new Command(cmdName, new ArrayList<>(Arrays.asList(argsList)), LanguageConfig.isBlockCommand(cmdName));
     }
 
+    /*
+    DOES NOT WORK YET
+
+    Reads a .scratch file line by line and creates Script and Command objects based on the indentation and content of each line. The resulting Script objects are stored in a Program object.
+    */
     public void readFile(File file) throws FileNotFoundException {
         Program program = new Program(file.getName());
         ArrayList<Script> scripts = new ArrayList<Script>();
@@ -61,7 +69,7 @@ public class Parser {
         int prevIndentLevel = -1;
         // stores the latest command block at each indent level
         ArrayList<Command> blockStack = new ArrayList<Command>();
-        
+
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();

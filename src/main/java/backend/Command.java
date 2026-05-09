@@ -3,7 +3,9 @@ package backend;
 
 import java.util.*;
 
-
+/*
+    This class represents a command in the Scratch language. It has a name, a list of arguments, and a list of child commands if it is a block command. For example, an "if" command would have child commands that represent the commands inside the "if" block.
+*/
 public class Command
 {
     private String name;
@@ -49,7 +51,7 @@ public class Command
 
     public String toString() {
         String ans = "COMMAND[" + name + ", " + args.toString() +"]\n";
-        
+
         for (Command child : children) {
             ans += "    " + child.toString();
         }
