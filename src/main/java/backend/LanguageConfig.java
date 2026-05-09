@@ -2,6 +2,9 @@ package backend;
 
 import java.util.Set;
 
+/*
+This class holds the configuration for the language, such as which commands are action commands, block commands, and events. It also has helper functions to check if a command is an action command, block command, or event.
+*/
 public final class LanguageConfig {
     private LanguageConfig() {
     }
@@ -36,5 +39,9 @@ public final class LanguageConfig {
 
     public static boolean isEvent(String name) {
         return EVENTS.contains(name);
+    }
+
+    public static boolean isValid(String name) {
+        return isActionCommand(name) || isBlockCommand(name) || isEvent(name);
     }
 }
