@@ -34,10 +34,18 @@ public final class LanguageConfig {
     }
 
     public static boolean isBlockCommand(String name) {
+        if (name == null) return false;
+
+        name = name.trim().toLowerCase();
+
         return BLOCK_COMMANDS.contains(name);
     }
 
     public static boolean isEvent(String name) {
+        if (name == null) return false;
+
+        name = name.trim().toLowerCase();
+
         return EVENTS.contains(name);
     }
 

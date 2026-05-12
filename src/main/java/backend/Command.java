@@ -13,10 +13,10 @@ public class Command
     private ArrayList<Command> children;
     private boolean isBlock;
 
-    public Command(String name, ArrayList<String> args, boolean isBlock) {
+    public Command(String name, ArrayList<String> args) {
         this.name = name;
         this.args = args;
-        this.isBlock = isBlock;
+        this.isBlock = LanguageConfig.isBlockCommand(name);
         children = new ArrayList<Command>();
     }
 
@@ -46,14 +46,21 @@ public class Command
             return true;
         }
 
+        System.out.println("ERROR: Attempted to add child command to non-block command " + name);
         return false;
     }
 
     public String toString() {
-        String ans = "COMMAND[" + name + ", " + args.toString() +"]\n";
+        return toStringHelper(0);
+    }
+
+    private String toStringHelper(int depth) {
+        String indent = "    ".repeat(depth);
+
+        String ans = indent + "COMMAND[" + name + ", " + args + "]\n";
 
         for (Command child : children) {
-            ans += "    " + child.toString();
+            ans += child.toStringHelper(depth + 1);
         }
 
         return ans;

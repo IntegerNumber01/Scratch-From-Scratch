@@ -1,13 +1,5 @@
 when_flag_clicked:
-    set_x(0)
-    goto(100, 10)
-    if (x> 1`) {
-        block
-        repeat(3):
-            move(10)
-    }
-    repeat(3):
-        move
-
-when_space_pressed:
-    script 2
+    move(10)
+    if (10<0):
+        goto(0, 0)
+    exit(0)

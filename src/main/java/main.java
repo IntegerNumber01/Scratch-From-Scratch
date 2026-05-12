@@ -20,7 +20,6 @@ public class main extends Application {
         gui = new Gui(world);
         parser = new Parser(world);
 
-        
 
         Pane root = new Pane();
         Scene scene = new Scene(root, 480, 360);
