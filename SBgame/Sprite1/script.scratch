@@ -2,4 +2,8 @@ when_flag_clicked:
     move(10)
     if (10<0):
         goto(0, 0)
+        if (10>0):
+            goto(10, 0)
+        repeat(3)"
+            switch(please)
     exit(0)

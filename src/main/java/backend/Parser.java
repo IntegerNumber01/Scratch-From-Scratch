@@ -68,19 +68,14 @@ public class Parser {
 
         Scanner scanner = new Scanner(file);
         int indentLevel = 0;
-        int expectedIndentLevel = 0; // this is updated when we expect a new indent after a repeat/if statemetn
-        int prevIndentLevel = -1;
         // stores the latest command block at each indent level
         ArrayList<Command> blockStack = new ArrayList<Command>();
 
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            // System.out.println(line); // prove file loading works
 
-            prevIndentLevel = indentLevel;
             indentLevel = checkIndentLevel(line);
-            // System.out.println("Indent level: " + indentLevel);
 
             line = line.trim();
 
@@ -89,13 +84,10 @@ public class Parser {
                     scripts.add(currentScript);
                 }
                 currentScript = new Script(line);
-                // expectedIndentLevel = 1;
                 blockStack.clear();
-                // scripts.add(new Script(line)); // should we substring the colon?
             } else {
 
                 currentCommand = parseCommand(line);
-                // System.out.println(currentCommand.toString());
 
                 // remove blocks that are no longer active
                 while (blockStack.size() > indentLevel - 1) {
@@ -110,15 +102,11 @@ public class Parser {
                 } else {
 
                     // nested command
-                    // System.out.println(blockStack.toString());
                     Command parent = blockStack.get(indentLevel - 2);
                     parent.addChild(currentCommand);
-                    // System.out.println("Parent after ADD");
-                    // System.out.println(parent.toString());
                 }
 
                 // remember this block if it opens a new scope
-                System.out.println(currentCommand.getName() + " isBlock=" + currentCommand.isBlock());
                 if (currentCommand.isBlock()) {
                     blockStack.add(currentCommand);
                 }
