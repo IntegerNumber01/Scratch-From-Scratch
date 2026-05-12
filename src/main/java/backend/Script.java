@@ -35,4 +35,14 @@ public class Script
     public void addCommand(Command command) {
         commands.add(command);
     }
+
+    public String toString() {
+        String ans = "SCRIPT[" + name + ", " + args + "]\n";
+
+        for (Command command : commands) {
+            ans += command.toString();  // REMOVE extra indentation here
+        }
+
+        return ans;
+}
 }

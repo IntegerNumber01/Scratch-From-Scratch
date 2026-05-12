@@ -39,17 +39,20 @@ public class Parser {
         int openParen = cmd.indexOf('(');
         int closeParen = cmd.indexOf(')');
 
-        String cmdName = cmd.substring(0, openParen);
+        String cmdName = cmd.substring(0, openParen).trim().replaceAll("[^a-zA-Z]", "");
         String argsString = cmd.substring(openParen + 1, closeParen);
 
-        String[] argsList = argsString.split(",");
+        ArrayList<String> args = new ArrayList<>();
 
-        // clean all whitespace
-        for (int i = 0; i < argsList.length; i++) {
-            argsList[i] = argsList[i].trim();
+        if (!argsString.isEmpty()) {
+            String[] argsList = argsString.split(",");
+            // clean all whitespace
+            for (int i = 0; i < argsList.length; i++) {
+                args.add(argsList[i].trim());
+            }
         }
 
-        return new Command(cmdName, new ArrayList<>(Arrays.asList(argsList)), LanguageConfig.isBlockCommand(cmdName));
+        return new Command(cmdName, args);
     }
 
     /*
@@ -77,6 +80,7 @@ public class Parser {
 
             prevIndentLevel = indentLevel;
             indentLevel = checkIndentLevel(line);
+            // System.out.println("Indent level: " + indentLevel);
 
             line = line.trim();
 
@@ -85,20 +89,39 @@ public class Parser {
                     scripts.add(currentScript);
                 }
                 currentScript = new Script(line);
-                expectedIndentLevel = 1;
+                // expectedIndentLevel = 1;
+                blockStack.clear();
                 // scripts.add(new Script(line)); // should we substring the colon?
-            } else if (indentLevel == expectedIndentLevel) { // commands or conditions/statements
-                currentCommand = parseCommand(line);
-                currentScript.addCommand(currentCommand);
-                blockStack.get(indentLevel).addChild(currentCommand); // add this command to the latest block command
+            } else {
 
-                if (currentCommand.isBlock()) { // if a block command
-                    expectedIndentLevel += 1;
+                currentCommand = parseCommand(line);
+                // System.out.println(currentCommand.toString());
+
+                // remove blocks that are no longer active
+                while (blockStack.size() > indentLevel - 1) {
+                    blockStack.remove(blockStack.size() - 1);
                 }
-            } else if (indentLevel == prevIndentLevel - 1) { // exited block
-                currentScript.addCommand(currentCommand);
-                expectedIndentLevel -= 1;
-                blockStack.set(prevIndentLevel, null);
+
+                // top-level command
+                if (indentLevel == 1) {
+
+                    currentScript.addCommand(currentCommand);
+
+                } else {
+
+                    // nested command
+                    // System.out.println(blockStack.toString());
+                    Command parent = blockStack.get(indentLevel - 2);
+                    parent.addChild(currentCommand);
+                    // System.out.println("Parent after ADD");
+                    // System.out.println(parent.toString());
+                }
+
+                // remember this block if it opens a new scope
+                System.out.println(currentCommand.getName() + " isBlock=" + currentCommand.isBlock());
+                if (currentCommand.isBlock()) {
+                    blockStack.add(currentCommand);
+                }
             }
         }
 
@@ -107,5 +130,9 @@ public class Parser {
         }
 
         scanner.close();
+
+        for (Script s : scripts) {
+            System.out.println(s.toString());
+        }
     }
 }
