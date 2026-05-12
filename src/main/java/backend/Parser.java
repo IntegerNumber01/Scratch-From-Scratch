@@ -61,7 +61,6 @@ public class Parser {
     Reads a .scratch file line by line and creates Script and Command objects based on the indentation and content of each line. The resulting Script objects are stored in a Program object.
     */
     public void readFile(File file) throws FileNotFoundException {
-        Program program = new Program(file.getName());
         ArrayList<Script> scripts = new ArrayList<Script>();
         Script currentScript = null;
         Command currentCommand = null;
@@ -119,8 +118,12 @@ public class Parser {
 
         scanner.close();
 
+        Program program = new Program(file.getName());
+
+
         for (Script s : scripts) {
             System.out.println(s.toString());
+            program.addScript(currentScript);
         }
     }
 }
