@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import backend.Interpreter;
 import backend.Parser;
 import backend.Program;
+import backend.Sprite;
 import backend.World;
 
 public class BackendMain {
@@ -20,6 +21,8 @@ public class BackendMain {
             e.printStackTrace();
         }
 
-        Interpreter interpreter = new Interpreter(program);
+        Sprite cat = new Sprite("cat");
+        Interpreter interpreter = new Interpreter(world);
+        interpreter.addProgram(cat, program);
     }
 }
