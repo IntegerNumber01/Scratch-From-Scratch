@@ -22,9 +22,11 @@ public class BackendMain {
         }
 
         Sprite cat = new Sprite("cat");
+        System.out.println(cat.toString());
         Interpreter interpreter = new Interpreter(world);
         interpreter.addProgram(cat, program);
 
         interpreter.execute();
+        System.out.println(cat.toString());
     }
 }

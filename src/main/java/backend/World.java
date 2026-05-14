@@ -3,7 +3,7 @@ import java.util.*;
 
 public class World {
     private ArrayList<Sprite> sprites;
-    private boolean end ; 
+    private boolean end;
 
     public World() {
         sprites = new ArrayList<Sprite>();

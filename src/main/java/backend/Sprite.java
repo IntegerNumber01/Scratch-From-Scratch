@@ -1,11 +1,14 @@
 package backend;
 
+import java.util.HashMap;
+
 public class Sprite {
     private String name;
     private int x;
     private int y;
     private int size;
     private int dir;
+    private HashMap<String, ScratchValue> variables;
 
     public Sprite(String name, int x, int y, int size) {
         this.name = name;
@@ -67,6 +70,14 @@ public class Sprite {
 
     public void changeX(int myX) {
         x += myX;
+    }
+
+    public ScratchValue getVariableValue(String varName) {
+        return variables.get(varName);
+    }
+
+    public void setVariableValue(String varName, ScratchValue value) {
+        variables.put(varName, value);
     }
 
     public String toString() {
