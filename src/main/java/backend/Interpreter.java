@@ -22,24 +22,30 @@ public class Interpreter
 
     public void execute() {
 
+        System.out.println("Executing programs...");
         for (Sprite sprite : programs.keySet()) {
             Program program = programs.get(sprite);
 
             for (Script script : program.getScripts()) {
                 for (Command command : script.getCommands()) {
+                    System.out.println(command.toString());
                     sprite = executeCommand(command, sprite);
                 }
             }
         }
+
+        System.out.println("Finished executing programs.");
     }
 
 
     public Sprite executeBlockCommand(Command command, Sprite sprite) {
         if (command.getName().equals("repeat")) {
             int times = Integer.parseInt(command.getArgs().get(0)); // num of times to repeat
+            System.out.println("REPEATING " + times + " TIMES");
 
             for (int i = 0; i < times; i++) {
                 for (Command child : command.getChildren()) {
+                    System.out.println("REPEAT CHILD: " + child.toString());
                     sprite = executeCommand(child, sprite);
                 }
             }
@@ -75,6 +81,9 @@ public class Interpreter
                 break;
             case "turn_right":
                 sprite.turnRight(Integer.parseInt(args.get(0)));
+                break;
+            case "change_x":
+                sprite.changeX(Integer.parseInt(args.get(0)));
                 break;
         }
 

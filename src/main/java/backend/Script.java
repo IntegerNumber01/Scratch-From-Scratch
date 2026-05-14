@@ -27,7 +27,7 @@ public class Script
     }
 
     public String toString() {
-        String ans = "SCRIPT[\n\n" + name + "\n";
+        String ans = "SCRIPT[\n\n" + name + "\n\n";
 
         for (Command command : commands) {
             ans += command.toString();

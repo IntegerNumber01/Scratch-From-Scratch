@@ -39,7 +39,7 @@ public class Parser {
         int openParen = cmd.indexOf('(');
         int closeParen = cmd.indexOf(')');
 
-        String cmdName = cmd.substring(0, openParen).trim().replaceAll("[^a-zA-Z]", "");
+        String cmdName = cmd.substring(0, openParen).trim().replaceAll("[^a-zA-Z_]", "");
         String argsString = cmd.substring(openParen + 1, closeParen);
 
         ArrayList<String> args = new ArrayList<>();
