@@ -4,6 +4,7 @@ import java.util.* ;
 
 import backend.Sprite;
 import backend.World;
+import backend.ScratchValue;
 
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
@@ -36,7 +37,7 @@ public class Gui
         //makes the whole window that will be created accessible
         Pane pane = new Pane() ; 
         Scene scene = new Scene(pane,480,360) ; 
-        stage.setScene(scene) ; 
+        stage.setScene(scene) ;
 
         //runs the constant refreshes over and over 
         timer = new AnimationTimer() 
