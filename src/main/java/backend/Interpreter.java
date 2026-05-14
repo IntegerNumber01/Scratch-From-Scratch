@@ -39,17 +39,31 @@ public class Interpreter
 
 
     public Sprite executeBlockCommand(Command command, Sprite sprite) {
-        if (command.getName().equals("repeat")) {
-            int times = Integer.parseInt(command.getArgs().get(0)); // num of times to repeat
-            System.out.println("REPEATING " + times + " TIMES");
 
-            for (int i = 0; i < times; i++) {
-                for (Command child : command.getChildren()) {
-                    System.out.println("REPEAT CHILD: " + child.toString());
-                    sprite = executeCommand(child, sprite);
+        switch (command.getName()) {
+            case "repeat":
+                int times = Integer.parseInt(command.getArgs().get(0)); // num of times to repeat
+
+                for (int i = 0; i < times; i++) {
+                    for (Command child : command.getChildren()) {
+                        sprite = executeCommand(child, sprite);
+                    }
                 }
-            }
+
+                break;
+
+            case "forever":
+                while (world.isRunning()) {
+                    for (Command child : command.getChildren()) {
+                        sprite = executeCommand(child, sprite);
+                    }
+                }
+                break;
+            default:
+                System.out.println("ERROR: Unrecognized block command " + command.getName());
+                break;
         }
+
         return sprite;
     }
 
