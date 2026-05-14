@@ -4,9 +4,17 @@ public class ScratchValue {
     //sets value to whatever is passed in constructor
     Object value  ; 
 
-    public ScratchValue(Object x)
+    public ScratchValue(String x)
     {
-        value = x ; 
+        try 
+        {
+            value = Double.parseDouble(x);
+        } 
+        
+        catch (NumberFormatException e) 
+        {
+            value = x ; 
+        }
     }
 
     public void setValue(Object o)
@@ -28,6 +36,15 @@ public class ScratchValue {
     public boolean isString()
     {
         return value instanceof String ; 
+    }
+
+    public double toNumber()
+    {
+        if (isNumber())
+        {
+            return (Double) value;
+        }
+        return 0;
     }
 
 }
