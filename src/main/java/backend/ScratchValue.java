@@ -9,14 +9,14 @@ public class ScratchValue {
         value = x ; 
     }
 
-    public void setVar(Object o)
+    public void setValue(Object o)
     {
-        value = o ; 
+        value = o;
     }
 
-    public Object getVar()
+    public Object getValue()
     {
-        return value ; 
+        return value;
     }
 
     // helper method to differentiate between the type Double and String and Boolean
