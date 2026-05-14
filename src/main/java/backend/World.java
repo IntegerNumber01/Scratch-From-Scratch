@@ -3,11 +3,10 @@ import java.util.*;
 
 public class World {
     private ArrayList<Sprite> sprites;
-    private boolean end;
-
+    private boolean isRunning;
     public World() {
         sprites = new ArrayList<Sprite>();
-        end = false ; 
+        isRunning = true ;
     }
 
     public void addSprite(Sprite sprite)
@@ -21,14 +20,12 @@ public class World {
         return sprites ; 
     }
 
-    public boolean getEnd() {
-        return end ; 
+    public boolean isRunning() {
+        return isRunning ;
     }
 
-    public void setEnd()
+    public void stopProgram()
     {
-        end = true ;  
+        isRunning = false ;  
     }
-
-    
 }

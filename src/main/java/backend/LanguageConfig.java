@@ -11,11 +11,11 @@ public final class LanguageConfig {
 
     public static final Set<String> ACTION_COMMANDS = Set.of(
         "move",
-        "goTo",
-        "turnRight",
-        "turnLeft",
-        "pointInDirection",
-        "changeX"
+        "go_to",
+        "turn_right",
+        "turn_left",
+        "point_in_direction",
+        "change_x"
     );
 
     public static final Set<String> BLOCK_COMMANDS = Set.of(
