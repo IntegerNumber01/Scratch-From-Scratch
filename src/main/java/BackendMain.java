@@ -24,5 +24,7 @@ public class BackendMain {
         Sprite cat = new Sprite("cat");
         Interpreter interpreter = new Interpreter(world);
         interpreter.addProgram(cat, program);
+
+        interpreter.execute();
     }
 }

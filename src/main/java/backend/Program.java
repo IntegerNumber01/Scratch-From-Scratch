@@ -18,4 +18,12 @@ public class Program
     public void addScript(Script script) {
         scripts.add(script);
     }
+
+    public ArrayList<Script> getScripts() {
+        return scripts;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
