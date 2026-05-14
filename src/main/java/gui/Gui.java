@@ -38,7 +38,6 @@ public class Gui
         Pane pane = new Pane() ; 
         Scene scene = new Scene(pane,480,360) ; 
         stage.setScene(scene) ;
-        Label label = new Labxel(""+) 
 
         //runs the constant refreshes over and over 
         timer = new AnimationTimer() 
