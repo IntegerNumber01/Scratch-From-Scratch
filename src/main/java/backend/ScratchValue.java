@@ -2,34 +2,27 @@ package backend;
 
 public class ScratchValue {
     //sets value to whatever is passed in constructor
-    private Object value ; 
+    Object value  ; 
 
-    public ScratchValue(double num)
+    public ScratchValue(Object x)
     {
-        value = num ; 
+        value = x ; 
     }
 
-    public ScratchValue(String word)
+    public void setVar(Object o)
     {
-        value = word ; 
+        value = o ; 
     }
 
-    public double toNumber()
-    {
-        if(isNumber())
-        {
-            return value ; 
-        } try {
-            return (double)
-        }
-    }
-
-    // helper method to differentiate between the type Double and String
+    // helper method to differentiate between the type Double and String and Boolean
     public boolean isNumber()
     {
         return value instanceof Double ; 
     }
 
+    public boolean isString()
+    {
+        return value instanceof String ; 
+    }
 
-    
 }
