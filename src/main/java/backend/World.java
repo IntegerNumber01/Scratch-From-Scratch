@@ -3,11 +3,13 @@ import java.util.*;
 
 public class World {
     private ArrayList<Sprite> sprites;
-    private boolean end;
+    private boolean isRunning;
+    private HashMap<String, ScratchValue> globalVariables;
 
     public World() {
         sprites = new ArrayList<Sprite>();
-        end = false ; 
+        isRunning = true ;
+        globalVariables = new HashMap<String, ScratchValue>();
     }
 
     public void addSprite(Sprite sprite)
@@ -21,14 +23,20 @@ public class World {
         return sprites ; 
     }
 
-    public boolean getEnd() {
-        return end ; 
+    public boolean isRunning() {
+        return isRunning ;
     }
 
-    public void setEnd()
+    public void stopProgram()
     {
-        end = true ;  
+        isRunning = false ;  
     }
 
-    
+    public void setGlobalVariable(String name, ScratchValue value) {
+        globalVariables.put(name, value);
+    }
+
+    public ScratchValue getGlobalVariable(String name) {
+        return globalVariables.get(name);
+    }
 }
