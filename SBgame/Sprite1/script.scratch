@@ -1,3 +1,7 @@
+define function():
+    change_x(10)
+
+
 when_flag_clicked:
     repeat(10):
         change_x(10)
