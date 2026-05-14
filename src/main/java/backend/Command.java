@@ -36,6 +36,10 @@ public class Command
         return !children.isEmpty();
     }
 
+    public ArrayList<Command> getChildren() {
+        return children;
+    }
+
     /*
     Returns true if addChild worked. False otherwise.
     Only works if the command is deemed as a block type

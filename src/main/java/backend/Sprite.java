@@ -15,6 +15,10 @@ public class Sprite {
         dir = 0;
     }
 
+    public Sprite(String name) {
+        this(name, 0, 0, 100);
+    }
+
     public String getName()
     {
         return name ;
@@ -65,4 +69,7 @@ public class Sprite {
         x += myX;
     }
 
+    public String toString() {
+        return "SPRITE[" + name + ", " + x + ", " + y + ", " + size + ", " + dir + "]";
+    }
 }
