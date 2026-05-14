@@ -14,6 +14,11 @@ public class ScratchValue {
         value = o ; 
     }
 
+    public Object getVar()
+    {
+        return value ; 
+    }
+
     // helper method to differentiate between the type Double and String and Boolean
     public boolean isNumber()
     {
