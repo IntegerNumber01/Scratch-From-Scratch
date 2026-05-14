@@ -2,7 +2,8 @@ package backend;
 
 public class ScratchValue {
     //sets value to whatever is passed in constructor
-    Object value  ; 
+    Object value  ;
+    boolean isScratchBool;
 
     public ScratchValue(String x)
     {
@@ -15,6 +16,12 @@ public class ScratchValue {
         {
             value = x ; 
         }
+        this.isScratchBool = false;
+    }
+
+    public ScratchValue(String x, boolean isScratchBool) {
+        this(x);
+        this.isScratchBool = isScratchBool;
     }
 
     public void setValue(Object o)
