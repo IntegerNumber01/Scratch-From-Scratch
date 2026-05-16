@@ -19,9 +19,9 @@ public class ScratchValue {
         this.isScratchBool = false;
     }
 
-    public ScratchValue(String x, boolean isScratchBool) {
-        this(x);
-        this.isScratchBool = isScratchBool;
+    public ScratchValue(String x, boolean b) {
+        value = x;
+        isScratchBool = b;
     }
 
     public void setValue(Object o)
