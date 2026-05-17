@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /*
@@ -64,12 +65,13 @@ public class Parser {
         ArrayList<Script> scripts = new ArrayList<Script>();
         Script currentScript = null;
         Command currentCommand = null;
+        Command temp = null;
 
         Scanner scanner = new Scanner(file);
         int indentLevel = 0;
         // stores the latest command block at each indent level
         ArrayList<Command> blockStack = new ArrayList<Command>();
-
+        ArrayList<Script> functions = new ArrayList<Script>();
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
@@ -78,12 +80,33 @@ public class Parser {
 
             line = line.trim();
 
-            if (indentLevel == 0) { // event block
+
+            if (line.isEmpty()) {
+                continue;
+            }
+
+            if (indentLevel == 0) { // event or function block
                 if (currentScript != null) {
-                    scripts.add(currentScript);
+                    if (currentScript.isFunction()) {
+                        functions.add(currentScript);
+                    } else {
+                        scripts.add(currentScript);
+                    }
                 }
-                currentScript = new Script(line);
+
+                if (line.startsWith("define")) {
+                    // use the parseCommand to obtain name and args, but throw away the command itself
+                    temp = parseCommand(line.substring(7)); // remove define
+
+                    line = temp.getName();
+
+                    currentScript = new Script(line, temp.getArgs());
+                } else {
+                    currentScript = new Script(line);
+                }
+
                 blockStack.clear();
+
             } else {
 
                 currentCommand = parseCommand(line);
@@ -121,9 +144,17 @@ public class Parser {
         Program program = new Program(file.getName());
 
 
+        System.out.println("-- SCRIPTS --");
         for (Script s : scripts) {
             System.out.println(s.toString());
-            program.addScript(currentScript);
+            program.addScript(s);
+        }
+        System.out.println();
+        System.out.println("-- FUNCTIONS --");
+
+        for (Script f : functions) {
+            System.out.println(f.toString());
+            program.addFunction(f);
         }
 
         return program;

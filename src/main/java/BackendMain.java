@@ -8,7 +8,7 @@ import backend.Sprite;
 import backend.World;
 
 public class BackendMain {
-    
+
 
     public static void main(String[] args) {
         World world = new World();
@@ -16,13 +16,16 @@ public class BackendMain {
         Program program = null;
 
         try {
+            System.out.println("[START] PROGRAM BUILDER OUTPUT --------------");
             program = parser.buildProgram(new File("SBGame/Sprite1/script.scratch"));
+            System.out.println("[END] PROGRAM BUILDER OUTPUT --------------");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         Sprite cat = new Sprite("cat");
         System.out.println(cat.toString());
+        System.out.println();
         Interpreter interpreter = new Interpreter(world);
         interpreter.addProgram(cat, program);
 

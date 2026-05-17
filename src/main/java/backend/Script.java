@@ -8,10 +8,18 @@ public class Script
 {
     private String name;
     private ArrayList<Command> commands;
+    private ArrayList<String> args;
 
     public Script(String name) {
         this.name = name;
+        this.args = null;
         commands = new ArrayList<Command>();
+    }
+
+    // only for functions because functions can have arguments
+    public Script(String name, ArrayList<String> args) {
+        this(name);
+        this.args = args;
     }
 
     public String getName() {
@@ -26,8 +34,16 @@ public class Script
         commands.add(command);
     }
 
+    public boolean isFunction() {
+        return args != null;
+    }
+
     public String toString() {
-        String ans = "SCRIPT[\n\n" + name + "\n\n";
+        String ans;
+        if (args == null)
+            ans = "SCRIPT[\n\nname=" + name + "\n\n";
+        else
+            ans = "SCRIPT[\n\nname=" + name + "\nargs=" + args.toString() + "\n\n";
 
         for (Command command : commands) {
             ans += command.toString();
@@ -35,5 +51,5 @@ public class Script
         ans += "\n]";
 
         return ans;
-}
+    }
 }

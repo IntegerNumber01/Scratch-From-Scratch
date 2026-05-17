@@ -1,7 +1,8 @@
-define function():
-    change_x(10)
+define do_something(x, y, z):
+    change_y(10)
+    repeat(3):
+        change_x(10)
 
 
 when_flag_clicked:
     repeat(10):
-        change_x(10)
