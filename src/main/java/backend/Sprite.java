@@ -8,6 +8,9 @@ public class Sprite {
     private int y;
     private int size;
     private int dir;
+    // TODO:
+    // everything is attached to Program since Sprite and Program go together as a pair
+    // should variables go to Program as well?
     private HashMap<String, ScratchValue> variables;
 
     public Sprite(String name, int x, int y, int size) {
@@ -70,6 +73,10 @@ public class Sprite {
 
     public void changeX(int myX) {
         x += myX;
+    }
+
+    public void changeY(int myY) {
+        y += myY;
     }
 
     public ScratchValue getVariableValue(String varName) {

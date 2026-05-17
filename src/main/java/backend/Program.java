@@ -29,6 +29,38 @@ public class Program
         return scripts;
     }
 
+    public ArrayList<Script> getFunctions() {
+        return functions;
+    }
+
+    /*
+    Given a String name, check if this function exists
+    */
+    public boolean isFunction(String name) {
+        for (Script f : functions) {
+            if (f.getName().equals(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /*
+    Given name, return the script of the function
+
+    Returns null if function doesn't exist
+    */
+    public Script getFunctionByName(String name) {
+        for (Script f : functions) {
+            if (f.getName().equals(name)) {
+                return f;
+            }
+        }
+
+        return null;
+    }
+
     public String getName() {
         return name;
     }

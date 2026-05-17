@@ -30,6 +30,10 @@ public class Script
         return commands;
     }
 
+    public ArrayList<String> getArgs() {
+        return args;
+    }
+
     public void addCommand(Command command) {
         commands.add(command);
     }

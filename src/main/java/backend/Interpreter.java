@@ -27,16 +27,54 @@ public class Interpreter
             Program program = programs.get(sprite);
 
             for (Script script : program.getScripts()) {
-                for (Command command : script.getCommands()) {
-                    System.out.println(command.toString());
-                    sprite = executeCommand(command, sprite);
-                }
+                sprite = executeScript(script, sprite);
             }
         }
 
         System.out.println("Finished executing programs.");
     }
 
+    // nested functions??
+    public Sprite executeScript(Script script, Sprite sprite) {
+        for (Command command : script.getCommands()) {
+            sprite = executeCommand(command, sprite);
+        }
+
+        return sprite;
+    }
+
+    public Sprite executeFunction(Script function, ArrayList<String> newArgs, Sprite sprite) {
+        for (Command c : function.getCommands()) {
+            // replace ALL args through ALL children
+            for (Command command : c.fullExpansion())
+                // find matching arg inside command & replace with value
+                for (int i = 0; i < function.getArgs().size(); i++) {
+                    String scriptArg = function.getArgs().get(i);
+
+                    for (String commandArg : command.getArgs()) {
+                        if (scriptArg.equals(commandArg)) {
+                            // find the index of the arg by name using function args
+                            // use that index on newArgs to get the value
+                            command.replaceArg(commandArg, newArgs.get(i));
+                        }
+                    }
+                }
+
+            System.out.println("Executing command");
+            System.out.println(c.toString());
+            sprite = executeCommand(c, sprite);
+        }
+
+        return sprite;
+    }
+
+    public Sprite executeCommand(Command command, Sprite sprite) {
+        if (command.isBlock()) {
+            return executeBlockCommand(command, sprite);
+        } else {
+            return exectuteActionCommand(command, sprite);
+        }
+    }
 
     public Sprite executeBlockCommand(Command command, Sprite sprite) {
 
@@ -67,14 +105,6 @@ public class Interpreter
         return sprite;
     }
 
-    public Sprite executeCommand(Command command, Sprite sprite) {
-        if (command.isBlock()) {
-            return executeBlockCommand(command, sprite);
-        } else {
-            return exectuteActionCommand(command, sprite);
-        }
-    }
-
     /*
     Take a single command and execute corresponding Scratch functions from Sprite
     */
@@ -82,6 +112,13 @@ public class Interpreter
         // command is action command
         String name = command.getName();
         ArrayList<String> args = command.getArgs();
+
+        // the args have to be evaluated using an evaluate method/class. It takes a single arg and returns a single ScratchValue
+
+        if (programs.get(sprite).isFunction(name)) { // the command is a function that is defined
+            sprite = executeFunction(programs.get(sprite).getFunctionByName(name), args, sprite);
+            return sprite;
+        }
 
         switch (name) {
             case "move":
@@ -98,6 +135,12 @@ public class Interpreter
                 break;
             case "change_x":
                 sprite.changeX(Integer.parseInt(args.get(0)));
+                break;
+            case "change_y":
+                sprite.changeY(Integer.parseInt(args.get(0)));
+                break;
+            default:
+                System.out.println("ERROR: Unrecognized action command " + name);
                 break;
         }
 

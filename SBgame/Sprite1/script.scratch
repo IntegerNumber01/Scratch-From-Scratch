@@ -1,8 +1,14 @@
+define back_home(a, b):
+    go_to(a, b)
+
 define do_something(x, y, z):
-    change_y(10)
-    repeat(3):
-        change_x(10)
+    change_y(x)
+    repeat(y):
+        repeat(x):
+            change_x(z)
+
+    back_home(10, 10)
 
 
 when_flag_clicked:
-    repeat(10):
+    do_something(10, 2, 10)

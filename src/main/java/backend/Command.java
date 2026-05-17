@@ -41,6 +41,36 @@ public class Command
     }
 
     /*
+    Replaces the VALUE of an arg by name with a new value
+    */
+    public void replaceArg(String oldArg, String newArg) {
+        for (int i = 0; i < args.size(); i++) {
+            if (args.get(i).equals(oldArg)) {
+                args.set(i, newArg);
+            }
+        }
+
+        for (Command child : children) {
+            child.replaceArg(oldArg, newArg);
+        }
+    }
+
+    /*
+    Returns a list of all commands in this command's subtree, including itself.
+    Used for function argument replacement
+    */
+    public ArrayList<Command> fullExpansion() {
+        ArrayList<Command> ans = new ArrayList<>();
+        ans.add(this);
+
+        for (Command child : children) {
+            ans.addAll(child.fullExpansion());
+        }
+
+        return ans;
+    }
+
+    /*
     Returns true if addChild worked. False otherwise.
     Only works if the command is deemed as a block type
     */

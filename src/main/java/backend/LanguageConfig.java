@@ -15,7 +15,8 @@ public final class LanguageConfig {
         "turn_right",
         "turn_left",
         "point_in_direction",
-        "change_x"
+        "change_x",
+        "change_y"
     );
 
     public static final Set<String> BLOCK_COMMANDS = Set.of(
