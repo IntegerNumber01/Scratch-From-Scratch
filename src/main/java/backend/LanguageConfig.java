@@ -30,6 +30,23 @@ public final class LanguageConfig {
         "when_clicked"
     );
 
+    public static final Set<Character> MATH_OPERATORS = Set.of(
+        '*',
+        '/',
+        '+',
+        '-'
+    );
+
+    public static final Set<String> BOOL_OPERATORS = Set.of(
+        ">",
+        "<",
+        "=="
+    );
+
+    public static boolean isMathOperator(char c) {
+        return MATH_OPERATORS.contains(c);
+    }
+
     public static boolean isActionCommand(String name) {
         return ACTION_COMMANDS.contains(name);
     }
