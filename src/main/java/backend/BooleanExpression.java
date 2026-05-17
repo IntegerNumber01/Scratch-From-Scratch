@@ -46,7 +46,7 @@ public class BooleanExpression
             // next, we have to update that list to contain true/false for each comparison expression
 
             for (int i = 0; i < container.size(); i++) {
-                if (!LanguageConfig.isBoolOperator(container.get(i))) {
+                if (LanguageConfig.isBoolOperator(container.get(i))) {
                     container.set(i - 1, evaluateComparisonExpression(container.get(i - 1)));
                     container.set(i + 1, evaluateComparisonExpression(container.get(i + 1)));
                 }
@@ -127,6 +127,8 @@ public class BooleanExpression
                 return lessThan(left, right);
             case "==":
                 return equal(left, right);
+            case "!=":
+                return notEqual(left, right);
             default:
                 System.out.println("ERROR: UNEXPECTED OPERATOR");
                 return null;

@@ -23,7 +23,7 @@ public class ExpressionTest
 
         // System.out.println(Expression.evaluate(exp));
 
-        exp = "10 > 5 and 4 < 10";
+        exp = "10 != 5 and 1 < 10";
 
         System.out.println(BooleanExpression.evaluate(exp));
     }

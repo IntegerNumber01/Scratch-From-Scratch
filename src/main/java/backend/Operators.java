@@ -47,6 +47,13 @@ public class Operators {
         return "false";
     }
 
+    public static String notEqual(String a, String b) {
+        if (Double.parseDouble(a) != Double.parseDouble(b)) {
+            return "true";
+        }
+        return "false";
+    }
+
     public static String and(String a, String b) {
         if (Boolean.parseBoolean(a) && Boolean.parseBoolean(b)) {
             return "true";
@@ -61,12 +68,12 @@ public class Operators {
         return "false";
     }
 
-    public static String not(String a) {
-        if (!Boolean.parseBoolean(a)) {
-            return "true";
-        }
-        return "false";
-    }
+    // public static String not(String a) {
+    //     if (!Boolean.parseBoolean(a)) {
+    //         return "true";
+    //     }
+    //     return "false";
+    // }
 
 
     //
