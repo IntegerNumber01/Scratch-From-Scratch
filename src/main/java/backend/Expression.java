@@ -26,10 +26,11 @@ public class Expression
 
             for (int i = 0; i < expression.length(); i++) {
                 if (LanguageConfig.isMathOperator(expression.charAt(i))) {
-                    container.add(temp);
+                    if (!temp.isEmpty())
+                        container.add(temp);
                     container.add(String.valueOf(expression.charAt(i)));
                     temp = "";
-                } else {
+                } else if (expression.charAt(i) != ' ') {
                     temp += expression.charAt(i);
                 }
             }
@@ -37,7 +38,18 @@ public class Expression
             container.add(temp);
 
             // at this point, we have a list of numbers and operators in the same order
-            System.out.println(container.toString());
+            System.out.println("after operator parsing " + container.toString());
+
+            // combine negative numbers
+
+            for (int i = 0; i < container.size(); i++) {
+                if (container.get(i).equals("-") && (i == 0 || LanguageConfig.isMathOperator(container.get(i - 1).charAt(0)))) {
+                    container.set(i + 1, "-" + container.get(i + 1));
+                    container.remove(i);
+                }
+            }
+
+            System.out.println("after negative parsing " + container.toString() );
 
             double t;
 
@@ -59,7 +71,7 @@ public class Expression
                 }
             }
 
-            // System.out.println("COMING IN " + expression);
+            System.out.println("COMING IN " + expression);
             System.out.println(container.toString());
 
             // at this point, we have a list of numbers with only +/- operators, all * / division has been calculated
