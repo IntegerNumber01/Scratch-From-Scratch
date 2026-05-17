@@ -2,6 +2,7 @@ package backend;
 
 import java.util.ArrayList;
 import java.util.Stack;
+import static backend.Operators.*;
 
 public class Expression
 {
@@ -40,22 +41,17 @@ public class Expression
                 }
             }
 
-            double t;
-
             while (container.contains("*") || container.contains("/")) {
                 for (int i = 0; i < container.size(); i++) {
                     if (container.get(i).equals("*")) {
-                        t = Double.parseDouble(container.get(i - 1)) * Double.parseDouble(container.get(i + 1));
-                        container.remove(i-1);
-                        container.remove(i-1);
-                        container.set(i-1, Double.toString(t));
+                        container.set(i, multiply(container.get(i - 1), container.get(i + 1)));
+                        container.remove(i - 1);
+                        container.remove(i);
 
                     } else if ( container.get(i).equals("/")) {
-                        t = Double.parseDouble(container.get(i - 1)) / Double.parseDouble(container.get(i + 1));
-
-                        container.remove(i-1);
-                        container.remove(i-1);
-                        container.set(i-1, Double.toString(t));
+                        container.set(i, divide(container.get(i - 1), container.get(i + 1)));
+                        container.remove(i - 1);
+                        container.remove(i);
                     }
                 }
             }
@@ -64,17 +60,14 @@ public class Expression
             while (container.size() > 1) {
                 for (int i = 0; i < container.size(); i++) {
                     if (container.get(i).equals("+")) {
-                        t = Double.parseDouble(container.get(i - 1)) + Double.parseDouble(container.get(i + 1));
-                        container.remove(i-1);
-                        container.remove(i-1);
-                        container.set(i-1, Double.toString(t));
+                        container.set(i, add(container.get(i - 1), container.get(i + 1)));
+                        container.remove(i - 1);
+                        container.remove(i);
 
                     } else if ( container.get(i).equals("-")) {
-                        t = Double.parseDouble(container.get(i - 1)) - Double.parseDouble(container.get(i + 1));
-
-                        container.remove(i-1);
-                        container.remove(i-1);
-                        container.set(i-1, Double.toString(t));
+                        container.set(i, subtract(container.get(i - 1), container.get(i + 1)));
+                        container.remove(i - 1);
+                        container.remove(i);
                     }
                 }
             }

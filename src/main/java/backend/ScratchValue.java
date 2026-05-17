@@ -2,42 +2,43 @@ package backend;
 
 public class ScratchValue {
     //sets value to whatever is passed in constructor
-    String strval ; 
-    double  doubleval ; 
+    String strval ;
+    double  doubleval ;
     boolean bool;
-    boolean isBoolean ; 
+    boolean isBoolean ;
 
     public ScratchValue(String x)
     {
-        try 
+        try
         {
             doubleval = Double.parseDouble(x);
-        } 
-        
-        catch (NumberFormatException e) 
-        {
-            strval = x ; 
         }
-        
-        isBoolean = false ; 
+
+        catch (NumberFormatException e)
+        {
+            strval = x ;
+        }
+
+        isBoolean = false ;
     }
 
-    public ScratchValue(boolean b) 
+    // I THINK THIS IS WRONG
+    public ScratchValue(boolean b)
     {
         bool = b;
-        isBoolean = true ; 
+        isBoolean = true ;
     }
 
 
-    public void setValue(String str) 
+    public void setValue(String str)
     {
-        try 
+        try
         {
             doubleval = Double.parseDouble(str);
             strval = null;
-        } 
+        }
 
-        catch (NumberFormatException e) 
+        catch (NumberFormatException e)
         {
             strval = str;
             doubleval = 0.0;
@@ -45,41 +46,41 @@ public class ScratchValue {
     }
 
 
-    public Object getValue() 
+    public Object getValue()
     {
         if (isBoolean()) return bool;
         if (isString()) return strval;
         return doubleval;
     }
 
-    public boolean isNumber() 
+    public boolean isNumber()
     {
         return !isString() && !isBoolean();
-    }    
+    }
 
-    public boolean isString() 
+    public boolean isString()
     {
         return strval != null;
     }
 
     public boolean isBoolean()
     {
-        return isBoolean ; 
+        return isBoolean ;
     }
 
 
-    public double toNumber() 
+    public double toNumber()
     {
-        if (isNumber()) 
+        if (isNumber())
         {
             return doubleval;
         }
         // try parsing the string as a number (Scratch does this)
-        try 
+        try
         {
             return Double.parseDouble(strval);
-        } 
-        catch (NumberFormatException e) 
+        }
+        catch (NumberFormatException e)
         {
             return 0;
         }

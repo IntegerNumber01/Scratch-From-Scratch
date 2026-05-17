@@ -37,14 +37,31 @@ public final class LanguageConfig {
         '-'
     );
 
-    public static final Set<String> BOOL_OPERATORS = Set.of(
+    public static final Set<String> COMPARISON_OPERATORS = Set.of(
         ">",
         "<",
-        "=="
+        "<=",
+        ">=",
+        "==",
+        "!="
+    );
+
+    public static final Set<String> BOOL_OPERATORS = Set.of(
+        "and",
+        "or",
+        "not"
     );
 
     public static boolean isMathOperator(char c) {
         return MATH_OPERATORS.contains(c);
+    }
+
+    public static boolean isBoolOperator(String c) {
+        return BOOL_OPERATORS.contains(c);
+    }
+
+    public static boolean isComparisonOperator(String c) {
+        return COMPARISON_OPERATORS.contains(c);
     }
 
     public static boolean isActionCommand(String name) {
