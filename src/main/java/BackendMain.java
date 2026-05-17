@@ -12,7 +12,7 @@ public class BackendMain {
 
     public static void main(String[] args) {
         World world = new World();
-        Parser parser = new Parser(world);
+        Parser parser = new Parser();
         Program program = null;
 
         try {

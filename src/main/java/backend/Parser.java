@@ -3,18 +3,13 @@ package backend;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Scanner;
 
 /*
     This class is responsible for parsing the Scratch code and creating Script objects
 */
 public class Parser {
-    private World world;
-
-    public Parser(World world) {
-        this.world = world;
+    public Parser() {
     }
 
     // Assumes each indent is 4 spaces
