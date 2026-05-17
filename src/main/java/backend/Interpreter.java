@@ -20,6 +20,10 @@ public class Interpreter
         programs.put(sprite, program);
     }
 
+    // public boolean evaluateBoolExpression(Expression left, String operator, Expression right) {
+
+    // }
+
     public void execute() {
 
         System.out.println("Executing programs...");

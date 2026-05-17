@@ -5,13 +5,7 @@ import java.util.Stack;
 
 public class Expression
 {
-    private String expression;
-
-    public Expression(String e) {
-        this.expression = e;
-    }
-
-    public String evaluate() {
+    public static String evaluate(String expression) {
         Stack<String> parens = new Stack<>();
         int startOuterParenIndex = -1;
         int endOuterParenIndex;
@@ -101,32 +95,17 @@ public class Expression
 
                     if (parens.isEmpty()) {
                         endOuterParenIndex = i;
-                        Expression a = new Expression(expression.substring(startOuterParenIndex + 1, endOuterParenIndex));
-                        noParenExp += a.evaluate();
+                        noParenExp += Expression.evaluate(expression.substring(startOuterParenIndex + 1, endOuterParenIndex));
                     }
                 } else if (parens.isEmpty() && c != ' ') { // any other character outside the parenthesis that is not a space
                     noParenExp += c;
                 }
             }
 
-            Expression b = new Expression(noParenExp);
-            ans = b.evaluate();
+            ans = Expression.evaluate(noParenExp);
         }
 
         return ans;
-    }
-
-
-    public String getExpression() {
-        return expression;
-    }
-
-    public void setExpression(String expression) {
-        this.expression = expression;
-    }
-
-    public String toString() {
-        return expression.trim();
     }
 
 }

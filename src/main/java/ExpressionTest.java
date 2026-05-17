@@ -15,11 +15,11 @@ public class ExpressionTest
         // exp = "(20+21)*((22-23/24)+(25*26))";
         // exp = "(100-20)*-2";
         // exp = "10";
-        Expression a  = new Expression(exp);
+        // Expression a  = new Expression(exp);
         // String a = "-10";
 
         // System.out.println(Double.parseDouble(a));
 
-        System.out.println(a.evaluate());
+        System.out.println(Expression.evaluate(exp));
     }
 }
