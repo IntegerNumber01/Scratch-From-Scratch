@@ -2,56 +2,87 @@ package backend;
 
 public class ScratchValue {
     //sets value to whatever is passed in constructor
-    Object value  ;
-    boolean isScratchBool;
+    String strval ; 
+    double  doubleval ; 
+    boolean bool;
+    boolean isBoolean ; 
 
     public ScratchValue(String x)
     {
         try 
         {
-            value = Double.parseDouble(x);
+            doubleval = Double.parseDouble(x);
         } 
         
         catch (NumberFormatException e) 
         {
-            value = x ; 
+            strval = x ; 
         }
-        this.isScratchBool = false;
+        
+        isBoolean = false ; 
     }
 
-    public ScratchValue(String x, boolean b) {
-        value = x;
-        isScratchBool = b;
-    }
-
-    public void setValue(Object o)
+    public ScratchValue(boolean b) 
     {
-        value = o;
+        bool = b;
+        isBoolean = true ; 
     }
 
-    public Object getValue()
-    {
-        return value;
-    }
 
-    // helper method to differentiate between the type Double and String and Boolean
-    public boolean isNumber()
+    public void setValue(String str) 
     {
-        return value instanceof Double ; 
-    }
-
-    public boolean isString()
-    {
-        return value instanceof String ; 
-    }
-
-    public double toNumber()
-    {
-        if (isNumber())
+        try 
         {
-            return (Double) value;
+            doubleval = Double.parseDouble(str);
+            strval = null;
+        } 
+
+        catch (NumberFormatException e) 
+        {
+            strval = str;
+            doubleval = 0.0;
         }
-        return 0;
+    }
+
+
+    public Object getValue() 
+    {
+        if (isBoolean()) return bool;
+        if (isString()) return strval;
+        return doubleval;
+    }
+
+    public boolean isNumber() 
+    {
+        return !isString() && !isBoolean();
+    }    
+
+    public boolean isString() 
+    {
+        return strval != null;
+    }
+
+    public boolean isBoolean()
+    {
+        return isBoolean ; 
+    }
+
+
+    public double toNumber() 
+    {
+        if (isNumber()) 
+        {
+            return doubleval;
+        }
+        // try parsing the string as a number (Scratch does this)
+        try 
+        {
+            return Double.parseDouble(strval);
+        } 
+        catch (NumberFormatException e) 
+        {
+            return 0;
+        }
     }
 
 }

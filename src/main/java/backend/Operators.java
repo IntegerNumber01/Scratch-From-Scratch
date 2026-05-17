@@ -2,9 +2,14 @@ package backend;
 import java.lang.Math;
 
 public class Operators {
+
+    private static double num(ScratchValue sv)
+    {
+        return sv.toNumber() ; 
+    }
     public static ScratchValue add(ScratchValue sv1, ScratchValue sv2) {
         if (sv1.isNumber() && sv2.isNumber()) {
-            ScratchValue sv3 = new ScratchValue(((double)sv1.getValue() + (double)sv2.getValue()) + "");
+            ScratchValue sv3 = new ScratchValue((num(sv1) + num(sv2)) + "");
             return sv3 ; 
         }
         return new ScratchValue("0");
@@ -12,7 +17,7 @@ public class Operators {
 
     public static ScratchValue subtract(ScratchValue sv1, ScratchValue sv2) {
         if (sv1.isNumber() && sv2.isNumber()) {
-            ScratchValue sv3 = new ScratchValue(((double)sv1.getValue() - (double)sv2.getValue()) + "");
+            ScratchValue sv3 = new ScratchValue(num(sv1) - num(sv2) + "");
             return sv3 ; 
         }
         return new ScratchValue("0");
@@ -20,7 +25,7 @@ public class Operators {
 
     public static ScratchValue multiply(ScratchValue sv1, ScratchValue sv2) {
         if (sv1.isNumber() && sv2.isNumber()) {
-            ScratchValue sv3 = new ScratchValue((((double)sv1.getValue() * (double)sv2.getValue()) + ""));
+            ScratchValue sv3 = new ScratchValue(((num(sv1) * num(sv2)) + ""));
             return sv3 ; 
         }
         return new ScratchValue("0");
@@ -28,7 +33,7 @@ public class Operators {
 
     public static ScratchValue divide(ScratchValue sv1, ScratchValue sv2) {
         if (sv1.isNumber() && sv2.isNumber()) {
-            ScratchValue sv3 = new ScratchValue(((double)sv1.getValue() / (double)sv2.getValue()) + "");
+            ScratchValue sv3 = new ScratchValue((num(sv1) / num(sv2)) + "");
             return sv3 ; 
         }
         return new ScratchValue("0");
@@ -36,7 +41,7 @@ public class Operators {
 
     public static ScratchValue modulo(ScratchValue sv1, ScratchValue sv2) {
         if (sv1.isNumber() && sv2.isNumber()) {
-            ScratchValue sv3 = new ScratchValue(((double)sv1.getValue() % (double)sv2.getValue()) + "");
+            ScratchValue sv3 = new ScratchValue((num(sv1) % num(sv2)) + "");
             return sv3 ; 
         }
         return new ScratchValue("0");
@@ -44,11 +49,11 @@ public class Operators {
     
     public static ScratchValue randomVal(ScratchValue sv1, ScratchValue sv2) {
         if (sv1.isNumber() && sv2.isNumber()) {
-            if ((double)sv1.getValue() >= (double)sv2.getValue()) {
-                ScratchValue sv3 = new ScratchValue((Math.random() * ((double)sv1.getValue() - (double)sv2.getValue() + 1) + (double)sv2.getValue()) + "");
+            if (num(sv1) >= num(sv2)) {
+                ScratchValue sv3 = new ScratchValue((Math.random() * (num(sv1) - num(sv2) + 1) + num(sv2)) + "");
                 return sv3;
             } else {
-                ScratchValue sv3 = new ScratchValue((Math.random() * ((double)sv2.getValue() - (double)sv1.getValue() + 1) + (double)sv1.getValue()) + "");
+                ScratchValue sv3 = new ScratchValue((Math.random() * (num(sv2) - num(sv1) + 1) + num(sv1)) + "");
                 return sv3;
             }
         }
@@ -57,40 +62,58 @@ public class Operators {
 
     public static ScratchValue greaterThan(ScratchValue sv1, ScratchValue sv2) {
         if (sv1.isNumber() && sv2.isNumber()) {
-            if ((double)sv1.getValue() > (double)sv2.getValue()) {
-                return new ScratchValue("true", true);
+            if (num(sv1) > num(sv2)) {
+                return new ScratchValue(true);
             }   
         }
-        return false;
+        return new ScratchValue(false) ; 
     }
 
     public static ScratchValue lessThan(ScratchValue sv1, ScratchValue sv2) {
         if (sv1.isNumber() && sv2.isNumber()) {
-            if ((double)sv1.getValue() < (double)sv2.getValue()) {
-                return true;
+            if (num(sv1) < num(sv2)) {
+                return new ScratchValue(true);
             } 
         }
-        return false;
+        return new ScratchValue(false) ; 
     }
 
-    public static boolean equal(ScratchValue sv1, ScratchValue sv2) {
+    public static ScratchValue equal(ScratchValue sv1, ScratchValue sv2) {
         if (sv1.isNumber() && sv2.isNumber()) {
-            if ((double)sv1.getValue() == (double)sv2.getValue()) {
-                return true;
+            if (num(sv1) == num(sv2)) {
+                return new ScratchValue(true);
             }
         }
-        return false;
+        return new ScratchValue(false) ; 
     }
 
-    public static boolean and(ScratchValue sv1, ScratchValue sv2) {
-        return false; // fix this
+    public static ScratchValue and(ScratchValue sv1, ScratchValue sv2) 
+    {
+        if(sv1.isBoolean() && sv2.isBoolean())
+        {
+            return new ScratchValue(sv1.bool && sv2.bool) ; 
+        }
+
+        return new ScratchValue(false) ; 
     }
 
-    public static boolean or(ScratchValue sv1, ScratchValue sv2) {
-        return false; // fix this
+    public static ScratchValue or(ScratchValue sv1, ScratchValue sv2) 
+    {
+        if(sv1.isBoolean() && sv2.isBoolean())
+        {
+            return new ScratchValue(sv1.bool || sv2.bool) ; 
+        }
+
+        return new ScratchValue(false) ; 
     }
 
-    public static boolean not(ScratchValue sv1, ScratchValue sv2) {
-        return false; // fix this
+    public static ScratchValue not(ScratchValue sv1) 
+    {
+        if(sv1.isBoolean())
+        {
+            return new ScratchValue(!sv1.bool) ; 
+        }
+
+        return new ScratchValue(false) ; 
     }
 }
