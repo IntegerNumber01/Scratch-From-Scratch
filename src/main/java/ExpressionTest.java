@@ -23,7 +23,9 @@ public class ExpressionTest
 
         // System.out.println(Expression.evaluate(exp));
 
-        exp = "10 != 5 and 1 < 10";
+        exp = "10 != 5 and 5 > 3 or 2 < 1";
+        exp = "not not 10!=1 and 5 > 3 or 2 < 1";
+        exp = "10> 5 or 10==11 and 20> 30";
 
         System.out.println(BooleanExpression.evaluate(exp));
     }

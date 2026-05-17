@@ -44,22 +44,39 @@ public class BooleanExpression
             // in the same order
 
             // next, we have to update that list to contain true/false for each comparison expression
-
             for (int i = 0; i < container.size(); i++) {
-                if (LanguageConfig.isBoolOperator(container.get(i))) {
-                    container.set(i - 1, evaluateComparisonExpression(container.get(i - 1)));
-                    container.set(i + 1, evaluateComparisonExpression(container.get(i + 1)));
+                if (!LanguageConfig.isBoolOperator(container.get(i))) {
+                    container.set(i, evaluateComparisonExpression(container.get(i)));
                 }
             }
 
-            while (container.size() > 1) {
+            // deal with any NOTs first
+            // the not will apply to the next value and reverse it
+            // the while loop is to deal with things like "not not true"
+            while (container.contains("not")) {
+                for (int i = 0; i < container.size(); i++) {
+                    if (container.get(i).equals("not") && !container.get(i+1).equals("not")) {
+                        container.set(i + 1, not(container.get(i + 1)));
+                        container.remove(i);
+                    }
+                }
+            }
+
+            // AND has higher precedence than OR, so deal with all ANDs first, then ORs
+            while (container.contains("and")) {
                 for (int i = 0; i < container.size(); i++) {
                     if (container.get(i).equals("and")) {
                         container.set(i, and(container.get(i - 1), container.get(i + 1)));
                         container.remove(i - 1);
                         container.remove(i);
 
-                    } else if ( container.get(i).equals("or")) {
+                    }
+                }
+            }
+
+            while (container.size() > 1) {
+                for (int i = 0; i < container.size(); i++) {
+                    if (container.get(i).equals("or")) {
                         container.set(i, or(container.get(i - 1), container.get(i + 1)));
                         container.remove(i - 1);
                         container.remove(i);

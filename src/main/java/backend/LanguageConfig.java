@@ -47,6 +47,7 @@ public final class LanguageConfig {
     );
 
     public static final Set<String> BOOL_OPERATORS = Set.of(
+        // and has higher precedence
         "and",
         "or",
         "not"
