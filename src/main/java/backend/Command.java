@@ -20,6 +20,18 @@ public class Command
         children = new ArrayList<Command>();
     }
 
+    // use this constructor when deep copying a command
+    public Command(Command other) {
+        this.name = other.name;
+        this.args = new ArrayList<>(other.args);
+        this.isBlock = other.isBlock;
+        this.children = new ArrayList<>();
+
+        for (Command child : other.children) {
+            this.children.add(new Command(child));
+        }
+    }
+
     public String getName() {
         return name;
     }

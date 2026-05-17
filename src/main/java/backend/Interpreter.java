@@ -49,18 +49,25 @@ public class Interpreter
 
     public Sprite executeFunction(Script function, ArrayList<String> newArgs, Sprite sprite) {
         System.out.println("Executing function " + function.getName() + " with args " + newArgs);
-        for (Command c : function.getCommands()) {
+
+        // since we mutate the function by changing all the args, first we must copy it, then change it
+        // then execute it, then destroy it
+        // this preserves the original function.
+
+        Script functionCopy = new Script(function); // deep copy the function
+
+        for (Command c : functionCopy.getCommands()) {
             // replace ALL args through ALL children
             for (Command command : c.fullExpansion())
                 // find matching arg inside command & replace with value
-                for (int i = 0; i < function.getArgs().size(); i++) {
-                    String scriptArg = function.getArgs().get(i);
+                for (int i = 0; i < functionCopy.getArgs().size(); i++) {
+                    String scriptArg = functionCopy.getArgs().get(i);
 
                     for (String commandArg : command.getArgs()) {
                         if (commandArg.contains(scriptArg)) {
                             // find the index of the arg by name using function args
                             // use that index on newArgs to get the value
-                            command.replaceArg(function.getArgs().get(i), newArgs.get(i));
+                            command.replaceArg(functionCopy.getArgs().get(i), newArgs.get(i));
                         }
                     }
                 }
@@ -103,6 +110,7 @@ public class Interpreter
                 }
                 break;
             case "if":
+                System.out.println("Eval " + BooleanExpression.evaluate(command.getArgs().get(0)));
                 if (BooleanExpression.evaluate(command.getArgs().get(0)).equals("true")) {
                     for (Command child : command.getChildren()) {
                         sprite = executeCommand(child, sprite);
