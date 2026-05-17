@@ -20,7 +20,6 @@ public class Expression
         String ans;
 
         if (!expression.contains("(")) {
-            System.out.println("expression before container " + expression);
             ArrayList<String> container = new ArrayList<>();
             String temp = "";
 
@@ -38,10 +37,8 @@ public class Expression
             container.add(temp);
 
             // at this point, we have a list of numbers and operators in the same order
-            System.out.println("after operator parsing " + container.toString());
 
             // combine negative numbers
-
             for (int i = 0; i < container.size(); i++) {
                 if (container.get(i).equals("-") && (i == 0 || LanguageConfig.isMathOperator(container.get(i - 1).charAt(0)))) {
                     container.set(i + 1, "-" + container.get(i + 1));
@@ -49,12 +46,10 @@ public class Expression
                 }
             }
 
-            System.out.println("after negative parsing " + container.toString() );
-
             double t;
 
             while (container.contains("*") || container.contains("/")) {
-                for (int i = 0; i < container.size(); i++) { // could be done twice as fast by going through every other object
+                for (int i = 0; i < container.size(); i++) {
                     if (container.get(i).equals("*")) {
                         t = Double.parseDouble(container.get(i - 1)) * Double.parseDouble(container.get(i + 1));
                         container.remove(i-1);
@@ -71,12 +66,9 @@ public class Expression
                 }
             }
 
-            System.out.println("COMING IN " + expression);
-            System.out.println(container.toString());
-
             // at this point, we have a list of numbers with only +/- operators, all * / division has been calculated
             while (container.size() > 1) {
-                for (int i = 0; i < container.size(); i++) { // could be done twice as fast by going through every other object
+                for (int i = 0; i < container.size(); i++) {
                     if (container.get(i).equals("+")) {
                         t = Double.parseDouble(container.get(i - 1)) + Double.parseDouble(container.get(i + 1));
                         container.remove(i-1);
@@ -92,8 +84,6 @@ public class Expression
                     }
                 }
             }
-
-            System.out.println("FINAL " + container.toString());
 
             return container.get(0);
         } else {
@@ -112,7 +102,6 @@ public class Expression
                     if (parens.isEmpty()) {
                         endOuterParenIndex = i;
                         Expression a = new Expression(expression.substring(startOuterParenIndex + 1, endOuterParenIndex));
-                        // System.out.println("SENT" + a.toString());
                         noParenExp += a.evaluate();
                     }
                 } else if (parens.isEmpty() && c != ' ') { // any other character outside the parenthesis that is not a space
@@ -121,7 +110,6 @@ public class Expression
             }
 
             Expression b = new Expression(noParenExp);
-            System.out.println("NO PAREN EXPRESSION " + noParenExp);
             ans = b.evaluate();
         }
 
