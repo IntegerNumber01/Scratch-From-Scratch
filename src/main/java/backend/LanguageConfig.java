@@ -21,8 +21,7 @@ public final class LanguageConfig {
     public static final Set<String> BLOCK_COMMANDS = Set.of(
         "if",
         "repeat",
-        "forever",
-        "function"
+        "forever"
     );
 
     public static final Set<String> EVENTS = Set.of(
