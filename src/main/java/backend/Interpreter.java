@@ -101,6 +101,13 @@ public class Interpreter
                     }
                 }
                 break;
+            case "if":
+                if (BooleanExpression.evaluate(command.getArgs().get(0)).equals("true")) {
+                    for (Command child : command.getChildren()) {
+                        sprite = executeCommand(child, sprite);
+                    }
+                }
+                break;
             default:
                 System.out.println("ERROR: Unrecognized block command " + command.getName());
                 break;
