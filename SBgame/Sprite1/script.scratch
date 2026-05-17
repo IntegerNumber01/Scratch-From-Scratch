@@ -1,14 +1,5 @@
-define back_home(a, b):
-    go_to(a, b)
-
-define do_something(x, y, z):
-    change_y(x)
-    repeat(y):
-        repeat(x):
-            change_x(z)
-
-    back_home(10, 10)
-
+define recurse(x):
+    go_to(x+10, 0)
 
 when_flag_clicked:
-    do_something(10, 2, 10)
+    recurse(0)

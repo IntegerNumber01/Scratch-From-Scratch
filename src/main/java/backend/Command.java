@@ -42,12 +42,15 @@ public class Command
 
     /*
     Replaces the VALUE of an arg by name with a new value
+    Can replace the arg in an expression as well.
+
+    oldArg holds the name of the var
+    newArg holds the value to replace with
     */
     public void replaceArg(String oldArg, String newArg) {
+        System.out.println("inside replace ARG in command " + name + " with args " + args);
         for (int i = 0; i < args.size(); i++) {
-            if (args.get(i).equals(oldArg)) {
-                args.set(i, newArg);
-            }
+            args.set(i, args.get(i).replace(oldArg, newArg));
         }
 
         for (Command child : children) {

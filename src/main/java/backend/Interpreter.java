@@ -48,6 +48,7 @@ public class Interpreter
     }
 
     public Sprite executeFunction(Script function, ArrayList<String> newArgs, Sprite sprite) {
+        System.out.println("Executing function " + function.getName() + " with args " + newArgs);
         for (Command c : function.getCommands()) {
             // replace ALL args through ALL children
             for (Command command : c.fullExpansion())
@@ -56,10 +57,10 @@ public class Interpreter
                     String scriptArg = function.getArgs().get(i);
 
                     for (String commandArg : command.getArgs()) {
-                        if (scriptArg.equals(commandArg)) {
+                        if (commandArg.contains(scriptArg)) {
                             // find the index of the arg by name using function args
                             // use that index on newArgs to get the value
-                            command.replaceArg(commandArg, newArgs.get(i));
+                            command.replaceArg(function.getArgs().get(i), newArgs.get(i));
                         }
                     }
                 }
@@ -84,7 +85,7 @@ public class Interpreter
 
         switch (command.getName()) {
             case "repeat":
-                int times = Integer.parseInt(command.getArgs().get(0)); // num of times to repeat
+                int times = (int) Double.parseDouble(command.getArgs().get(0)); // num of times to repeat
 
                 for (int i = 0; i < times; i++) {
                     for (Command child : command.getChildren()) {
@@ -124,7 +125,12 @@ public class Interpreter
         String name = command.getName();
         ArrayList<String> args = command.getArgs();
 
-        // the args have to be evaluated using an evaluate method/class. It takes a single arg and returns a single ScratchValue
+
+        // evalute all args into a single String value
+        for (int i = 0; i < args.size(); i++) {
+            args.set(i, Expression.evaluate(args.get(i)));
+        }
+
 
         if (programs.get(sprite).isFunction(name)) { // the command is a function that is defined
             sprite = executeFunction(programs.get(sprite).getFunctionByName(name), args, sprite);
@@ -133,22 +139,22 @@ public class Interpreter
 
         switch (name) {
             case "move":
-                sprite.move(Integer.parseInt(args.get(0)));
+                sprite.move((int) Double.parseDouble(args.get(0)));
                 break;
             case "go_to":
-                sprite.goTo(Integer.parseInt(args.get(0)), Integer.parseInt(args.get(1)));
+                sprite.goTo((int) Double.parseDouble(args.get(0)), (int) Double.parseDouble(args.get(1)));
                 break;
             case "turn_left":
-                sprite.turnLeft(Integer.parseInt(args.get(0)));
+                sprite.turnLeft((int) Double.parseDouble(args.get(0)));
                 break;
             case "turn_right":
-                sprite.turnRight(Integer.parseInt(args.get(0)));
+                sprite.turnRight((int) Double.parseDouble(args.get(0)));
                 break;
             case "change_x":
-                sprite.changeX(Integer.parseInt(args.get(0)));
+                sprite.changeX((int) Double.parseDouble(args.get(0)));
                 break;
             case "change_y":
-                sprite.changeY(Integer.parseInt(args.get(0)));
+                sprite.changeY((int) Double.parseDouble(args.get(0)));
                 break;
             default:
                 System.out.println("ERROR: Unrecognized action command " + name);
