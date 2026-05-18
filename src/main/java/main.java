@@ -18,8 +18,7 @@ public class main extends Application {
     public void start(Stage stage) {
         world = new World();
         gui = new Gui(world);
-        parser = new Parser(world);
-
+        parser = new Parser();
 
         Pane root = new Pane();
         Scene scene = new Scene(root, 480, 360);

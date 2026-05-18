@@ -6,6 +6,10 @@ import static backend.Operators.*;
 
 public class Expression
 {
+
+    /*
+        I know this is super inefficient, but it works
+    */
     public static String evaluate(String expression) {
         Stack<String> parens = new Stack<>();
         int startOuterParenIndex = -1;
