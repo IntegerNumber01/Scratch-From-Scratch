@@ -1,6 +1,7 @@
 package backend;
 
-import java.util.HashMap;
+import java.io.File;
+import java.util.* ; 
 
 public class Sprite {
     private String name;
@@ -8,21 +9,25 @@ public class Sprite {
     private int y;
     private int size;
     private int dir;
+    private ArrayList<File> costumes;
+    private File currentCostume ; 
     // TODO:
     // everything is attached to Program since Sprite and Program go together as a pair
     // should variables go to Program as well?
     private HashMap<String, ScratchValue> variables;
 
-    public Sprite(String name, int x, int y, int size) {
+    public Sprite(String name, int x, int y, int size, ArrayList<File> costumes) {
         this.name = name;
         this.x = x;
         this.y = y;
         this.size = size;
         dir = 0;
+        this.costumes = costumes ; 
+        this.currentCostume = costumes.get(0);
     }
 
-    public Sprite(String name) {
-        this(name, 0, 0, 100);
+    public Sprite(String name, ArrayList<File> costumes) {
+        this(name, 0, 0, 100, costumes);
     }
 
     public String getName()
@@ -102,6 +107,16 @@ public class Sprite {
 
     public void setVariableValue(String varName, ScratchValue value) {
         variables.put(varName, value);
+    }
+
+    public void addCostume(File file) 
+    {
+        costumes.add(file);
+    }
+
+    public File getCurrentCostume()
+    {
+        return currentCostume ; 
     }
 
     public String toString() {

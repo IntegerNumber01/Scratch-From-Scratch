@@ -48,8 +48,16 @@
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <configuration>
+                            <mainClass>GuiTest</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
-                    <mainClass>main</mainClass>
+                    <mainClass>GuiTest</mainClass>
                 </configuration>
             </plugin>
         </plugins>
