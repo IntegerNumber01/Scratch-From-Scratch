@@ -52,11 +52,18 @@ public class Sprite {
 
     public void move(int steps) {
         // implement moving in direction facing
+        x += (int) Math.round(steps * Math.cos(Math.toRadians(90-dir)));
+        y += (int) Math.round(steps * Math.sin(Math.toRadians(90-dir)));
     }
 
     public void goTo(int myX, int myY) {
         x = myX;
         y = myY;
+    }
+
+    public void goToRandomPosition() { // bounds are 480,360)
+        x = (int)Math.random() *(481);
+        y = (int)Math.random()*(361);
     }
 
     public void turnLeft(int deg) {
@@ -79,6 +86,16 @@ public class Sprite {
         y += myY;
     }
 
+    public void setX(int x)
+    {
+        this.x = x ; 
+    }
+
+    public void setY(int y)
+    {
+        this.y = y ; 
+    }
+
     public ScratchValue getVariableValue(String varName) {
         return variables.get(varName);
     }
@@ -90,4 +107,33 @@ public class Sprite {
     public String toString() {
         return "SPRITE[" + name + ", " + x + ", " + y + ", " + size + ", " + dir + "]";
     }
+
+    public String say(String text) {
+        return text;
+    }
+
+    public void sayForTime(String text, int time) {
+        say(text);
+        try {
+            Thread.sleep(time * 1000L); // use L to create a long variable instead of an integer and use milliseconds instead of seconds
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // restore previous state if sleep is interrupted 
+        }
+        say(""); // clear once time is over
+    }
+
+    public String think(String text) {
+        return text;
+    }
+
+    public void thinkForTime(String text, int time) { // exact same code as previous sayForTime()
+        think(text);
+        try {
+            Thread.sleep(time * 1000L);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        think("");
+    }
+
 }

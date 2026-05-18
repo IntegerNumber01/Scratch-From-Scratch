@@ -166,7 +166,7 @@ public class Interpreter
                 break;
             default:
                 System.out.println("ERROR: Unrecognized action command " + name);
-                break;
+                break; 
         }
 
         return sprite;
