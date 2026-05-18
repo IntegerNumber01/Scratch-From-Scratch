@@ -136,4 +136,15 @@ public class Sprite {
         think("");
     }
 
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void changeSize(int size) {
+        this.size += size;
+            
+    }
+
+    
+
 }
