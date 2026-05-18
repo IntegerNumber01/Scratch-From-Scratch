@@ -52,11 +52,17 @@ public class Sprite {
 
     public void move(int steps) {
         // implement moving in direction facing
+        x += (int) Math.round(steps * Math.cos(Math.toRadians(90-dir)));
+        y += (int) Math.round(steps * Math.sin(Math.toRadians(90-dir)));
     }
 
     public void goTo(int myX, int myY) {
         x = myX;
         y = myY;
+    }
+
+    public void goToRandomPosition() {
+        x = Math.random() *
     }
 
     public void turnLeft(int deg) {
