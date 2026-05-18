@@ -79,6 +79,16 @@ public class Sprite {
         y += myY;
     }
 
+    public void setX(int x)
+    {
+        this.x = x ; 
+    }
+
+    public void setY(int y)
+    {
+        this.y = y ; 
+    }
+
     public ScratchValue getVariableValue(String varName) {
         return variables.get(varName);
     }
