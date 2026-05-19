@@ -135,6 +135,10 @@ public class Interpreter
                     for (Command child : command.getChildren()) {
                         sprite = executeCommand(child, sprite);
                     }
+                } else if (command.hasElse()) { // execute the else block
+                    for (Command child : command.getElseChildren()) {
+                        sprite = executeCommand(child, sprite);
+                    }
                 }
                 break;
             default:
@@ -223,7 +227,7 @@ public class Interpreter
                 break;
             default:
                 ScratchError.throwError(command.getLineNumber(), "Unrecognized command " + "'" + name + "'");
-                break; 
+                break;
         }
 
         return sprite;

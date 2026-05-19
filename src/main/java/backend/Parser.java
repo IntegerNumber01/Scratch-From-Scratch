@@ -67,8 +67,6 @@ public class Parser {
     }
 
     /*
-    DOES NOT WORK YET
-
     Reads a .scratch file line by line and creates Script and Command objects based on the indentation and content of each line. The resulting Script objects are stored in a Program object.
     */
     public Program buildProgram(File file) throws FileNotFoundException {
@@ -80,8 +78,10 @@ public class Parser {
         Scanner scanner = new Scanner(file);
         int indentLevel = 0;
         int lineNumber = 0;
+        int targetStackSize;
         // stores the latest command block at each indent level
         ArrayList<Command> blockStack = new ArrayList<Command>();
+        ArrayList<Boolean> elseStack = new ArrayList<Boolean>();
         ArrayList<Script> functions = new ArrayList<Script>();
 
         while (scanner.hasNextLine()) {
@@ -119,15 +119,33 @@ public class Parser {
                 }
 
                 blockStack.clear();
+                elseStack.clear();
 
             } else {
-
-                currentCommand = parseCommand(line, lineNumber);
+                boolean isElse = line.equals("else:");
 
                 // remove blocks that are no longer active
-                while (blockStack.size() > indentLevel - 1) {
-                    blockStack.remove(blockStack.size() - 1);
+                if (isElse) {
+                    targetStackSize = indentLevel;
+                } else {
+                    targetStackSize = indentLevel - 1;
                 }
+
+                while (blockStack.size() > targetStackSize) {
+                    blockStack.remove(blockStack.size() - 1);
+                    elseStack.remove(elseStack.size() - 1);
+                }
+
+                if (isElse) {
+                    if (blockStack.isEmpty() || !blockStack.get(blockStack.size() - 1).getName().equals("if")) {
+                        ScratchError.throwError(lineNumber, "else without matching if");
+                    }
+
+                    elseStack.set(elseStack.size() - 1, true);
+                    continue;
+                }
+
+                currentCommand = parseCommand(line, lineNumber);
 
                 // top-level command
                 if (indentLevel == 1) {
@@ -138,12 +156,17 @@ public class Parser {
 
                     // nested command
                     Command parent = blockStack.get(indentLevel - 2);
-                    parent.addChild(currentCommand);
+                    if (elseStack.get(indentLevel - 2) && parent.getName().equals("if")) {
+                        parent.addElseChild(currentCommand);
+                    } else {
+                        parent.addChild(currentCommand);
+                    }
                 }
 
                 // remember this block if it opens a new scope
                 if (currentCommand.isBlock()) {
                     blockStack.add(currentCommand);
+                    elseStack.add(false);
                 }
             }
         }

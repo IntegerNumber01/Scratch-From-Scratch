@@ -13,9 +13,13 @@ public class Command
     private ArrayList<Command> children;
     private boolean isBlock;
 
+    // only applies to if blocks since they can have else.
+    private ArrayList<Command> elseChildren;
+    private boolean hasElse;
+
     private int lineNumber; // for error reporting. Line number in the original .scratch file where this command was defined
 
-    // this command name is called "assign". If the user has a 
+    // this command name is called "assign". If the user has a
     private boolean isPrivate; // only true for variable assigment commands
 
     public Command(String name, ArrayList<String> args, int lineNumber) {
@@ -23,8 +27,10 @@ public class Command
         this.args = args;
         this.isBlock = LanguageConfig.isBlockCommand(name);
         this.lineNumber = lineNumber;
-        children = new ArrayList<Command>();
+        this.children = new ArrayList<Command>();
         this.isPrivate = false;
+        this.elseChildren = new ArrayList<Command>();
+        this.hasElse = false;
     }
 
     public Command(String name, ArrayList<String> args, int lineNumber, boolean isPrivate) {
@@ -40,7 +46,15 @@ public class Command
         this.children = new ArrayList<>();
         this.isPrivate = other.isPrivate;
         this.lineNumber = other.lineNumber;
+        this.hasElse = other.hasElse;
 
+        // copy over else children
+        this.elseChildren = new ArrayList<>();
+        for (Command child : other.elseChildren) {
+            this.elseChildren.add(new Command(child));
+        }
+
+        // copy normal children
         for (Command child : other.children) {
             this.children.add(new Command(child));
         }
@@ -60,6 +74,18 @@ public class Command
 
     public boolean hasChildren() {
         return !children.isEmpty();
+    }
+
+    public boolean hasElseChildren() {
+        return !elseChildren.isEmpty();
+    }
+
+    public boolean hasElse() {
+        return hasElse;
+    }
+
+    public ArrayList<Command> getElseChildren() {
+        return elseChildren;
     }
 
     public ArrayList<Command> getChildren() {
@@ -120,6 +146,27 @@ public class Command
         return false;
     }
 
+    /*
+    Returns true if addChild worked. False otherwise.
+    Only works if the command is deemed as a block type
+    */
+    public boolean addElseChild(Command child) {
+        hasElse = true;
+
+        if (isBlock) {
+            if (elseChildren == null) {
+                elseChildren = new ArrayList<Command>();
+            }
+            elseChildren.add(child);
+            return true;
+        }
+
+        System.out.println("ERROR: Attempted to add child command to non-block command " + name);
+        return false;
+    }
+
+
+
     public String toString() {
         return toStringHelper(0);
     }
@@ -130,6 +177,11 @@ public class Command
         String ans = indent + "COMMAND[" + name + ", " + args + "]\n";
 
         for (Command child : children) {
+            ans += child.toStringHelper(depth + 1);
+        }
+
+        for (Command child : elseChildren) {
+            ans += indent + "ELSE\n";
             ans += child.toStringHelper(depth + 1);
         }
 

@@ -6,12 +6,12 @@ public class ScratchError {
     }
 
     public static void throwError(int number, String errorMsg, int col) {
-        throwError(number, errorMsg, col, -1); // call the main throwError method  
+        throwError(number, errorMsg, col, -1); // call the main throwError method
     }
 
     public static void throwError(int number, String errorMsg, int col, int length) {
         System.out.println("⚠️  Error on line " + number + ": " + errorMsg);
- 
+
         if (col >= 0) { // if the entire method is wrong, then put carrots for the entire method where the scratch code errors
             int count = 0; // if it doesn't then it'll just put one at a point of the error
             if (length > 0) {
