@@ -101,6 +101,14 @@ public class Sprite {
     {
         costumes.add(file);
     }
+    
+    public void switchCostume(File file) {
+        currentCostume = file;
+    }
+
+    public void nextCostume() {
+        currentCostume = costumes.get(costumes.indexOf(currentCostume) + 1);
+    }
 
     public File getCurrentCostume()
     {

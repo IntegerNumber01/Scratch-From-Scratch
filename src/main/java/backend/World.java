@@ -1,24 +1,52 @@
 package backend;
+
 import java.util.*;
 
 public class World {
+
     private ArrayList<Sprite> sprites;
     private boolean isRunning;
+
     private HashMap<String, ScratchValue> globalVariables;
-    private HashMap<String, Object> guiState;
+    private HashMap<String, Boolean> keysPressed;
+
+    private boolean mouseDown;
+    private double mouseX;
+    private double mouseY;
 
     public World() {
-        sprites = new ArrayList<Sprite>();
+        sprites = new ArrayList<>();
         isRunning = true;
-        globalVariables = new HashMap<String, ScratchValue>();
-        guiState = new HashMap<String, Object>();
 
-        guiState.put("keyPressed", "");
-        guiState.put("mouseDown", false);
-        guiState.put("mouseX", 0);
-        guiState.put("mouseY", 0);
+        globalVariables = new HashMap<>();
+
+        keysPressed = new HashMap<>();
+        initKeys();
+
+        mouseDown = false;
+        mouseX = 0;
+        mouseY = 0;
     }
 
+    // ======================
+    // KEY INITIALIZATION
+    // ======================
+    private void initKeys() {
+
+        // a - z
+        for (char c = 'a'; c <= 'z'; c++) {
+            keysPressed.put(String.valueOf(c), false);
+        }
+
+        // 0 - 9
+        for (char c = '0'; c <= '9'; c++) {
+            keysPressed.put(String.valueOf(c), false);
+        }
+    }
+
+    // ======================
+    // SPRITES
+    // ======================
     public void addSprite(Sprite sprite) {
         sprites.add(sprite);
     }
@@ -27,6 +55,9 @@ public class World {
         return sprites;
     }
 
+    // ======================
+    // GAME STATE
+    // ======================
     public boolean isRunning() {
         return isRunning;
     }
@@ -35,6 +66,9 @@ public class World {
         isRunning = false;
     }
 
+    // ======================
+    // GLOBAL VARIABLES
+    // ======================
     public void setGlobalVariable(String name, ScratchValue value) {
         globalVariables.put(name, value);
     }
@@ -43,11 +77,56 @@ public class World {
         return globalVariables.get(name);
     }
 
-    public void setGuiState(String key, Object value) {
-        guiState.put(key, value);
+    // KEYBOARD INPUT
+    public void setKeyPressed(String key, boolean value) 
+    {
+        if (key == null) return;
+
+        key = key.toLowerCase();
+
+        if (keysPressed.containsKey(key)) 
+        {
+            keysPressed.put(key, value);
+        }
     }
 
-    public Object getGuiState(String key) {
-        return guiState.get(key);
+    public boolean getKeyPressed(String key) 
+    {
+        if (key == null) return false;
+
+        key = key.toLowerCase();
+
+        return keysPressed.getOrDefault(key, false);
+    }
+
+    // MOUSE INPUT
+    public void setMouseDown(boolean value) 
+    {
+        mouseDown = value;
+    }
+
+    public boolean isMouseDown() 
+    {
+        return mouseDown;
+    }
+
+    public void setMouseX(double x) 
+    {
+        mouseX = x;
+    }
+
+    public void setMouseY(double y) 
+    {
+        mouseY = y;
+    }
+
+    public double getMouseX() 
+    {
+        return mouseX;
+    }
+
+    public double getMouseY() 
+    {
+        return mouseY;
     }
 }

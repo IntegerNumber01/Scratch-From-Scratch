@@ -16,7 +16,18 @@ public final class LanguageConfig {
         "turn_left",
         "point_in_direction",
         "change_x",
-        "change_y"
+        "change_y",
+        "go_to_random_position",
+        "set_x",
+        "set_y",
+        "switch_costume", 
+        "next_costume",
+        "say",
+        "say_for_time",
+        "think",
+        "think_for_time",
+        "set_size",
+        "change_size"
     );
 
     public static final Set<String> BLOCK_COMMANDS = Set.of(
