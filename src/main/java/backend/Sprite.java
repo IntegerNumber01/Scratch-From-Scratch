@@ -11,23 +11,19 @@ public class Sprite {
     private int dir;
     private ArrayList<File> costumes;
     private File currentCostume ; 
-    // TODO:
-    // everything is attached to Program since Sprite and Program go together as a pair
-    // should variables go to Program as well?
-    private HashMap<String, ScratchValue> variables;
 
-    public Sprite(String name, int x, int y, int size, ArrayList<File> costumes) {
+    public Sprite(String name, int x, int y, int size) {
         this.name = name;
         this.x = x;
         this.y = y;
         this.size = size;
         dir = 0;
-        this.costumes = costumes ; 
-        this.currentCostume = costumes.get(0);
+        // this.costumes = costumes ; 
+        // this.currentCostume = costumes.get(0);
     }
 
-    public Sprite(String name, ArrayList<File> costumes) {
-        this(name, 0, 0, 100, costumes);
+    public Sprite(String name) {
+        this(name, 0, 0, 100);
     }
 
     public String getName()
@@ -99,14 +95,6 @@ public class Sprite {
     public void setY(int y)
     {
         this.y = y ; 
-    }
-
-    public ScratchValue getVariableValue(String varName) {
-        return variables.get(varName);
-    }
-
-    public void setVariableValue(String varName, ScratchValue value) {
-        variables.put(varName, value);
     }
 
     public void addCostume(File file) 

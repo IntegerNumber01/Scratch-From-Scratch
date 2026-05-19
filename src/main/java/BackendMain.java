@@ -17,7 +17,7 @@ public class BackendMain {
 
         try {
             System.out.println("[START] PROGRAM BUILDER OUTPUT --------------");
-            program = parser.buildProgram(new File("SBGame/Sprite1/script.scratch"));
+            program = parser.buildProgram(new File("SBGame/Cat/script.scratch"));
             System.out.println("[END] PROGRAM BUILDER OUTPUT --------------");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
