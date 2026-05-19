@@ -44,7 +44,7 @@ public class Parser {
                 ArrayList<String> args = new ArrayList<>();
                 args.add(varName);
                 args.add(value);
-                return new Command("assign", args);
+                return new Command("assign", args, true);
             }
         } else {
             String cmdName = cmd.substring(0, openParen).trim().replaceAll("[^a-zA-Z_]", "");
