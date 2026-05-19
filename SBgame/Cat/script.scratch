@@ -1,7 +1,11 @@
 define function(x, y):
-    move(x)
+    change_x(x)
     set_y(y)
 
-when_flag_clicked:
+when_flag_clicked: 
     go_to(0, 0)
     function(1, 2)
+    set_x(3)
+    change_y(1)
+    set_size(1)
+    change_size(4)

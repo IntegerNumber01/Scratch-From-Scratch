@@ -165,6 +165,12 @@ public class Interpreter
             case "change_y":
                 sprite.changeY((int) Double.parseDouble(args.get(0)));
                 break;
+            case "set_x":
+                sprite.setX((int) Double.parseDouble(args.get(0)));
+                break;
+            case "set_y":
+                sprite.setY((int) Double.parseDouble(args.get(0)));
+                break;
             case "switch_costume":
                 sprite.switchCostume(new File(args.get(0)));
                 break;
