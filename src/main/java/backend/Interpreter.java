@@ -20,10 +20,6 @@ public class Interpreter
         programs.put(sprite, program);
     }
 
-    // public boolean evaluateBoolExpression(Expression left, String operator, Expression right) {
-
-    // }
-
     public void execute() {
 
         System.out.println("Executing programs...");
@@ -49,6 +45,14 @@ public class Interpreter
 
     public Sprite executeFunction(Script function, ArrayList<String> newArgs, Sprite sprite) {
         System.out.println("Executing function " + function.getName() + " with args " + newArgs);
+
+        // check if any function args are the same name as variables. if so, thrown an error since that isn't allowd
+        for (String arg : function.getArgs()) {
+            if (programs.get(sprite).getVariables().containsKey(arg)) {
+                System.out.println("ERROR: Function argument " + arg + " has the same name as a variable. This is not allowed.");
+                return sprite;
+            }
+        }
 
         // since we mutate the function by changing all the args, first we must copy it, then change it
         // then execute it, then destroy it
@@ -81,10 +85,25 @@ public class Interpreter
     }
 
     public Sprite executeCommand(Command command, Sprite sprite) {
-        if (command.isBlock()) {
-            return executeBlockCommand(command, sprite);
+        // replace all the args through all children
+        // make a new command using deep copy and use that to execute.
+
+        Command commandCopy = new Command(command);
+
+        for (Command c : commandCopy.fullExpansion()) {
+            for (int i = 0; i < c.getArgs().size(); i++) {
+                for (String var : programs.get(sprite).getVariables().keySet()) {
+                    if (c.getArgs().get(i).contains(var)) {
+                        c.replaceArg(var, programs.get(sprite).getVariableValue(var));
+                    }
+                }
+            }
+        }
+
+        if (commandCopy.isBlock()) {
+            return executeBlockCommand(commandCopy, sprite);
         } else {
-            return exectuteActionCommand(command, sprite);
+            return exectuteActionCommand(commandCopy, sprite);
         }
     }
 
@@ -133,6 +152,13 @@ public class Interpreter
         String name = command.getName();
         ArrayList<String> args = command.getArgs();
 
+        if (command.isPrivate()) {
+            // eval only second arg into single string value
+            args.set(1, Expression.evaluate(args.get(1)));
+
+            programs.get(sprite).setVariableValue(args.get(0), args.get(1));
+            return sprite;
+        }
 
         // evalute all args into a single String value
         for (int i = 0; i < args.size(); i++) {

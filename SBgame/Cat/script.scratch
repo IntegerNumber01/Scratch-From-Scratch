@@ -1,3 +1,9 @@
+define sure(x):
+    change_x(x + 200)
+    change_y(y)
+
 when_flag_clicked:
     go_to(0, 0)
-    x = 1
+    x = 100
+    a = x + 10
+    sure(a)

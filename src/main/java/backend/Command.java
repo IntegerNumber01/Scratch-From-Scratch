@@ -13,11 +13,20 @@ public class Command
     private ArrayList<Command> children;
     private boolean isBlock;
 
+    // this command name is called "assign". If the user has a 
+    private boolean isPrivate; // only true for variable assigment commands
+
     public Command(String name, ArrayList<String> args) {
         this.name = name;
         this.args = args;
         this.isBlock = LanguageConfig.isBlockCommand(name);
         children = new ArrayList<Command>();
+        this.isPrivate = false;
+    }
+
+    public Command(String name, ArrayList<String> args, boolean isPrivate) {
+        this(name, args);
+        this.isPrivate = isPrivate;
     }
 
     // use this constructor when deep copying a command
@@ -26,6 +35,7 @@ public class Command
         this.args = new ArrayList<>(other.args);
         this.isBlock = other.isBlock;
         this.children = new ArrayList<>();
+        this.isPrivate = other.isPrivate;
 
         for (Command child : other.children) {
             this.children.add(new Command(child));
@@ -50,6 +60,10 @@ public class Command
 
     public ArrayList<Command> getChildren() {
         return children;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
     }
 
     /*

@@ -1,6 +1,7 @@
 package backend;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /*
     This class holds the parsed user code
@@ -10,11 +11,13 @@ public class Program
     private String name;
     private ArrayList<Script> scripts;
     private ArrayList<Script> functions;
+    private HashMap<String, String> variables;
 
     public Program(String name) {
         this.name = name;
         scripts = new ArrayList<>();
         functions = new ArrayList<>();
+        variables = new HashMap<String, String>();
     }
 
     public void addScript(Script script) {
@@ -31,6 +34,18 @@ public class Program
 
     public ArrayList<Script> getFunctions() {
         return functions;
+    }
+
+    public String getVariableValue(String varName) {
+        return variables.get(varName);
+    }
+
+    public void setVariableValue(String varName, String value) {
+        variables.put(varName, value);
+    }
+
+    public HashMap<String, String> getVariables() {
+        return variables;
     }
 
     /*
