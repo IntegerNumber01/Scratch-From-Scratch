@@ -35,20 +35,35 @@ public class Parser {
         int openParen = cmd.indexOf('(');
         int closeParen = cmd.indexOf(')');
 
-        String cmdName = cmd.substring(0, openParen).trim().replaceAll("[^a-zA-Z_]", "");
-        String argsString = cmd.substring(openParen + 1, closeParen);
-
-        ArrayList<String> args = new ArrayList<>();
-
-        if (!argsString.isEmpty()) {
-            String[] argsList = argsString.split(",");
-            // clean all whitespace
-            for (int i = 0; i < argsList.length; i++) {
-                args.add(argsList[i].trim());
+        if (openParen == -1 && closeParen == -1) {
+            // could be variable assignement since commands with no args don't exist
+            if (cmd.contains("=")) {
+                String[] parts = cmd.split("=");
+                String varName = parts[0].trim();
+                String value = parts[1].trim();
+                ArrayList<String> args = new ArrayList<>();
+                args.add(varName);
+                args.add(value);
+                return new Command("assign", args);
             }
+        } else {
+            String cmdName = cmd.substring(0, openParen).trim().replaceAll("[^a-zA-Z_]", "");
+            String argsString = cmd.substring(openParen + 1, closeParen);
+
+            ArrayList<String> args = new ArrayList<>();
+
+            if (!argsString.isEmpty()) {
+                String[] argsList = argsString.split(",");
+                // clean all whitespace
+                for (int i = 0; i < argsList.length; i++) {
+                    args.add(argsList[i].trim());
+                }
+            }
+
+            return new Command(cmdName, args);
         }
 
-        return new Command(cmdName, args);
+        return null;
     }
 
     /*
