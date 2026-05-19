@@ -12,7 +12,7 @@ public class Sprite {
     private ArrayList<File> costumes;
     private File currentCostume ; 
 
-    public Sprite(String name, int x, int y, int size) {
+    public Sprite(String name, int x, int y, int size, ArrayList<File> costumes) {
         this.name = name;
         this.x = x;
         this.y = y;
@@ -22,8 +22,8 @@ public class Sprite {
         // this.currentCostume = costumes.get(0);
     }
 
-    public Sprite(String name) {
-        this(name, 0, 0, 100);
+    public Sprite(String name, ArrayList<File> costumes) {
+        this(name, 0, 0, 100, costumes);
     }
 
     public String getName()
