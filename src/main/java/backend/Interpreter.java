@@ -1,5 +1,6 @@
 package backend;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -163,6 +164,30 @@ public class Interpreter
                 break;
             case "change_y":
                 sprite.changeY((int) Double.parseDouble(args.get(0)));
+                break;
+            case "switch_costume":
+                sprite.switchCostume(new File(args.get(0)));
+                break;
+            case "next_costume":
+                sprite.nextCostume();
+                break;
+            case "say":
+                sprite.say(args.get(0));
+                break;
+            case "say_for_time":
+                sprite.sayForTime(args.get(0), (int) Double.parseDouble(args.get(1)));
+                break;
+            case "think":
+                sprite.think(args.get(0));
+                break;
+            case "think_for_time":
+                sprite.thinkForTime(args.get(0), (int) Double.parseDouble(args.get(1)));
+                break;
+            case "set_size":
+                sprite.setSize((int) Double.parseDouble(args.get(0)));
+                break;
+            case "change_size":
+                sprite.changeSize((int) Double.parseDouble(args.get(0)));
                 break;
             default:
                 System.out.println("ERROR: Unrecognized action command " + name);
