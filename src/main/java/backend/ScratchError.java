@@ -1,3 +1,8 @@
+package backend;
+
+public class ScratchError {
+    
+}
 // this is a static class that has a throwError() method
 
 // the method takes (line text, line number, error message, OPTIONAL column number)
