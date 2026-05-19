@@ -1,7 +1,7 @@
 package gui;
 
 import java.util.*;
-import java.io.*;
+import java.io.File;
 
 import backend.Sprite;
 import backend.World;
@@ -16,13 +16,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 public class Gui {
-    private ArrayList<Sprite> sprites;
-    private World world_of_sprites;
-    private AnimationTimer timer;
+
+    private World world;
 
     public Gui(World world) {
-        world_of_sprites = world;
-        sprites = world.getSprites();
+        this.world = world;
     }
 
     public void refresh_and_draw(Stage stage) {
@@ -30,68 +28,59 @@ public class Gui {
         Scene scene = new Scene(pane, 480, 360);
         stage.setScene(scene);
 
-        // Key listeners
         scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-            world_of_sprites.setGuiState("keyPressed", e.getCode().toString().toLowerCase());
+            world.setGuiState("keyPressed", e.getCode().toString().toLowerCase());
         });
 
         scene.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
-            world_of_sprites.setGuiState("keyPressed", "");
+            world.setGuiState("keyPressed", "");
         });
 
-        // Mouse listeners
         scene.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-            world_of_sprites.setGuiState("mouseDown", true);
+            world.setGuiState("mouseDown", true);
         });
 
         scene.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
-            world_of_sprites.setGuiState("mouseDown", false);
+            world.setGuiState("mouseDown", false);
         });
 
         scene.addEventFilter(MouseEvent.MOUSE_MOVED, e -> {
-            world_of_sprites.setGuiState("mouseX", (int) e.getX());
-            world_of_sprites.setGuiState("mouseY", (int) e.getY());
+            world.setGuiState("mouseX", (int) e.getX());
+            world.setGuiState("mouseY", (int) e.getY());
         });
 
-        timer = new AnimationTimer() {
+        AnimationTimer timer = new AnimationTimer() {
             @Override
-            public void handle(long time) {
-                // if (!world_of_sprites.isRunning()) {
-                //     timer.stop();
-                //     return;
-                // }
+            public void handle(long now) {
                 draw(pane);
             }
         };
+
         timer.start();
     }
 
-    public void draw(Pane pane) {
+    public void draw(Pane pane)
+    {
         pane.getChildren().clear();
-        for (Sprite sprite : sprites) {
+
+        for (Sprite sprite : world.getSprites()) {
             drawSprite(pane, sprite);
         }
     }
 
     public void drawSprite(Pane pane, Sprite sprite) {
-    File costume = sprite.getCurrentCostume();
-    if (costume == null) return;
+        File costume = sprite.getCurrentCostume();
+        if (costume == null) return;
 
-    Image image = new Image(costume.toURI().toString());
+        Image image = new Image(costume.toURI().toString());
+        ImageView view = new ImageView(image);
 
-    System.out.println(image.getWidth());
-    System.out.println(image.getHeight());
+        view.setX(sprite.getX());
+        view.setY(sprite.getY());
 
-    ImageView image_drawn = new ImageView(image);
+        view.setFitWidth(200);
+        view.setFitHeight(200);
 
-    image_drawn.setX(100);
-    image_drawn.setY(100);
-
-    image_drawn.setFitWidth(200);
-    image_drawn.setFitHeight(200);
-
-    pane.getChildren().add(image_drawn);
-
-    System.out.println("sprite added");
-}
+        pane.getChildren().add(view);
+    }
 }
