@@ -13,19 +13,22 @@ public class Command
     private ArrayList<Command> children;
     private boolean isBlock;
 
+    private int lineNumber; // for error reporting. Line number in the original .scratch file where this command was defined
+
     // this command name is called "assign". If the user has a 
     private boolean isPrivate; // only true for variable assigment commands
 
-    public Command(String name, ArrayList<String> args) {
+    public Command(String name, ArrayList<String> args, int lineNumber) {
         this.name = name;
         this.args = args;
         this.isBlock = LanguageConfig.isBlockCommand(name);
+        this.lineNumber = lineNumber;
         children = new ArrayList<Command>();
         this.isPrivate = false;
     }
 
-    public Command(String name, ArrayList<String> args, boolean isPrivate) {
-        this(name, args);
+    public Command(String name, ArrayList<String> args, int lineNumber, boolean isPrivate) {
+        this(name, args, lineNumber);
         this.isPrivate = isPrivate;
     }
 
@@ -36,6 +39,7 @@ public class Command
         this.isBlock = other.isBlock;
         this.children = new ArrayList<>();
         this.isPrivate = other.isPrivate;
+        this.lineNumber = other.lineNumber;
 
         for (Command child : other.children) {
             this.children.add(new Command(child));
@@ -62,6 +66,10 @@ public class Command
         return children;
     }
 
+    public int getLineNumber() {
+        return lineNumber;
+    }
+
     public boolean isPrivate() {
         return isPrivate;
     }
@@ -74,7 +82,6 @@ public class Command
     newArg holds the value to replace with
     */
     public void replaceArg(String oldArg, String newArg) {
-        System.out.println("inside replace ARG in command " + name + " with args " + args);
         for (int i = 0; i < args.size(); i++) {
             args.set(i, args.get(i).replace(oldArg, newArg));
         }

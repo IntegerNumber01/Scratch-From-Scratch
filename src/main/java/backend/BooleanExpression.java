@@ -124,7 +124,8 @@ public class BooleanExpression
             }
         }
 
-        System.out.println("ERROR: UNEXPECTED COMPARISON OPERATOR");
+        // System.out.println("ERROR: UNEXPECTED COMPARISON OPERATOR");
+        ScratchError.throwError(-1, "Unexpected comparison operator", -1);
         return null;
     }
 

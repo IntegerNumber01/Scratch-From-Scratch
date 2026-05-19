@@ -31,7 +31,7 @@ public class Parser {
     /*
     Parses a line of code directly from the user .scratch file and converts it into a Command object with parameters. For example, "move(10)" would be converted into a Command with name "move" and args ["10"]
     */
-    private Command parseCommand(String cmd) {
+    private Command parseCommand(String cmd, int lineNumber) {
         int openParen = cmd.indexOf('(');
         int closeParen = cmd.indexOf(')');
 
@@ -44,7 +44,7 @@ public class Parser {
                 ArrayList<String> args = new ArrayList<>();
                 args.add(varName);
                 args.add(value);
-                return new Command("assign", args, true);
+                return new Command("assign", args, lineNumber, true);
             }
         } else {
             String cmdName = cmd.substring(0, openParen).trim().replaceAll("[^a-zA-Z_]", "");
@@ -60,7 +60,7 @@ public class Parser {
                 }
             }
 
-            return new Command(cmdName, args);
+            return new Command(cmdName, args, lineNumber);
         }
 
         return null;
@@ -79,6 +79,7 @@ public class Parser {
 
         Scanner scanner = new Scanner(file);
         int indentLevel = 0;
+        int lineNumber = 0;
         // stores the latest command block at each indent level
         ArrayList<Command> blockStack = new ArrayList<Command>();
         ArrayList<Script> functions = new ArrayList<Script>();
@@ -89,6 +90,8 @@ public class Parser {
             indentLevel = checkIndentLevel(line);
 
             line = line.trim();
+
+            lineNumber++;
 
 
             if (line.isEmpty()) {
@@ -106,20 +109,20 @@ public class Parser {
 
                 if (line.startsWith("define")) {
                     // use the parseCommand to obtain name and args, but throw away the command itself
-                    temp = parseCommand(line.substring(7)); // remove define
+                    temp = parseCommand(line.substring(7), lineNumber); // remove define
 
                     line = temp.getName();
 
-                    currentScript = new Script(line, temp.getArgs());
+                    currentScript = new Script(line, temp.getArgs(), lineNumber);
                 } else {
-                    currentScript = new Script(line);
+                    currentScript = new Script(line, lineNumber);
                 }
 
                 blockStack.clear();
 
             } else {
 
-                currentCommand = parseCommand(line);
+                currentCommand = parseCommand(line, lineNumber);
 
                 // remove blocks that are no longer active
                 while (blockStack.size() > indentLevel - 1) {

@@ -3,6 +3,7 @@ package backend;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Function;
 
 /*
     Supposed to take in a Program object and execute the commands in each Script object based on the event blocks. For example, if a Script has the name "when_flag_clicked", then the commands in that Script would be executed when the user clicks the green flag in the GUI.
@@ -45,12 +46,11 @@ public class Interpreter
     }
 
     public Sprite executeFunction(Script function, ArrayList<String> newArgs, Sprite sprite) {
-        System.out.println("Executing function " + function.getName() + " with args " + newArgs);
-
         // check if any function args are the same name as variables. if so, thrown an error since that isn't allowd
         for (String arg : function.getArgs()) {
             if (programs.get(sprite).getVariables().containsKey(arg)) {
-                System.out.println("ERROR: Function argument " + arg + " has the same name as a variable. This is not allowed.");
+                // System.out.println("ERROR: Function argument " + arg + " has the same name as a variable. This is not allowed.");
+                ScratchError.throwError(function.getLineNumber(), "Function argument " + arg + " has the same name as a variable.");
                 return sprite;
             }
         }
@@ -138,7 +138,7 @@ public class Interpreter
                 }
                 break;
             default:
-                System.out.println("ERROR: Unrecognized block command " + command.getName());
+                ScratchError.throwError(command.getLineNumber(), "Unrecognized block command " + "'" + command.getName() + "'");
                 break;
         }
 
@@ -216,7 +216,7 @@ public class Interpreter
                 sprite.changeSize((int) Double.parseDouble(args.get(0)));
                 break;
             default:
-                System.out.println("ERROR: Unrecognized action command " + name);
+                ScratchError.throwError(command.getLineNumber(), "Unrecognized command " + "'" + name + "'");
                 break; 
         }
 

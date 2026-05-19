@@ -9,10 +9,12 @@
         private String name;
         private ArrayList<Command> commands;
         private ArrayList<String> args;
+        private int lineNumber; // for error reporting. Line number in the original .scratch file where this script was defined
 
-        public Script(String name) {
+        public Script(String name, int lineNumber) {
             this.name = name;
             this.args = null;
+            this.lineNumber = lineNumber;
             commands = new ArrayList<Command>();
         }
 
@@ -20,6 +22,7 @@
         public Script(Script other) {
             this.name = other.name;
             this.args = other.args == null ? null : new ArrayList<>(other.args);
+            this.lineNumber = other.lineNumber;
             this.commands = new ArrayList<>();
 
             for (Command command : other.commands) {
@@ -28,8 +31,8 @@
         }
 
         // only for functions because functions can have arguments
-        public Script(String name, ArrayList<String> args) {
-            this(name);
+        public Script(String name, ArrayList<String> args, int lineNumber) {
+            this(name, lineNumber);
             this.args = args;
         }
 
@@ -43,6 +46,10 @@
 
         public ArrayList<String> getArgs() {
             return args;
+        }
+
+        public int getLineNumber() {
+            return lineNumber;
         }
 
         public void addCommand(Command command) {
