@@ -33,6 +33,7 @@ public final class LanguageConfig {
     public static final Set<String> BLOCK_COMMANDS = Set.of(
         "if",
         "repeat",
+        "repeat_until",
         "forever"
     );
 

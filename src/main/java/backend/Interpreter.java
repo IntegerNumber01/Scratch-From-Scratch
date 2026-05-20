@@ -84,34 +84,74 @@ public class Interpreter
         return sprite;
     }
 
+    private static boolean isIdentifierChar(char ch) {
+        return Character.isLetterOrDigit(ch) || ch == '_';
+    }
+
+    /*
+        Replaces all instances of target in expression with replacement, but only when target is a standalone identifier (not part of another word). For example, if target is "x", then "x + 1" would become "replacement + 1", but "max + 1" would remain unchanged.
+    */
+    private String replaceIdentifier(String expression, String target, String replacement) {
+        if (target == null || target.isEmpty()) {
+            return expression;
+        }
+
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+
+        while (i < expression.length()) {
+            boolean matchesTarget = expression.startsWith(target, i);
+            boolean leftBounded = i == 0 || !isIdentifierChar(expression.charAt(i - 1));
+            int end = i + target.length();
+            boolean rightBounded = end >= expression.length() || !isIdentifierChar(expression.charAt(end));
+
+            if (matchesTarget && leftBounded && rightBounded) {
+                result.append(replacement);
+                i = end;
+            } else {
+                result.append(expression.charAt(i));
+                i++;
+            }
+        }
+
+        return result.toString();
+    }
+
+    private String resolveVariables(String expression, Sprite sprite) {
+        String resolved = expression;
+        ArrayList<String> variables = new ArrayList<>(programs.get(sprite).getVariables().keySet());
+        variables.sort((a, b) -> Integer.compare(b.length(), a.length()));
+
+        for (String variable : variables) {
+            resolved = replaceIdentifier(resolved, variable, programs.get(sprite).getVariableValue(variable));
+        }
+
+        return resolved;
+    }
+
+    private String resolveExpressionArg(String expression, Sprite sprite) {
+        return OperatorFunctionExpression.evaluate(resolveVariables(expression, sprite));
+    }
+
+    private void resolveCommandArgs(Command command, Sprite sprite) {
+        for (int i = 0; i < command.getArgs().size(); i++) {
+            if (command.isPrivate() && i == 0) { // variable assignment & LHS
+                continue;
+            }
+
+            command.setArg(i, resolveExpressionArg(command.getArgs().get(i), sprite));
+        }
+    }
+
     public Sprite executeCommand(Command command, Sprite sprite) {
         // replace all the args through all children
         // make a new command using deep copy and use that to execute.
         Command commandCopy = new Command(command);
 
-        for (Command c : commandCopy.fullExpansion()) {
-            for (int i = 0; i < c.getArgs().size(); i++) {
-                for (String var : programs.get(sprite).getVariables().keySet()) {
-                    String arg = c.getArgs().get(i);
-
-                    if (arg.contains(var)) {
-                        c.replaceArg(var, programs.get(sprite).getVariableValue(var));
-                    }
-                }
-            }
-        }
-
-        // AFTER all the variables have been replaced, we can replace "operator functions"
-
-        for (Command c : commandCopy.fullExpansion()) {
-            for (int i = 0; i < c.getArgs().size(); i++) {
-                c.setArg(i, OperatorFunctionExpression.evaluate(c.getArgs().get(i)));
-            }
-        }
-
         if (commandCopy.isBlock()) {
             return executeBlockCommand(commandCopy, sprite);
         } else {
+            resolveCommandArgs(commandCopy, sprite);
             return exectuteActionCommand(commandCopy, sprite);
         }
     }
@@ -120,7 +160,7 @@ public class Interpreter
 
         switch (command.getName()) {
             case "repeat":
-                int times = (int) Double.parseDouble(command.getArgs().get(0)); // num of times to repeat
+                int times = (int) Double.parseDouble(Expression.evaluate(resolveExpressionArg(command.getArgs().get(0), sprite))); // num of times to repeat
 
                 for (int i = 0; i < times; i++) {
                     for (Command child : command.getChildren()) {
@@ -128,6 +168,14 @@ public class Interpreter
                     }
                 }
 
+                break;
+
+            case "repeat_until":
+                while (BooleanExpression.evaluate(resolveExpressionArg(command.getArgs().get(0), sprite)).equals("false")) {
+                    for (Command child : command.getChildren()) {
+                        sprite = executeCommand(child, sprite);
+                    }
+                }
                 break;
 
             case "forever":
@@ -138,8 +186,9 @@ public class Interpreter
                 }
                 break;
             case "if":
-                System.out.println("Eval " + BooleanExpression.evaluate(command.getArgs().get(0)));
-                if (BooleanExpression.evaluate(command.getArgs().get(0)).equals("true")) {
+                String condition = resolveExpressionArg(command.getArgs().get(0), sprite);
+                System.out.println("Eval " + BooleanExpression.evaluate(condition));
+                if (BooleanExpression.evaluate(condition).equals("true")) {
                     for (Command child : command.getChildren()) {
                         sprite = executeCommand(child, sprite);
                     }
