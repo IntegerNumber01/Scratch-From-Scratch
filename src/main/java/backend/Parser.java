@@ -103,7 +103,7 @@ public class Parser {
         }
 
         if (openParen == -1 && closeParen == -1) {
-            // commands with no args don't exist
+            ScratchError.throwError(lineNumber, "Invalid command: '" + cmd + "'");
         } else {
             String cmdName = cmd.substring(0, openParen).trim().replaceAll("[^a-zA-Z_]", "");
             String argsString = cmd.substring(openParen + 1, closeParen);
