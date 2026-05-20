@@ -12,6 +12,30 @@ public class Parser {
     public Parser() {
     }
 
+    private static int findTopLevelAssignmentIndex(String line) {
+        int depth = 0;
+
+        for (int i = 0; i < line.length(); i++) {
+            char ch = line.charAt(i);
+
+            if (ch == '(') {
+                depth++;
+            } else if (ch == ')') {
+                depth--;
+            } else if (ch == '=' && depth == 0) {
+                // checking for ==
+                boolean isDoubleEqualsLeft = i > 0 && line.charAt(i - 1) == '=';
+                boolean isDoubleEqualsRight = i + 1 < line.length() && line.charAt(i + 1) == '=';
+
+                if (!isDoubleEqualsLeft && !isDoubleEqualsRight) { // no ==
+                    return i;
+                }
+            }
+        }
+
+        return -1;
+    }
+
     // Assumes each indent is 4 spaces
     private int checkIndentLevel(String line) {
         int indentLevel = 0;
@@ -65,20 +89,21 @@ public class Parser {
     Made static so that it can be accessed from interpreter when parsing function like operators
     */
     public static Command parseCommand(String cmd, int lineNumber) {
+        int assignmentIndex = findTopLevelAssignmentIndex(cmd);
         int openParen = cmd.indexOf('(');
         int closeParen = cmd.lastIndexOf(')');
 
+        if (assignmentIndex != -1) { // variable assignment
+            String varName = cmd.substring(0, assignmentIndex).trim();
+            String value = cmd.substring(assignmentIndex + 1).trim();
+            ArrayList<String> args = new ArrayList<>();
+            args.add(varName);
+            args.add(value);
+            return new Command("assign", args, lineNumber, true);
+        }
+
         if (openParen == -1 && closeParen == -1) {
-            // could be variable assignement since commands with no args don't exist
-            if (cmd.contains("=")) {
-                String[] parts = cmd.split("=");
-                String varName = parts[0].trim();
-                String value = parts[1].trim();
-                ArrayList<String> args = new ArrayList<>();
-                args.add(varName);
-                args.add(value);
-                return new Command("assign", args, lineNumber, true);
-            }
+            // commands with no args don't exist
         } else {
             String cmdName = cmd.substring(0, openParen).trim().replaceAll("[^a-zA-Z_]", "");
             String argsString = cmd.substring(openParen + 1, closeParen);

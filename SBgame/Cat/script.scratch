@@ -1,21 +1,50 @@
+define setup_pose(arg_start_x, arg_start_y, arg_start_size):
+    go_to(arg_start_x, arg_start_y)
+    set_size(arg_start_size)
 
+define stride_block(arg_step_x, arg_step_y, arg_growth):
+    change_x(arg_step_x)
+    change_y(arg_step_y)
+    change_size(arg_growth)
 
-define sure(a, y, z):
-    go_to(a, y)
-    set_size(z)
+define square_wave(arg_reps, arg_forward, arg_rise, arg_growth):
+    repeat(arg_reps)
+        stride_block(arg_forward, arg_rise, arg_growth)
+        move(10)
+        turn_right(90)
+        move(5)
+        turn_left(90)
 
 when_flag_clicked:
-    go_to(0, 0)
-    x = 100
-    hungry = x + 10
-    gry = 10
-    sure(hungry + gry, gry, 100)
+    base_pos_x = -120 * (10 - 0)
+    base_pos_y = 35
+    base_size_value = 90
+    wave_reps_value = 3
+    stride_x_value = round(12.6) + mod(17, 5)
+    stride_y_value = sqrt(81) - 4
+    growth_value = length_of(join(12, 34))
 
-    comparsion = 10 > 0
+    setup_pose(base_pos_x, base_pos_y, base_size_value)
+    say(join(Phase, One))
+    turn_right(90)
 
-    if (comparsion):
-        go_to(1000, 0)
+    square_wave(wave_reps_value, stride_x_value, stride_y_value, growth_value)
 
-    go_to(pick_random(0, 10)+100, pick_random(100, 200) - 10)
+    if (stride_x_value + stride_y_value > 19 and growth_value == 4):
+        change_x(abs(-7) + floor(2.9))
+        change_y(ceiling(3.1) * 2)
+        change_size(log(1000) * 5)
+    else:
+        change_x(-999)
+        change_y(-999)
 
-    go_to(sin(3.), join(12, 3))
+    repeat(2)
+        move(8)
+        turn_left(45)
+        move(4)
+        turn_right(45)
+
+    set_x(base_pos_x + 200)
+    set_y(base_pos_y + sin(90) * 25)
+    move(10)
+    change_size(floor(9.9) / 3)
