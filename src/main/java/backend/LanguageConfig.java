@@ -67,7 +67,22 @@ public final class LanguageConfig {
         "letter_of",
         "length_of",
         "round",
-        "mod"
+        "mod",
+        // math time
+        "abs",
+        "floor",
+        "ceiling",
+        "sqrt",
+        "sin",
+        "cos",
+        "tan",
+        "asin",
+        "acos",
+        "atan",
+        "ln",
+        "log",
+        "e^",
+        "10^"
     );
 
     public static boolean isMathOperator(char c) {

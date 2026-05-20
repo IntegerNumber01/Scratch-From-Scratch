@@ -3,7 +3,6 @@ package backend;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.function.Function;
 
 /*
     Supposed to take in a Program object and execute the commands in each Script object based on the event blocks. For example, if a Script has the name "when_flag_clicked", then the commands in that Script would be executed when the user clicks the green flag in the GUI.
@@ -106,22 +105,7 @@ public class Interpreter
 
         for (Command c : commandCopy.fullExpansion()) {
             for (int i = 0; i < c.getArgs().size(); i++) {
-                String arg = c.getArgs().get(i);
-                Command temp;
-                String tempStr;
-
-                for (String op : LanguageConfig.FUNCTION_OPERATORS) {
-                    while (arg.contains(op)) {
-                        tempStr = arg.substring(arg.indexOf(op), arg.indexOf(')', arg.indexOf(op))+1);
-
-                        temp = Parser.parseCommand(tempStr, -1);
-                        String eval = evaluateOperatorFunction(temp);
-
-                        // to set the arg, we have to replace the pick_random(...) with eval AND join everything else
-                        arg = arg.replace(tempStr, eval);
-                        c.setArg(i, arg);
-                    }
-                }
+                c.setArg(i, OperatorFunctionExpression.evaluate(c.getArgs().get(i)));
             }
         }
 
@@ -185,34 +169,6 @@ public class Interpreter
         }
 
         return ans;
-    }
-
-    private String evaluateOperatorFunction(Command command) {
-        ArrayList<String> temp = command.getArgs();
-
-        switch (command.getName()) {
-            case "pick_random":
-                double a = Double.parseDouble(temp.get(0));
-                double b = Double.parseDouble(temp.get(1));
-                return String.valueOf((int) (Math.random() * (b - a + 1) + a));
-
-            case "join":
-                return temp.get(0) + temp.get(1);
-
-            case "letter_of":
-                return String.valueOf(temp.get(1).charAt((int) Double.parseDouble(temp.get(0)) - 1));
-
-            case "length_of":
-                return String.valueOf(temp.get(0).length());
-
-            case "round":
-                return String.valueOf(Math.round(Double.parseDouble(temp.get(0))));
-            case "mod":
-                return String.valueOf(Double.parseDouble(temp.get(0)) % Double.parseDouble(temp.get(1)));
-            default:
-                ScratchError.throwError(command.getLineNumber(), "Unknown operator function " + command.getName());
-                return "";
-        }
     }
 
     /*
