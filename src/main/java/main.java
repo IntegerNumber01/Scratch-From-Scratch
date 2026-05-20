@@ -24,39 +24,28 @@ public class main extends Application {
     // folderName -> files
     private Map<String, ArrayList<File>> sbGameFiles;
 
-    @Override
-    public void start(Stage stage) {
-
-        setupBackend();
-
-        testParser();
-
-        testSpritesLoaded();
-
-        launchGui(stage);
-
-        runInterpreter();
-    }
+@Override
+public void start(Stage stage) {
+    setupBackend();
+    testSpritesLoaded();  
+    launchGui(stage);     // gui + interpreter created here
+    testParser();         // now interpreter exists, addProgram works
+    runInterpreter();
+}
 
     // ==================================================
     // BACKEND SETUP
     // ==================================================
 
-    public void setupBackend() {
-
-        System.out.println("\n=== BACKEND SETUP ===");
-
-        world = new World();
-
-        parser = new Parser();
-
-        interpreter = new Interpreter(world);
-
-        sbGameFiles = getSBGameFolderFiles("SBGame");
-
-        System.out.println("Loaded folders:");
-        System.out.println(sbGameFiles.keySet());
-    }
+public void setupBackend() {
+    System.out.println("\n=== BACKEND SETUP ===");
+    world = new World();
+    parser = new Parser();
+    // DON'T create interpreter here, gui is still null
+    sbGameFiles = getSBGameFolderFiles("SBGame");
+    System.out.println("Loaded folders:");
+    System.out.println(sbGameFiles.keySet());
+}
 
     // ==================================================
     // PARSER TEST
@@ -138,40 +127,28 @@ public class main extends Application {
     // GUI TEST
     // ==================================================
 
-    public void launchGui(Stage stage) {
+public void launchGui(Stage stage) {
+    System.out.println("\n=== GUI TEST ===");
+    gui = new Gui(world);
+    stage.setTitle("Scratch-From-Scratch");
+    gui.refresh_and_draw(stage);
 
-        System.out.println("\n=== GUI TEST ===");
+    // create interpreter HERE after gui exists
+    interpreter = new Interpreter(world, gui);
 
-        gui = new Gui(world);
-
-        stage.setTitle("Scratch-From-Scratch");
-
-        gui.refresh_and_draw(stage);
-
-        System.out.println("GUI launched");
-    }
+    System.out.println("GUI launched");
+}
 
     // ==================================================
     // INTERPRETER TEST
     // ==================================================
 
     public void runInterpreter() {
-
-        System.out.println("\n=== INTERPRETER TEST ===");
-
-        new Thread(() -> {
-
-            try {
-
-                interpreter.execute();
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
-
-        }).start();
-    }
+    System.out.println("\n=== INTERPRETER TEST ===");
+    new Thread(() -> {
+        interpreter.execute();
+    }).start();
+}
 
     // ==================================================
     // FILE LOADER

@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Scene;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -20,6 +21,7 @@ public class Gui
 {
 
     private World world;
+    private Pane pane;
 
     // Image cache (prevents reloading every frame)
     private HashMap<String, Image> imageCache = new HashMap<>();
@@ -32,7 +34,7 @@ public class Gui
     public void refresh_and_draw(Stage stage) 
     {
 
-        Pane pane = new Pane();
+        pane = new Pane();
         Scene scene = new Scene(pane, 480, 360);
 
         stage.setScene(scene);
@@ -118,6 +120,12 @@ public class Gui
         {
             drawSprite(pane, sprite);
         }
+    }
+
+    // Called by interpreter after each command
+    public void tick() 
+    {
+        Platform.runLater(() -> draw(pane));
     }
 
     public void drawSprite(Pane pane, Sprite sprite) 

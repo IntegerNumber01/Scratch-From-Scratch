@@ -3,4 +3,4 @@ when_flag_clicked:
     set_y(0)
 
     repeat(1000):
-        move(x_position + 10, 0)
+        go_to(x_position + 10, 0)
