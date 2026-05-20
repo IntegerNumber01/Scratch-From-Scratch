@@ -38,11 +38,17 @@ public class Gui
         stage.setScene(scene);
         stage.show();
 
-        // IMPORTANT: ensures keyboard input always works
+        // ensures keyboard input always works
         scene.getRoot().requestFocus();
 
         
-        // KEYBOARD INPUTS 
+        // keyboard inputs
+        //How it works:
+        //addEventFilter -- Writes a method for when the event passed happens
+        //KeyEvent.KEY_PRESSED -- Specifies the desired event
+        //new EventHandler<KeyEvent>() -- Means when key is pressed call this method
+        //public void handle(KeyEvent e) -- runs the code that should happen when a key is pressed
+        //world.setKeyPressed() -- sets the key pressed in world's keysPressed to true 
         scene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() 
         {
             @Override

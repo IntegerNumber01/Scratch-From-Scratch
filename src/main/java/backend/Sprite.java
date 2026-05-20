@@ -18,8 +18,12 @@ public class Sprite {
         this.y = y;
         this.size = size;
         dir = 0;
-        // this.costumes = costumes ; 
-        // this.currentCostume = costumes.get(0);
+        //sets the arraylist of costumes for the spriteand the current costume of the sprite
+        this.costumes = costumes ; 
+        if(costumes != null && !costumes.isEmpty())
+        {
+            this.currentCostume = costumes.get(0);
+        }
     }
 
     public Sprite(String name, ArrayList<File> costumes) {
@@ -63,8 +67,8 @@ public class Sprite {
     }
 
     public void goToRandomPosition() { // bounds are 480,360)
-        x = (int)Math.random() *(481);
-        y = (int)Math.random()*(361);
+        x = (int)(Math.random() * 481);
+        y = (int)(Math.random()*361);
     }
 
     public void turnLeft(int deg) {
@@ -97,26 +101,40 @@ public class Sprite {
         this.y = y ; 
     }
 
+    //adds another costume to the sprite's list of costumes
     public void addCostume(File file) 
     {
         costumes.add(file);
     }
     
+    //switches the current costumes to the another costume
     public void switchCostume(File file) {
         currentCostume = file;
     }
 
-    public void nextCostume() {
-        currentCostume = costumes.get(costumes.indexOf(currentCostume) + 1);
+    // switches currentcostume to the costume after its index
+    //Ex. currentcostume is the file at index 0 in arraylist, nextCostume() changes currentcostume to the file at index 1
+    public void nextCostume() 
+    {
+        int index = costumes.indexOf(currentCostume) ; 
+        index++ ; 
+        if(index >= costumes.size())
+        {
+            index = 0 ; 
+        }
+        currentCostume = costumes.get(index);
     }
 
+    //returns the current costume for drawing
     public File getCurrentCostume()
     {
         return currentCostume ; 
     }
 
-    public String toString() {
-        return "SPRITE[" + name + ", " + x + ", " + y + ", " + size + ", " + dir + "]";
+    //returns all the costumes for the sprite
+    public ArrayList<File> getCostumes()
+    {
+        return costumes;
     }
 
     public String say(String text) {
@@ -156,6 +174,9 @@ public class Sprite {
             
     }
 
+    public String toString() {
+        return "SPRITE[" + name + ", " + x + ", " + y + ", " + size + ", " + dir + "]";
+    }
     
 
 }
