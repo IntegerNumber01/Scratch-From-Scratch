@@ -125,6 +125,11 @@ public class Gui
 
         File costume = sprite.getCurrentCostume();
 
+        if(costume == null)
+        {
+            return ; 
+        }
+
         //Path to png file
         String path = costume.toURI().toString();
 

@@ -1,11 +1,4 @@
 when_flag_clicked:
     go_to(0, 0)
-<<<<<<< Updated upstream
-
-    if (mouse_down):
-        go_to(100, 100)
-=======
     x = 100
     y = x + 10
-    sure(a)
->>>>>>> Stashed changes

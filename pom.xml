@@ -9,6 +9,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <mainClass>GuiTest</mainClass>
     </properties>
 
     <dependencies>
@@ -52,12 +53,20 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>GuiTest</mainClass>
+                            <mainClass>${mainClass}</mainClass>
                         </configuration>
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>GuiTest</mainClass>
+                    <mainClass>${mainClass}</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>BackendMain</mainClass>
                 </configuration>
             </plugin>
         </plugins>

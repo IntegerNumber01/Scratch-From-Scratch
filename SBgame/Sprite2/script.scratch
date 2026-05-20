@@ -2,8 +2,5 @@ when_flag_clicked:
     set_x(0)
     set_y(0)
 
-    forever:
-        if (x < 100):
-            change_x(10)
-
-        turn_left(15)
+    repeat(1000):
+        move(x_position + 10, 0)
