@@ -46,7 +46,7 @@ public class BooleanExpression
             // next, we have to update that list to contain true/false for each comparison expression
             for (int i = 0; i < container.size(); i++) {
                 if (!LanguageConfig.isBoolOperator(container.get(i))) {
-                    container.set(i, evaluateComparisonExpression(container.get(i)));
+                    container.set(i, evaluateBooleanTerm(container.get(i)));
                 }
             }
 
@@ -129,7 +129,28 @@ public class BooleanExpression
         return null;
     }
 
+    private static String evaluateBooleanTerm(String expression) {
+        expression = expression.trim();
+
+        if (expression.equals("true") || expression.equals("false")) {
+            return expression;
+        }
+
+        if (expression.equals("mouse_down")) {
+            return Interpreter.getMouseDownValue(); // works, but not the best design
+        }
+
+        // if (expression.startsWith("key_pressed(")) {
+        //     return Interpreter.getKeyPressedValue(expression);
+        // }
+
+        return evaluateComparisonExpression(expression);
+    }
+
+
     private static String evaluateComparisonExpression(String expression) {
+
+        System.out.println("expression " + expression);
         ArrayList<String> exp = splitComparisonExpression(expression);
 
         exp.set(0, Expression.evaluate(exp.get(0)));

@@ -1,5 +1,5 @@
 when_flag_clicked:
     go_to(0, 0)
 
-    repeat_until(x_position > 10):
-        go_to(x_position + 1, 0)
+    if (mouse_down):
+        go_to(100, 100)

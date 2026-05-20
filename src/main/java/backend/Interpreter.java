@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class Interpreter
 {
     private HashMap<Sprite, Program> programs;
-    private World world;
+    private static World world;
 
     public Interpreter(World world) {
         this.world = world;
@@ -309,5 +309,9 @@ public class Interpreter
         }
 
         return sprite;
+    }
+
+    public static String getMouseDownValue() {
+        return world.isMouseDown() ? "true" : "false";
     }
 }
