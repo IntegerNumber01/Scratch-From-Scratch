@@ -1,17 +1,19 @@
 
 
-define sure(x):
-    change_x(x + 200)
-    change_y(y)
+define sure(a, y, z):
+    go_to(a, y)
+    set_size(z)
 
 when_flag_clicked:
     go_to(0, 0)
     x = 100
-    a = x + 10
-    if (a < 10):
-        go_to(100, 100)
-    else:
-        if (a == 100):
-            set_x(50)
-        else:
-            go_to(-100,0)
+    hungry = x + 10
+    gry = 10
+    sure(hungry + gry, gry, 100)
+
+    comparsion = 10 > 0
+
+    if (comparsion):
+        go_to(1000, 0)
+
+    go_to(pick_random(0, 10)+100, pick_random(100, 200) - 10)

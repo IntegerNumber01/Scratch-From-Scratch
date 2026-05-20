@@ -117,6 +117,10 @@ public class Command
         }
     }
 
+    public void setArg(int index, String newValue) {
+        args.set(index, newValue);
+    }
+
     /*
     Returns a list of all commands in this command's subtree, including itself.
     Used for function argument replacement

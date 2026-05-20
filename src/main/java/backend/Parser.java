@@ -27,13 +27,46 @@ public class Parser {
         return indentLevel;
     }
 
+    // need to split args by comma, dealing with parens inside
+    private static ArrayList<String> splitArgs(String argsString) {
+        ArrayList<String> args = new ArrayList<>();
+        int depth = 0; // basically simulates a stack, but I don't like stack
+        // using string builder since its more efficient
+        StringBuilder current = new StringBuilder();
+
+        for (int i = 0; i < argsString.length(); i++) {
+            char ch = argsString.charAt(i);
+
+            if (ch == '(') {
+                depth++;
+            } else if (ch == ')') {
+                depth--;
+            }
+
+            if (ch == ',' && depth == 0) {
+                args.add(current.toString().trim());
+                current.setLength(0);
+            } else {
+                current.append(ch);
+            }
+        }
+
+        if (current.length() > 0) {
+            args.add(current.toString().trim());
+        }
+
+        return args;
+    }
+
 
     /*
     Parses a line of code directly from the user .scratch file and converts it into a Command object with parameters. For example, "move(10)" would be converted into a Command with name "move" and args ["10"]
+
+    Made static so that it can be accessed from interpreter when parsing function like operators
     */
-    private Command parseCommand(String cmd, int lineNumber) {
+    public static Command parseCommand(String cmd, int lineNumber) {
         int openParen = cmd.indexOf('(');
-        int closeParen = cmd.indexOf(')');
+        int closeParen = cmd.lastIndexOf(')');
 
         if (openParen == -1 && closeParen == -1) {
             // could be variable assignement since commands with no args don't exist
@@ -53,11 +86,7 @@ public class Parser {
             ArrayList<String> args = new ArrayList<>();
 
             if (!argsString.isEmpty()) {
-                String[] argsList = argsString.split(",");
-                // clean all whitespace
-                for (int i = 0; i < argsList.length; i++) {
-                    args.add(argsList[i].trim());
-                }
+                args = splitArgs(argsString);
             }
 
             return new Command(cmdName, args, lineNumber);

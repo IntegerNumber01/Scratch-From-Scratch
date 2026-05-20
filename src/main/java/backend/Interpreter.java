@@ -88,15 +88,41 @@ public class Interpreter
     public Sprite executeCommand(Command command, Sprite sprite) {
         // replace all the args through all children
         // make a new command using deep copy and use that to execute.
-
         Command commandCopy = new Command(command);
 
         for (Command c : commandCopy.fullExpansion()) {
             for (int i = 0; i < c.getArgs().size(); i++) {
                 for (String var : programs.get(sprite).getVariables().keySet()) {
-                    if (c.getArgs().get(i).contains(var)) {
+                    String arg = c.getArgs().get(i);
+
+                    if (arg.contains(var)) {
                         c.replaceArg(var, programs.get(sprite).getVariableValue(var));
                     }
+                }
+            }
+        }
+
+        // AFTER all the variables have been replaced, we can replace "operator functions"
+
+        for (Command c : commandCopy.fullExpansion()) {
+            for (int i = 0; i < c.getArgs().size(); i++) {
+                String arg = c.getArgs().get(i);
+                ArrayList<String> temp;
+                String tempStr;
+
+                while (arg.contains("pick_random")) {
+                    tempStr = arg.substring(arg.indexOf("pick_random"), arg.indexOf(')', arg.indexOf("pick_random"))+1);
+
+                    temp = Parser.parseCommand(tempStr, -1).getArgs();
+                    Double a = Double.parseDouble(temp.get(0));
+                    Double b = Double.parseDouble(temp.get(1));
+                    // does [a, b]
+                    String eval = String.valueOf((int) (Math.random() * (b - a + 1) + a));
+
+                    // to set the arg, we have to replace the pick_random(...) with eval AND join everything else
+                    arg = arg.replace(tempStr, eval);
+                    c.setArg(i, arg);
+                    System.out.println(c.getArgs());
                 }
             }
         }
@@ -149,6 +175,20 @@ public class Interpreter
         return sprite;
     }
 
+
+    /*
+        evalute all args into a single String value in a ne list
+    */
+    private ArrayList<String> evalArgs(ArrayList<String> args) {
+        ArrayList<String> ans = new ArrayList<>();
+
+        for (int i = 0; i < args.size(); i++) {
+            ans.add(Expression.evaluate(args.get(i)));
+        }
+
+        return ans;
+    }
+
     /*
     Take a single command and execute corresponding Scratch functions from Sprite
     */
@@ -157,7 +197,7 @@ public class Interpreter
         String name = command.getName();
         ArrayList<String> args = command.getArgs();
 
-        if (command.isPrivate()) {
+        if (command.isPrivate()) { // variable assignment
             // eval only second arg into single string value
             args.set(1, Expression.evaluate(args.get(1)));
 
@@ -166,10 +206,7 @@ public class Interpreter
         }
 
         // evalute all args into a single String value
-        for (int i = 0; i < args.size(); i++) {
-            args.set(i, Expression.evaluate(args.get(i)));
-        }
-
+        args = evalArgs(args);
 
         if (programs.get(sprite).isFunction(name)) { // the command is a function that is defined
             sprite = executeFunction(programs.get(sprite).getFunctionByName(name), args, sprite);

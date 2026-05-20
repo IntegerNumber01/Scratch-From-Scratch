@@ -20,7 +20,7 @@ public final class LanguageConfig {
         "go_to_random_position",
         "set_x",
         "set_y",
-        "switch_costume", 
+        "switch_costume",
         "next_costume",
         "say",
         "say_for_time",
@@ -51,10 +51,7 @@ public final class LanguageConfig {
     public static final Set<String> COMPARISON_OPERATORS = Set.of(
         ">",
         "<",
-        "<=",
-        ">=",
-        "==",
-        "!="
+        "=="
     );
 
     public static final Set<String> BOOL_OPERATORS = Set.of(
@@ -74,6 +71,26 @@ public final class LanguageConfig {
 
     public static boolean isComparisonOperator(String c) {
         return COMPARISON_OPERATORS.contains(c);
+    }
+
+    public static boolean isComparisonExpression(String expression) {
+        for (String op : COMPARISON_OPERATORS) {
+            if (expression.contains(op)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isBooleanExpression(String expression) {
+        for (String op : BOOL_OPERATORS) {
+            if (expression.contains(op)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static boolean isActionCommand(String name) {
