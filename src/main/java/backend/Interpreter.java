@@ -130,6 +130,7 @@ public class Interpreter
     }
 
     private String resolveExpressionArg(String expression, Sprite sprite) {
+        recordSpriteVariables(sprite);
         return OperatorFunctionExpression.evaluate(resolveVariables(expression, sprite));
     }
 
@@ -141,6 +142,15 @@ public class Interpreter
 
             command.setArg(i, resolveExpressionArg(command.getArgs().get(i), sprite));
         }
+    }
+
+    private void recordSpriteVariables(Sprite sprite) {
+        // handle all the variables Scratch provides that actively monitor sprite state
+        programs.get(sprite).setVariableValue("x_position", sprite.getX() + "");
+        programs.get(sprite).setVariableValue("y_position", sprite.getY() + "");
+        programs.get(sprite).setVariableValue("direction", sprite.getDir() + "");
+
+        programs.get(sprite).setVariableValue("size", sprite.getSize() + "");
     }
 
     public Sprite executeCommand(Command command, Sprite sprite) {

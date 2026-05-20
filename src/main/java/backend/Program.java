@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
-    This class holds the parsed user code
+    This class holds the parsed user code for one sprite
 */
 public class Program
 {
@@ -37,6 +37,8 @@ public class Program
     }
 
     public String getVariableValue(String varName) {
+        
+
         return variables.get(varName);
     }
 
