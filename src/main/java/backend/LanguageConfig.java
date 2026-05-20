@@ -61,6 +61,15 @@ public final class LanguageConfig {
         "not"
     );
 
+    public static final Set<String> FUNCTION_OPERATORS = Set.of(
+        "pick_random",
+        "join",
+        "letter_of",
+        "length_of",
+        "round",
+        "mod"
+    );
+
     public static boolean isMathOperator(char c) {
         return MATH_OPERATORS.contains(c);
     }

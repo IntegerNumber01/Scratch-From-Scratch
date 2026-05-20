@@ -17,3 +17,5 @@ when_flag_clicked:
         go_to(1000, 0)
 
     go_to(pick_random(0, 10)+100, pick_random(100, 200) - 10)
+
+    go_to(mod(length_of(arjun), 5), join(12, 3))
