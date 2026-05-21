@@ -19,6 +19,7 @@ import java.util.Map;
  * Main application class for the Scratch-From-Scratch engine.
  * Sets up the backend simulation world, parses assets/scripts, initializes
  * the JavaFX user interface, and executes the simulation loop.
+ * Each sprite gets its own Interpreter instance and execution thread.
  */
 public class main extends Application {
 
@@ -27,7 +28,9 @@ public class main extends Application {
     private World world;
     private Gui gui;
     private Parser parser;
-    private Interpreter interpreter;
+
+    // Each sprite gets its own interpreter
+    private List<Interpreter> interpreters = new ArrayList<>();
 
     // Maps folder (sprite/system) names to their associated asset files
     private Map<String, List<File>> sbGameFiles;
@@ -35,10 +38,10 @@ public class main extends Application {
     @Override
     public void start(Stage stage) {
         setupBackend();
-        launchGui(stage);     // Creates GUI and configures interpreter
+        launchGui(stage);     // Creates GUI
         testParser();         // Parses scripts and populates sprites into the world
         testSpritesLoaded();  // Diagnostic printout of loaded sprites
-        runInterpreter();     // Launches execution thread
+        runInterpreter();     // Launches one execution thread per sprite
     }
 
     // ==================================================
@@ -60,9 +63,6 @@ public class main extends Application {
         gui = new Gui(world);
         stage.setTitle("Scratch-From-Scratch");
         gui.refresh_and_draw(stage);
-
-        // Created after GUI setup to ensure references are healthy
-        interpreter = new Interpreter(world, gui);
         System.out.println("GUI launched");
     }
 
@@ -89,10 +89,14 @@ public class main extends Application {
                 Program program = parser.buildProgram(scriptFile);
                 System.out.println("RUNNING " + scriptFile.toString());
 
-                // Create and track sprite instance with its discovered assets
+                // Create sprite with its discovered assets
                 Sprite sprite = new Sprite(folderName, new ArrayList<>(sbGameFiles.get(folderName)));
                 world.addSprite(sprite);
-                interpreter.addProgram(sprite, program);
+
+                // Each sprite gets its own interpreter
+                Interpreter spriteInterpreter = new Interpreter(world, gui);
+                spriteInterpreter.addProgram(sprite, program);
+                interpreters.add(spriteInterpreter);
 
                 System.out.println("Loaded sprite: " + folderName);
 
@@ -121,20 +125,17 @@ public class main extends Application {
     }
 
     // ==================================================
-    // INTERPRETER TEST
+    // INTERPRETER - one thread per sprite
     // ==================================================
     public void runInterpreter() {
         System.out.println("\n=== INTERPRETER TEST ===");
-        Thread interpreterThread = new Thread(() -> {
-            // Note: Any visual updates or JavaFX node alterations done during 
-            // execute() must be wrapped in Platform.runLater().
-            interpreter.execute();
-        });
+        System.out.println("Launching " + interpreters.size() + " interpreter(s)...");
 
-        // Set the execution thread to daemon so that closing the GUI
-        // terminates the background interpreter task automatically.
-        interpreterThread.setDaemon(true);
-        interpreterThread.start();
+        for (Interpreter interp : interpreters) {
+            Thread t = new Thread(() -> interp.execute());
+            t.setDaemon(true);
+            t.start();
+        }
     }
 
     // ==================================================

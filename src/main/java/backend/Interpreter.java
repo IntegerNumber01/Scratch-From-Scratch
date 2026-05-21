@@ -33,7 +33,7 @@ public class Interpreter
             Program program = programs.get(sprite);
 
             for (Script script : program.getScripts()) {
-                sprite = executeScript(script, sprite);
+                executeScript(script, sprite);
             }
         }
 
@@ -41,12 +41,10 @@ public class Interpreter
     }
 
     // nested functions??
-    public Sprite executeScript(Script script, Sprite sprite) {
+    public void executeScript(Script script, Sprite sprite) {
         for (Command command : script.getCommands()) {
-            sprite = executeCommand(command, sprite);
+            executeCommand(command, sprite);
         }
-
-        return sprite;
     }
 
     public Sprite executeFunction(Script function, ArrayList<String> newArgs, Sprite sprite) {
