@@ -1,5 +1,6 @@
 when_flag_clicked:
     go_to(0, 0)
-    x = abc
-    if(x > 5) 
-        move(x)
+    x = 100
+    y = x + 10
+    repeat(100):
+        change_x(1)

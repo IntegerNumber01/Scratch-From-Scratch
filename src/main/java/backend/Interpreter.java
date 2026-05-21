@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import gui.Gui;
+
 /*
     Supposed to take in a Program object and execute the commands in each Script object based on the event blocks. For example, if a Script has the name "when_flag_clicked", then the commands in that Script would be executed when the user clicks the green flag in the GUI.
 */
@@ -11,9 +13,12 @@ public class Interpreter
 {
     private HashMap<Sprite, Program> programs;
     private static World world;
+    private Gui gui; // only calls tick
 
-    public Interpreter(World world) {
+    public Interpreter(World world, Gui gui) {
         this.world = world;
+        this.gui = gui;
+
         this.programs = new HashMap<Sprite, Program>();
     }
 
@@ -159,11 +164,22 @@ public class Interpreter
         Command commandCopy = new Command(command);
 
         if (commandCopy.isBlock()) {
-            return executeBlockCommand(commandCopy, sprite);
+            sprite = executeBlockCommand(commandCopy, sprite);
         } else {
             resolveCommandArgs(commandCopy, sprite);
-            return exectuteActionCommand(commandCopy, sprite);
+            sprite = exectuteActionCommand(commandCopy, sprite);
         }
+
+        if (gui != null) {
+            gui.tick();
+            try {
+                Thread.sleep(50); // 50ms = 20 commands per second, like Scratch
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        return sprite;
     }
 
     public Sprite executeBlockCommand(Command command, Sprite sprite) {

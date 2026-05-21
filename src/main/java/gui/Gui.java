@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Scene;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -20,6 +21,7 @@ public class Gui
 {
 
     private World world;
+    private Pane pane;
 
     // Image cache (prevents reloading every frame)
     private HashMap<String, Image> imageCache = new HashMap<>();
@@ -32,17 +34,23 @@ public class Gui
     public void refresh_and_draw(Stage stage) 
     {
 
-        Pane pane = new Pane();
+        pane = new Pane();
         Scene scene = new Scene(pane, 480, 360);
 
         stage.setScene(scene);
         stage.show();
 
-        // IMPORTANT: ensures keyboard input always works
+        // ensures keyboard input always works
         scene.getRoot().requestFocus();
 
         
-        // KEYBOARD INPUTS 
+        // keyboard inputs
+        //How it works:
+        //addEventFilter -- Writes a method for when the event passed happens
+        //KeyEvent.KEY_PRESSED -- Specifies the desired event
+        //new EventHandler<KeyEvent>() -- Means when key is pressed call this method
+        //public void handle(KeyEvent e) -- runs the code that should happen when a key is pressed
+        //world.setKeyPressed() -- sets the key pressed in world's keysPressed to true 
         scene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() 
         {
             @Override
@@ -114,10 +122,21 @@ public class Gui
         }
     }
 
+    // Called by interpreter after each command
+    public void tick() 
+    {
+        Platform.runLater(() -> draw(pane));
+    }
+
     public void drawSprite(Pane pane, Sprite sprite) 
     {
 
         File costume = sprite.getCurrentCostume();
+
+        if(costume == null)
+        {
+            return ; 
+        }
 
         //Path to png file
         String path = costume.toURI().toString();

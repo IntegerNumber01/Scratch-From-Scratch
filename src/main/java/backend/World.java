@@ -28,9 +28,7 @@ public class World {
         mouseY = 0;
     }
 
-    // ======================
-    // KEY INITIALIZATION
-    // ======================
+    // sets the values of the HashMaps to the characters on the keyboard and false since they haven't been pressed yet
     private void initKeys() {
 
         // a - z
@@ -44,9 +42,7 @@ public class World {
         }
     }
 
-    // ======================
-    // SPRITES
-    // ======================
+    // adds a new sprite object 
     public void addSprite(Sprite sprite) {
         sprites.add(sprite);
     }
@@ -55,9 +51,7 @@ public class World {
         return sprites;
     }
 
-    // ======================
-    // GAME STATE
-    // ======================
+    // returns the state of the gui
     public boolean isRunning() {
         return isRunning;
     }
@@ -77,7 +71,7 @@ public class World {
         return globalVariables.get(name);
     }
 
-    // KEYBOARD INPUT
+    // keyboard inputs
     public void setKeyPressed(String key, boolean value) 
     {
         if (key == null) return;
@@ -99,7 +93,7 @@ public class World {
         return keysPressed.getOrDefault(key, false);
     }
 
-    // MOUSE INPUT
+    // mouse inputs
     public void setMouseDown(boolean value) 
     {
         mouseDown = value;
