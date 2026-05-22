@@ -19,7 +19,7 @@ import java.util.Map;
  * Main application class for the Scratch-From-Scratch engine.
  * Sets up the backend simulation world, parses assets/scripts, initializes
  * the JavaFX user interface, and executes the simulation loop.
- * Each sprite gets its own Interpreter instance and execution thread.
+ * Each sprite gets its own Interpreter instance, and the GUI advances them on a shared timer.
  */
 public class main extends Application {
 
@@ -38,10 +38,10 @@ public class main extends Application {
     @Override
     public void start(Stage stage) {
         setupBackend();
-        launchGui(stage);     // Creates GUI
         testParser();         // Parses scripts and populates sprites into the world
         testSpritesLoaded();  // Diagnostic printout of loaded sprites
-        runInterpreter();     // Launches one execution thread per sprite
+        launchGui(stage);     // Creates GUI
+        runInterpreter();     // GUI owns the tick loop
     }
 
     // ==================================================
@@ -94,7 +94,7 @@ public class main extends Application {
                 world.addSprite(sprite);
 
                 // Each sprite gets its own interpreter
-                Interpreter spriteInterpreter = new Interpreter(world, gui);
+                Interpreter spriteInterpreter = new Interpreter(world);
                 spriteInterpreter.addProgram(sprite, program);
                 interpreters.add(spriteInterpreter);
 
@@ -125,17 +125,12 @@ public class main extends Application {
     }
 
     // ==================================================
-    // INTERPRETER - one thread per sprite
+    // INTERPRETER - GUI drives each interpreter at a fixed tick rate
     // ==================================================
     public void runInterpreter() {
         System.out.println("\n=== INTERPRETER TEST ===");
-        System.out.println("Launching " + interpreters.size() + " interpreter(s)...");
-
-        for (Interpreter interp : interpreters) {
-            Thread t = new Thread(() -> interp.execute());
-            t.setDaemon(true);
-            t.start();
-        }
+        System.out.println("Registering " + interpreters.size() + " interpreter(s) with GUI...");
+        gui.setInterpreters(interpreters);
     }
 
     // ==================================================

@@ -2,7 +2,10 @@ package gui;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
+import backend.Interpreter;
 import backend.Sprite;
 import backend.World;
 
@@ -10,18 +13,20 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Scene;
-import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.event.EventHandler;
+import javafx.util.Duration;
 
 public class Gui 
 {
 
     private World world;
     private Pane pane;
+    private List<Interpreter> interpreters;
 
     // Image cache (prevents reloading every frame)
     private HashMap<String, Image> imageCache = new HashMap<>();
@@ -29,6 +34,7 @@ public class Gui
     public Gui(World world) 
     {
         this.world = world;
+        this.interpreters = new ArrayList<Interpreter>();
     }
 
     public void refresh_and_draw(Stage stage) 
@@ -98,17 +104,17 @@ public class Gui
             }
         });
 
-        // GAME LOOP
-        AnimationTimer timer = new AnimationTimer() 
-        {
-            @Override
-            public void handle(long now) 
-            {
-                draw(pane);
+        Timeline interpreterTimeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+            for (Interpreter interpreter : interpreters) {
+                interpreter.tick();
             }
-        };
+        }));
+        interpreterTimeline.setCycleCount(Timeline.INDEFINITE);
+        interpreterTimeline.play();
 
-        timer.start();
+        Timeline renderTimeline = new Timeline(new KeyFrame(Duration.millis(16), event -> draw(pane)));
+        renderTimeline.setCycleCount(Timeline.INDEFINITE);
+        renderTimeline.play();
     }
 
     // DRAWING - Calls drawSprite all the time 
@@ -122,10 +128,8 @@ public class Gui
         }
     }
 
-    // Called by interpreter after each command
-    public void tick() 
-    {
-        Platform.runLater(() -> draw(pane));
+    public void setInterpreters(List<Interpreter> interpreters) {
+        this.interpreters = interpreters;
     }
 
     public void drawSprite(Pane pane, Sprite sprite) 

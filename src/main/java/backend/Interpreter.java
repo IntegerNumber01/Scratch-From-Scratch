@@ -3,8 +3,7 @@ package backend;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import gui.Gui;
+import java.util.Map;
 
 /*
     Supposed to take in a Program object and execute the commands in each Script object based on the event blocks. For example, if a Script has the name "when_flag_clicked", then the commands in that Script would be executed when the user clicks the green flag in the GUI.
@@ -13,13 +12,18 @@ public class Interpreter
 {
     private HashMap<Sprite, Program> programs;
     private static World world;
-    private Gui gui; // only calls tick
 
-    public Interpreter(World world, Gui gui) {
+    private Sprite currentSprite;
+    private Program currentProgram;
+    private int currentScriptIndex;
+    private boolean initialized;
+    private boolean finished;
+    private ArrayList<ExecutionFrame> executionStack;
+
+    public Interpreter(World world) {
         this.world = world;
-        this.gui = gui;
-
         this.programs = new HashMap<Sprite, Program>();
+        this.executionStack = new ArrayList<ExecutionFrame>();
     }
 
     public void addProgram(Sprite sprite, Program program) {
@@ -27,17 +31,48 @@ public class Interpreter
     }
 
     public void execute() {
-
         System.out.println("Executing programs...");
-        for (Sprite sprite : programs.keySet()) {
-            Program program = programs.get(sprite);
+        while (tick()) {
+            // Keep advancing until this interpreter runs out of work.
+        }
+        System.out.println("Finished executing programs.");
+    }
 
-            for (Script script : program.getScripts()) {
-                executeScript(script, sprite);
-            }
+    public boolean tick() {
+        initializeExecution();
+
+        if (finished || currentSprite == null || currentProgram == null) {
+            return false;
         }
 
-        System.out.println("Finished executing programs.");
+        while (world.isRunning()) {
+            if (executionStack.isEmpty()) {
+                if (!pushNextScript()) {
+                    finished = true;
+                    return false;
+                }
+            }
+
+            ExecutionFrame frame = peekFrame();
+
+            if (frame.index >= frame.commands.size()) {
+                completeFrame(frame);
+                continue;
+            }
+
+            Command command = frame.commands.get(frame.index++);
+
+            if (command.isBlock()) {
+                enterBlock(command);
+                continue;
+            }
+
+            currentSprite = executeLeafCommand(command, currentSprite);
+            return true;
+        }
+
+        finished = true;
+        return false;
     }
 
     // nested functions??
@@ -166,15 +201,6 @@ public class Interpreter
         } else {
             resolveCommandArgs(commandCopy, sprite);
             sprite = exectuteActionCommand(commandCopy, sprite);
-        }
-
-        if (gui != null) {
-            gui.tick();
-            try {
-                Thread.sleep(50); // 50ms = 20 commands per second, like Scratch
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
         }
 
         return sprite;
@@ -327,5 +353,125 @@ public class Interpreter
 
     public static String getMouseDownValue() {
         return world.isMouseDown() ? "true" : "false";
+    }
+
+    private void initializeExecution() {
+        if (initialized) {
+            return;
+        }
+
+        initialized = true;
+        finished = programs.isEmpty();
+
+        if (finished) {
+            return;
+        }
+
+        Map.Entry<Sprite, Program> entry = programs.entrySet().iterator().next();
+        currentSprite = entry.getKey();
+        currentProgram = entry.getValue();
+        currentScriptIndex = 0;
+    }
+
+    private boolean pushNextScript() {
+        while (currentScriptIndex < currentProgram.getScripts().size()) {
+            Script script = currentProgram.getScripts().get(currentScriptIndex++);
+            if (!script.getCommands().isEmpty()) {
+                pushFrame(new ExecutionFrame(script.getCommands(), ExecutionFrame.SCRIPT));
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private Sprite executeLeafCommand(Command command, Sprite sprite) {
+        Command commandCopy = new Command(command);
+        resolveCommandArgs(commandCopy, sprite);
+        return exectuteActionCommand(commandCopy, sprite);
+    }
+
+    private void enterBlock(Command command) {
+        switch (command.getName()) {
+            case "repeat":
+                int times = (int) Double.parseDouble(Expression.evaluate(resolveExpressionArg(command.getArgs().get(0), currentSprite)));
+                if (times > 0 && !command.getChildren().isEmpty()) {
+                    ExecutionFrame repeatFrame = new ExecutionFrame(command.getChildren(), ExecutionFrame.REPEAT);
+                    repeatFrame.remainingIterations = times;
+                    pushFrame(repeatFrame);
+                }
+                break;
+            case "repeat_until":
+                String repeatUntilCondition = resolveExpressionArg(command.getArgs().get(0), currentSprite);
+                if (BooleanExpression.evaluate(repeatUntilCondition).equals("false") && !command.getChildren().isEmpty()) {
+                    ExecutionFrame repeatUntilFrame = new ExecutionFrame(command.getChildren(), ExecutionFrame.REPEAT_UNTIL);
+                    repeatUntilFrame.conditionExpression = command.getArgs().get(0);
+                    pushFrame(repeatUntilFrame);
+                }
+                break;
+            case "forever":
+                if (world.isRunning() && !command.getChildren().isEmpty()) {
+                    pushFrame(new ExecutionFrame(command.getChildren(), ExecutionFrame.FOREVER));
+                }
+                break;
+            case "if":
+                String condition = resolveExpressionArg(command.getArgs().get(0), currentSprite);
+                if (BooleanExpression.evaluate(condition).equals("true") && !command.getChildren().isEmpty()) {
+                    pushFrame(new ExecutionFrame(command.getChildren(), ExecutionFrame.IF_BRANCH));
+                } else if (command.hasElse() && !command.getElseChildren().isEmpty()) {
+                    pushFrame(new ExecutionFrame(command.getElseChildren(), ExecutionFrame.IF_BRANCH));
+                }
+                break;
+            default:
+                ScratchError.throwError(command.getLineNumber(), "Unrecognized block command " + "'" + command.getName() + "'");
+                break;
+        }
+    }
+
+    private void completeFrame(ExecutionFrame frame) {
+        switch (frame.type) {
+            case ExecutionFrame.SCRIPT:
+            case ExecutionFrame.IF_BRANCH:
+                popFrame();
+                break;
+            case ExecutionFrame.REPEAT:
+                if (frame.remainingIterations > 1) {
+                    frame.remainingIterations--;
+                    frame.index = 0;
+                } else {
+                    popFrame();
+                }
+                break;
+            case ExecutionFrame.REPEAT_UNTIL:
+                String condition = resolveExpressionArg(frame.conditionExpression, currentSprite);
+                if (BooleanExpression.evaluate(condition).equals("false")) {
+                    frame.index = 0;
+                } else {
+                    popFrame();
+                }
+                break;
+            case ExecutionFrame.FOREVER:
+                if (world.isRunning()) {
+                    frame.index = 0;
+                } else {
+                    popFrame();
+                }
+                break;
+            default:
+                popFrame();
+                break;
+        }
+    }
+
+    private void pushFrame(ExecutionFrame frame) {
+        executionStack.add(frame);
+    }
+
+    private ExecutionFrame peekFrame() {
+        return executionStack.get(executionStack.size() - 1);
+    }
+
+    private void popFrame() {
+        executionStack.remove(executionStack.size() - 1);
     }
 }
