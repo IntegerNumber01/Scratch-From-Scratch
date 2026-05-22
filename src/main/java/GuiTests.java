@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.*;
 
-public class TestEverything extends Application {
+public class GuiTests extends Application {
 
     private World world;
     private ArrayList<File> costumes;

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -9,7 +10,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <mainClass>GuiTest</mainClass>
     </properties>
 
     <dependencies>
@@ -53,12 +53,12 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>${mainClass}</mainClass>
+                            <mainClass>main</mainClass>
                         </configuration>
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>${mainClass}</mainClass>
+                    <mainClass>main</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -66,7 +66,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>BackendMain</mainClass>
+                    <mainClass>main</mainClass>
                 </configuration>
             </plugin>
         </plugins>

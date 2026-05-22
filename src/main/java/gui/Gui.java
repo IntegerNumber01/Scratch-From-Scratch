@@ -162,7 +162,9 @@ public class Gui
         view.setX(sprite.getX());
         view.setY(sprite.getY());
 
-        view.setFitWidth(200);
+        double scale = sprite.getSize()/100.0 ; 
+        
+        view.setFitWidth(200*scale);
         view.setFitHeight(200);
 
         pane.getChildren().add(view);
