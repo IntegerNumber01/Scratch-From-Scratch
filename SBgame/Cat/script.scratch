@@ -1,6 +1,8 @@
 when_flag_clicked:
     go_to(0, 0)
-    x = 100
+    x = 0
     y = x + 10
-    repeat(100):
-        change_x(1)
+    forever():
+        go_to(mouse_x+x, mouse_y)
+        if (mouse_down):
+            x = x + 10

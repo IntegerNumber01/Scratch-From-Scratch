@@ -187,8 +187,12 @@ public class Interpreter
         programs.get(sprite).setVariableValue("x_position", sprite.getX() + "");
         programs.get(sprite).setVariableValue("y_position", sprite.getY() + "");
         programs.get(sprite).setVariableValue("direction", sprite.getDir() + "");
-
         programs.get(sprite).setVariableValue("size", sprite.getSize() + "");
+
+        // handle world variables
+
+        programs.get(sprite).setVariableValue("mouse_x", getMouseXValue());
+        programs.get(sprite).setVariableValue("mouse_y", getMouseYValue());
     }
 
     public Sprite executeCommand(Command command, Sprite sprite) {
@@ -353,6 +357,14 @@ public class Interpreter
 
     public static String getMouseDownValue() {
         return world.isMouseDown() ? "true" : "false";
+    }
+
+    public static String getMouseXValue() {
+        return world.getMouseX() + "";
+    }
+
+    public static String getMouseYValue() {
+        return world.getMouseY() + "";
     }
 
     private void initializeExecution() {
