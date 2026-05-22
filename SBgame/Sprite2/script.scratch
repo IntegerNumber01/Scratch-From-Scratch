@@ -1,5 +1,5 @@
 when_flag_clicked:
     set_x(250)
-    set_y(0)
+    set_y(100)
     repeat(10):
-        go_to(x_position + 10, 0)
+        go_to(x_position + 10, 100)
