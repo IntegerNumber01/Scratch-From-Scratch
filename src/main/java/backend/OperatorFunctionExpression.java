@@ -7,7 +7,7 @@ import java.util.ArrayList;
 */
 public class OperatorFunctionExpression
 {
-    public static String evaluate(String expression) {
+    public static String evaluate(String expression, World world) {
         int startFunctionIndex = -1;
         int openParenIndex = -1;
         int closeParenIndex = -1;
@@ -54,13 +54,13 @@ public class OperatorFunctionExpression
 
             // evaluate all nested operator functions inside the args first
             for (int i = 0; i < command.getArgs().size(); i++) {
-                command.setArg(i, evaluate(command.getArgs().get(i)));
+                command.setArg(i, evaluate(command.getArgs().get(i), world));
             }
 
-            ans = evaluateOperatorFunction(command);
+            ans = evaluateOperatorFunction(command, world);
 
             expression = expression.substring(0, startFunctionIndex) + ans + expression.substring(closeParenIndex + 1);
-            ans = evaluate(expression);
+            ans = evaluate(expression, world);
         }
 
         return ans;
@@ -98,10 +98,16 @@ public class OperatorFunctionExpression
         return -1;
     }
 
-    private static String evaluateOperatorFunction(Command command) {
+    private static String evaluateOperatorFunction(Command command, World world) {
         ArrayList<String> temp = command.getArgs();
 
         switch (command.getName()) {
+            case "key_pressed":
+                if (temp.size() != 1) {
+                    ScratchError.throwError(command.getLineNumber(), "key_pressed operator function requires exactly 1 argument");
+                }
+                return String.valueOf(world.getKeyPressed(temp.get(0)));
+
             case "pick_random":
                 double a = Double.parseDouble(temp.get(0));
                 double b = Double.parseDouble(temp.get(1));

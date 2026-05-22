@@ -63,6 +63,8 @@ public final class LanguageConfig {
     );
 
     public static final Set<String> FUNCTION_OPERATORS = Set.of(
+        "key_pressed",
+
         "pick_random",
         "join",
         "letter_of",

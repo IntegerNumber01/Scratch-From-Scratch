@@ -169,7 +169,7 @@ public class Interpreter
 
     private String resolveExpressionArg(String expression, Sprite sprite) {
         recordSpriteVariables(sprite);
-        return OperatorFunctionExpression.evaluate(resolveVariables(expression, sprite));
+        return OperatorFunctionExpression.evaluate(resolveVariables(expression, sprite), world);
     }
 
     private void resolveCommandArgs(Command command, Sprite sprite) {

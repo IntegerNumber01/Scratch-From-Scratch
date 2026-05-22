@@ -1,8 +1,15 @@
 when_flag_clicked:
     go_to(0, 0)
-    x = 0
-    y = x + 10
+    x = 100
+    y = 100
     forever():
-        go_to(mouse_x+x, mouse_y)
-        if (mouse_down):
-            x = x + 10
+        go_to(x, y)
+
+        if (key_pressed(w)):
+            y = y +1
+        if (key_pressed(s)):
+            y = y - 1
+        if (key_pressed(a)):
+            x = x - 1
+        if (key_pressed(d)):
+            x = x + 1
