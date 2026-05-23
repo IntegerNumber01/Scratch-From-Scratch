@@ -7,7 +7,7 @@ import java.util.ArrayList;
 */
 public class OperatorFunctionExpression
 {
-    public static String evaluate(String expression, World world) {
+    public static String evaluate(String expression, World world, Sprite sprite) {
         int startFunctionIndex = -1;
         int openParenIndex = -1;
         int closeParenIndex = -1;
@@ -54,13 +54,13 @@ public class OperatorFunctionExpression
 
             // evaluate all nested operator functions inside the args first
             for (int i = 0; i < command.getArgs().size(); i++) {
-                command.setArg(i, evaluate(command.getArgs().get(i), world));
+                command.setArg(i, evaluate(command.getArgs().get(i), world, sprite));
             }
 
-            ans = evaluateOperatorFunction(command, world);
+            ans = evaluateOperatorFunction(command, world, sprite);
 
             expression = expression.substring(0, startFunctionIndex) + ans + expression.substring(closeParenIndex + 1);
-            ans = evaluate(expression, world);
+            ans = evaluate(expression, world, sprite);
         }
 
         return ans;
@@ -98,7 +98,7 @@ public class OperatorFunctionExpression
         return -1;
     }
 
-    private static String evaluateOperatorFunction(Command command, World world) {
+    private static String evaluateOperatorFunction(Command command, World world, Sprite sprite) {
         ArrayList<String> temp = command.getArgs();
 
         switch (command.getName()) {
@@ -113,6 +113,15 @@ public class OperatorFunctionExpression
                     ScratchError.throwError(command.getLineNumber(), "attribute_of_sprite operator function requires exactly 2 arguments");
                 }
                 return Interpreter.getSpriteAttribute(temp.get(0), temp.get(1), command.getLineNumber());
+
+            case "touching":
+                if (temp.size() != 1) {
+                    ScratchError.throwError(command.getLineNumber(), "touching operator function requires exactly 1 argument");
+                }
+                if (sprite == null) {
+                    ScratchError.throwError(command.getLineNumber(), "touching operator function requires a current sprite context");
+                }
+                return String.valueOf(world.isTouching(sprite.getName(), temp.get(0)));
 
             case "pick_random":
                 double a = Double.parseDouble(temp.get(0));

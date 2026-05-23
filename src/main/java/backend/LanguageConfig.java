@@ -98,6 +98,7 @@ public final class LanguageConfig {
     public static final Set<String> FUNCTION_OPERATORS = Set.of(
         "key_pressed",
         "attribute_of_sprite",
+        "touching",
 
         "pick_random",
         "join",
