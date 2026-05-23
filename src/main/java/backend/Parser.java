@@ -83,6 +83,25 @@ public class Parser {
         return args;
     }
 
+    private static String stripComments(String line) {
+        // just checks if the # is on an outer level, if it is, then strip
+        int depth = 0;
+
+        for (int i = 0; i < line.length(); i++) {
+            char ch = line.charAt(i);
+
+            if (ch == '(') {
+                depth++;
+            } else if (ch == ')') {
+                depth--;
+            } else if (ch == '#' && depth == 0) {
+                return line.substring(0, i);
+            }
+        }
+
+        return line;
+    }
+
 
     /*
     Parses a line of code directly from the user .scratch file and converts it into a Command object with parameters. For example, "move(10)" would be converted into a Command with name "move" and args ["10"]
@@ -129,6 +148,7 @@ public class Parser {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             int indentLevel = checkIndentLevel(line);
+            line = stripComments(line);
             line = line.trim();
             lineNumber++;
 
@@ -190,6 +210,7 @@ public class Parser {
             String line = scanner.nextLine();
 
             indentLevel = checkIndentLevel(line);
+            line = stripComments(line);
 
             line = line.trim();
 

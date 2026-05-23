@@ -75,8 +75,6 @@ public final class LanguageConfig {
         ELSE_KEYWORD
     );
 
-    public static final Set<String> RESERVED_WORDS = buildReservedWords();
-
     public static final Set<Character> MATH_OPERATORS = Set.of(
         '*',
         '/',
@@ -123,6 +121,8 @@ public final class LanguageConfig {
         "e^",
         "10^"
     );
+
+    public static final Set<String> RESERVED_WORDS = buildReservedWords();
 
     public static boolean isMathOperator(char c) {
         return MATH_OPERATORS.contains(c);

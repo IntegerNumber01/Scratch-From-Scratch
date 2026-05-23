@@ -7,10 +7,12 @@ when_flag_clicked:
     x = 100
     y = 100
     forever():
-        //go_to(attribute_of_sprite(asd, Sprite2), y)
-        if (key_pressed(w)):
+        go_to(EVERYBODY_X, y)
+
+        # now we can handle key pressing using comments!
+        if (key_pressed(w)): # if w is pressed
             y = y +1
-        if (key_pressed(s)):
+        if (key_pressed(s)): # if s is pressed
             y = y - 1
         if (key_pressed(a)):
             EVERYBODY_X = EVERYBODY_X - 1
