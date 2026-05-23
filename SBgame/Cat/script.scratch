@@ -7,8 +7,7 @@ when_flag_clicked:
     x = 100
     y = 100
     forever():
-        go_to(EVERYBODY_X, y)
-
+        go_to(attribute_of_sprite(asd, Sprite2), y)
         if (key_pressed(w)):
             y = y +1
         if (key_pressed(s)):

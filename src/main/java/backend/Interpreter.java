@@ -12,6 +12,7 @@ import java.util.Map;
 public class Interpreter
 {
     private HashMap<Sprite, Program> programs;
+    private static HashMap<String, Program> programsBySpriteName = new HashMap<>();
     private static World world;
 
     private Sprite currentSprite;
@@ -30,6 +31,7 @@ public class Interpreter
     public void addProgram(Sprite sprite, Program program) {
         validateProgramVariables(program);
         programs.put(sprite, program);
+        programsBySpriteName.put(sprite.getName(), program);
     }
 
     private void validateProgramVariables(Program program) {
@@ -216,9 +218,86 @@ public class Interpreter
         return resolved;
     }
 
+    private int findMatchingCloseParen(String expression, int openParenIndex) {
+        int depth = 0;
+
+        for (int i = openParenIndex; i < expression.length(); i++) {
+            if (expression.charAt(i) == '(') {
+                depth++;
+            } else if (expression.charAt(i) == ')') {
+                depth--;
+
+                if (depth == 0) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    /*
+        Uses a cool trick where it hides the args of this special operator function so that it doesn't get replaced
+        in the normal variable replacement loops
+
+        The variables can then be restored using the function below
+    */
+    private String protectAttributeOfSpriteArgs(String expression, HashMap<String, String> protectedArgs) {
+        String functionName = "attribute_of_sprite";
+        int searchIndex = 0;
+
+        while (true) {
+            int startIndex = expression.indexOf(functionName + "(", searchIndex);
+
+            if (startIndex == -1) {
+                break;
+            }
+
+            int openParenIndex = startIndex + functionName.length();
+            int closeParenIndex = findMatchingCloseParen(expression, openParenIndex);
+
+            if (closeParenIndex == -1) {
+                break;
+            }
+
+            String functionString = expression.substring(startIndex, closeParenIndex + 1);
+            Command command = Parser.parseCommand(functionString, -1);
+
+            if (command != null && command.getArgs().size() == 2) {
+                ArrayList<String> args = command.getArgs();
+
+                for (int i = 0; i < args.size(); i++) {
+                    String token = "__ATTRIBUTE_OF_SPRITE_ARG_" + protectedArgs.size() + "__";
+                    protectedArgs.put(token, args.get(i));
+                    args.set(i, token);
+                }
+
+                String rebuiltFunction = functionName + "(" + args.get(0) + ", " + args.get(1) + ")";
+                expression = expression.substring(0, startIndex) + rebuiltFunction + expression.substring(closeParenIndex + 1);
+                searchIndex = startIndex + rebuiltFunction.length();
+            } else {
+                searchIndex = closeParenIndex + 1;
+            }
+        }
+
+        return expression;
+    }
+
+    private String restoreProtectedArgs(String expression, HashMap<String, String> protectedArgs) {
+        for (Map.Entry<String, String> entry : protectedArgs.entrySet()) {
+            expression = expression.replace(entry.getKey(), entry.getValue());
+        }
+
+        return expression;
+    }
+
     private String resolveExpressionArg(String expression, Sprite sprite) {
         recordSpriteVariables(sprite);
-        return OperatorFunctionExpression.evaluate(resolveVariables(expression, sprite), world);
+        HashMap<String, String> protectedArgs = new HashMap<>();
+        String protectedExpression = protectAttributeOfSpriteArgs(expression, protectedArgs);
+        String resolvedExpression = resolveVariables(protectedExpression, sprite);
+        resolvedExpression = restoreProtectedArgs(resolvedExpression, protectedArgs);
+        return OperatorFunctionExpression.evaluate(resolvedExpression, world);
     }
 
     private void resolveCommandArgs(Command command, Sprite sprite) {
@@ -232,20 +311,46 @@ public class Interpreter
     }
 
     private void recordSpriteVariables(Sprite sprite) {
+        recordSpriteVariables(sprite, programs.get(sprite));
+    }
+
+    private static void recordSpriteVariables(Sprite sprite, Program program) {
         for (Map.Entry<String, String> entry : world.getGlobalVariables().entrySet()) {
-            programs.get(sprite).setVariableValue(entry.getKey(), entry.getValue());
+            program.setVariableValue(entry.getKey(), entry.getValue());
         }
 
         // handle all the variables Scratch provides that actively monitor sprite state
-        programs.get(sprite).setVariableValue("x_position", sprite.getX() + "");
-        programs.get(sprite).setVariableValue("y_position", sprite.getY() + "");
-        programs.get(sprite).setVariableValue("direction", sprite.getDir() + "");
-        programs.get(sprite).setVariableValue("size", sprite.getSize() + "");
+        program.setVariableValue("x_position", sprite.getX() + "");
+        program.setVariableValue("y_position", sprite.getY() + "");
+        program.setVariableValue("direction", sprite.getDir() + "");
+        program.setVariableValue("size", sprite.getSize() + "");
 
         // handle world variables
+        program.setVariableValue("mouse_x", getMouseXValue());
+        program.setVariableValue("mouse_y", getMouseYValue());
+    }
 
-        programs.get(sprite).setVariableValue("mouse_x", getMouseXValue());
-        programs.get(sprite).setVariableValue("mouse_y", getMouseYValue());
+    public static String getSpriteAttribute(String variableName, String spriteName, int lineNumber) {
+        for (Sprite sprite : world.getSprites()) {
+            if (sprite.getName().equals(spriteName)) {
+                Program program = programsBySpriteName.get(spriteName);
+
+                if (program == null) {
+                    ScratchError.throwError(lineNumber, "Sprite " + spriteName + " has no program.");
+                }
+
+                recordSpriteVariables(sprite, program);
+
+                if (program.getVariableValue(variableName) == null) {
+                    ScratchError.throwError(lineNumber, "Sprite " + spriteName + " has no attribute " + variableName + ".");
+                }
+
+                return program.getVariableValue(variableName);
+            }
+        }
+
+        ScratchError.throwError(lineNumber, "Unknown sprite " + spriteName + ".");
+        return "";
     }
 
     public Sprite executeCommand(Command command, Sprite sprite) {

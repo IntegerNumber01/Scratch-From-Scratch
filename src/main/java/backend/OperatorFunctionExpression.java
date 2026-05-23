@@ -108,6 +108,12 @@ public class OperatorFunctionExpression
                 }
                 return String.valueOf(world.getKeyPressed(temp.get(0)));
 
+            case "attribute_of_sprite":
+                if (temp.size() != 2) {
+                    ScratchError.throwError(command.getLineNumber(), "attribute_of_sprite operator function requires exactly 2 arguments");
+                }
+                return Interpreter.getSpriteAttribute(temp.get(0), temp.get(1), command.getLineNumber());
+
             case "pick_random":
                 double a = Double.parseDouble(temp.get(0));
                 double b = Double.parseDouble(temp.get(1));
