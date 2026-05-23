@@ -24,12 +24,10 @@ import javafx.util.Duration;
 public class Gui
 {
 
-    private World world;
-    private Pane pane;
-    private List<Interpreter> interpreters;
-
-    // Image cache (prevents reloading every frame)
-    private HashMap<String, Image> imageCache = new HashMap<>();
+    private World world; //holds the game states: sprites, inputs, etc
+    private Pane pane; //for the gui so JavaFx knows where to draw the sprites
+    private List<Interpreter> interpreters; //List of script runners, one per sprite
+    private HashMap<String, Image> imageCache = new HashMap<>(); // Image cache (prevents reloading every frame)
 
     public Gui(World world)
     {
@@ -40,23 +38,25 @@ public class Gui
     public void refresh_and_draw(Stage stage)
     {
 
-        pane = new Pane();
-        Scene scene = new Scene(pane, 480, 360);
-
-        stage.setScene(scene);
+        //the window setup 
+        //sets window to 480x360
+        pane = new Pane(); //for drawing sprites
+        Scene scene = new Scene(pane, 480, 360); //takes in pane as parameter to know what it can display and also takes in width and height
+        stage.setScene(scene); //stage makes scene a window
         stage.show();
 
         // ensures keyboard input always works
-        scene.getRoot().requestFocus();
+        scene.getRoot().requestFocus(); //.getRoot() just gets the thing scene is displaying then .requestFocus() just says this is the thing recieving the inputs
 
-
-        // keyboard inputs
         //How it works:
         //addEventFilter -- Writes a method for when the event passed happens
         //KeyEvent.KEY_PRESSED -- Specifies the desired event
         //new EventHandler<KeyEvent>() -- Means when key is pressed call this method
         //public void handle(KeyEvent e) -- runs the code that should happen when a key is pressed
         //world.setKeyPressed() -- sets the key pressed in world's keysPressed to true
+        //world.setMouseDown/X/Y -- sets mouses state to whatever needs to be done
+
+        // keyboard inputs
         scene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>()
         {
             @Override
@@ -114,6 +114,7 @@ public class Gui
             }
         });
 
+        
         Timeline interpreterTimeline = new Timeline(new KeyFrame(Duration.millis(1000), event -> {
             for (Interpreter interpreter : interpreters) {
                 interpreter.tick();     
