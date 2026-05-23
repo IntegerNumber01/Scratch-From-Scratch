@@ -4,3 +4,5 @@ when_flag_clicked:
 
     repeat(100):
         change_x(1)
+
+    switch_costume(Glass_Frog-x.jpg)

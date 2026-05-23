@@ -459,8 +459,10 @@ public class Interpreter
             return sprite;
         }
 
-        // evalute all args into a single String value
-        args = evalArgs(args);
+        // switch_costume takes a raw filename, not a numeric/string expression
+        if (!name.equals("switch_costume")) {
+            args = evalArgs(args);
+        }
 
         if (programs.get(sprite).isFunction(name)) { // the command is a function that is defined
             sprite = executeFunction(programs.get(sprite).getFunctionByName(name), args, sprite);
