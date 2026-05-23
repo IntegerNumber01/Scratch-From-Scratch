@@ -85,7 +85,7 @@ public class Operators {
 
     //
 
-
+    /* 
     private static double num(ScratchValue sv)
     {
         return sv.toNumber() ;
@@ -202,5 +202,6 @@ public class Operators {
         }
 
         return new ScratchValue(false) ;
-    }
+    }*/
 }
+    
