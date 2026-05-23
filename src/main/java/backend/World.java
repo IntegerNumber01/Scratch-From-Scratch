@@ -3,11 +3,19 @@ package backend;
 import java.util.*;
 
 public class World {
+    private static final String[] RESERVED_VARIABLE_NAMES = {
+        "x_position",
+        "y_position",
+        "direction",
+        "size",
+        "mouse_x",
+        "mouse_y"
+    };
 
     private ArrayList<Sprite> sprites;
     private boolean isRunning;
 
-    private HashMap<String, ScratchValue> globalVariables;
+    private HashMap<String, String> globalVariables;
     private HashMap<String, Boolean> keysPressed;
 
     private boolean mouseDown;
@@ -42,7 +50,7 @@ public class World {
         }
     }
 
-    // adds a new sprite object 
+    // adds a new sprite object
     public void addSprite(Sprite sprite) {
         sprites.add(sprite);
     }
@@ -63,28 +71,50 @@ public class World {
     // ======================
     // GLOBAL VARIABLES
     // ======================
-    public void setGlobalVariable(String name, ScratchValue value) {
+    public void setGlobalVariable(String name, String value) {
         globalVariables.put(name, value);
     }
 
-    public ScratchValue getGlobalVariable(String name) {
+    public void addGlobalVariables(HashMap<String, String> variables) {
+        globalVariables.putAll(variables);
+    }
+
+    public HashMap<String, String> getGlobalVariables() {
+        return globalVariables;
+    }
+
+    public boolean hasGlobalVariable(String name) {
+        return globalVariables.containsKey(name);
+    }
+
+    public String getGlobalVariable(String name) {
         return globalVariables.get(name);
     }
 
+    public static boolean isReservedVariableName(String name) {
+        for (String reservedName : RESERVED_VARIABLE_NAMES) {
+            if (reservedName.equals(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // keyboard inputs
-    public void setKeyPressed(String key, boolean value) 
+    public void setKeyPressed(String key, boolean value)
     {
         if (key == null) return;
 
         key = key.toLowerCase();
 
-        if (keysPressed.containsKey(key)) 
+        if (keysPressed.containsKey(key))
         {
             keysPressed.put(key, value);
         }
     }
 
-    public boolean getKeyPressed(String key) 
+    public boolean getKeyPressed(String key)
     {
         if (key == null) return false;
 
@@ -94,32 +124,32 @@ public class World {
     }
 
     // mouse inputs
-    public void setMouseDown(boolean value) 
+    public void setMouseDown(boolean value)
     {
         mouseDown = value;
     }
 
-    public boolean isMouseDown() 
+    public boolean isMouseDown()
     {
         return mouseDown;
     }
 
-    public void setMouseX(double x) 
+    public void setMouseX(double x)
     {
         mouseX = x;
     }
 
-    public void setMouseY(double y) 
+    public void setMouseY(double y)
     {
         mouseY = y;
     }
 
-    public double getMouseX() 
+    public double getMouseX()
     {
         return mouseX;
     }
 
-    public double getMouseY() 
+    public double getMouseY()
     {
         return mouseY;
     }

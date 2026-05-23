@@ -3,6 +3,7 @@ package backend;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /*
@@ -27,7 +28,55 @@ public class Interpreter
     }
 
     public void addProgram(Sprite sprite, Program program) {
+        validateProgramVariables(program);
         programs.put(sprite, program);
+    }
+
+    private void validateProgramVariables(Program program) {
+        HashSet<String> localVariables = new HashSet<>();
+
+        for (Script script : program.getScripts()) {
+            validateVariableNamesInCommands(script.getCommands(), localVariables);
+        }
+
+        for (Script function : program.getFunctions()) {
+            validateVariableNamesInCommands(function.getCommands(), localVariables);
+        }
+
+        for (Script function : program.getFunctions()) {
+            for (String arg : function.getArgs()) {
+                if (World.isReservedVariableName(arg)) {
+                    ScratchError.throwError(function.getLineNumber(), "Function argument " + arg + " uses a reserved Scratch variable name.");
+                }
+
+                if (world.hasGlobalVariable(arg)) {
+                    ScratchError.throwError(function.getLineNumber(), "Function argument " + arg + " has the same name as a global variable.");
+                }
+
+                if (localVariables.contains(arg)) {
+                    ScratchError.throwError(function.getLineNumber(), "Function argument " + arg + " has the same name as a variable.");
+                }
+            }
+        }
+    }
+
+    private void validateVariableNamesInCommands(ArrayList<Command> commands, HashSet<String> localVariables) {
+        for (Command command : commands) {
+            if (command.isPrivate()) {
+                String varName = command.getArgs().get(0);
+
+                if (World.isReservedVariableName(varName)) {
+                    ScratchError.throwError(command.getLineNumber(), "Variable " + varName + " uses a reserved Scratch variable name.");
+                }
+
+                if (!world.hasGlobalVariable(varName)) {
+                    localVariables.add(varName);
+                }
+            }
+
+            validateVariableNamesInCommands(command.getChildren(), localVariables);
+            validateVariableNamesInCommands(command.getElseChildren(), localVariables);
+        }
     }
 
     public void execute() {
@@ -183,6 +232,10 @@ public class Interpreter
     }
 
     private void recordSpriteVariables(Sprite sprite) {
+        for (Map.Entry<String, String> entry : world.getGlobalVariables().entrySet()) {
+            programs.get(sprite).setVariableValue(entry.getKey(), entry.getValue());
+        }
+
         // handle all the variables Scratch provides that actively monitor sprite state
         programs.get(sprite).setVariableValue("x_position", sprite.getX() + "");
         programs.get(sprite).setVariableValue("y_position", sprite.getY() + "");
@@ -285,6 +338,10 @@ public class Interpreter
         if (command.isPrivate()) { // variable assignment
             // eval only second arg into single string value
             args.set(1, Expression.evaluate(args.get(1)));
+
+            if (world.hasGlobalVariable(args.get(0))) {
+                world.setGlobalVariable(args.get(0), args.get(1));
+            }
 
             programs.get(sprite).setVariableValue(args.get(0), args.get(1));
             return sprite;

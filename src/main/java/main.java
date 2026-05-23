@@ -1,6 +1,7 @@
 import backend.Interpreter;
 import backend.Parser;
 import backend.Program;
+import backend.ScratchValue;
 import backend.Sprite;
 import backend.World;
 import gui.Gui;
@@ -27,7 +28,6 @@ public class main extends Application {
 
     private World world;
     private Gui gui;
-    private Parser parser;
 
     // Each sprite gets its own interpreter
     private List<Interpreter> interpreters = new ArrayList<>();
@@ -50,8 +50,17 @@ public class main extends Application {
     public void setupBackend() {
         System.out.println("\n=== BACKEND SETUP ===");
         world = new World();
-        parser = new Parser();
         sbGameFiles = getSBGameFolderFiles(SB_GAME_FOLDER_NAME);
+
+        try {
+            File backdropFile = new File(SB_GAME_FOLDER_NAME + "/backdrop.scratch");
+            HashMap<String, String> globalVariables = Parser.parseBackdrop(backdropFile);
+            world.addGlobalVariables(globalVariables);
+        } catch (FileNotFoundException e) {
+            System.err.println("Failed to parse backdrop globals.");
+            e.printStackTrace();
+        }
+
         System.out.println("Loaded folders: " + sbGameFiles.keySet());
     }
 
@@ -86,7 +95,7 @@ public class main extends Application {
                     continue;
                 }
 
-                Program program = parser.buildProgram(scriptFile);
+                Program program = Parser.buildProgram(scriptFile);
                 System.out.println("RUNNING " + scriptFile.toString());
 
                 // Create sprite with its discovered assets

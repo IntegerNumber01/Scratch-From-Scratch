@@ -2,5 +2,8 @@ when_flag_clicked:
     set_x(0)
     set_y(0)
 
-    repeat(100):
-        change_x(10)
+    forever():
+        go_to(x_position, mouse_y)
+        set_x(EVERYBODY_X)
+        if (mouse_down):
+            EVERYBODY_X  = EVERYBODY_X + 1

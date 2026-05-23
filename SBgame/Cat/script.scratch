@@ -1,15 +1,19 @@
+define sizer(w):
+    x = x+1
+    change_size(w)
+
 when_flag_clicked:
     go_to(0, 0)
     x = 100
     y = 100
     forever():
-        go_to(x, y)
+        go_to(EVERYBODY_X, y)
 
         if (key_pressed(w)):
             y = y +1
         if (key_pressed(s)):
             y = y - 1
         if (key_pressed(a)):
-            x = x - 1
+            EVERYBODY_X = EVERYBODY_X - 1
         if (key_pressed(d)):
-            x = x + 1
+            EVERYBODY_X = EVERYBODY_X + 1

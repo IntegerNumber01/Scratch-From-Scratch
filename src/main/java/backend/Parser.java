@@ -3,13 +3,14 @@ package backend;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /*
     This class is responsible for parsing the Scratch code and creating Script objects
 */
 public class Parser {
-    public Parser() {
+    private Parser() {
     }
 
     private static int findTopLevelAssignmentIndex(String line) {
@@ -37,7 +38,7 @@ public class Parser {
     }
 
     // Assumes each indent is 4 spaces
-    private int checkIndentLevel(String line) {
+    private static int checkIndentLevel(String line) {
         int indentLevel = 0;
         int spaces = 0;
         for (char c : line.toCharArray()) {
@@ -120,10 +121,53 @@ public class Parser {
         return null;
     }
 
+    public static HashMap<String, String> parseBackdrop(File file) throws FileNotFoundException {
+        HashMap<String, String> globalVariables = new HashMap<>();
+        Scanner scanner = new Scanner(file);
+        int lineNumber = 0;
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            int indentLevel = checkIndentLevel(line);
+            line = line.trim();
+            lineNumber++;
+
+            if (line.isEmpty()) {
+                continue;
+            }
+
+            if (indentLevel != 0) {
+                ScratchError.throwError(lineNumber, "backdrop.scratch only supports global variable assignments.");
+            }
+
+            Command command = parseCommand(line, lineNumber);
+
+            if (!command.isPrivate()) {
+                ScratchError.throwError(lineNumber, "backdrop.scratch only supports global variable assignments.");
+            }
+
+            String varName = command.getArgs().get(0);
+            String value = command.getArgs().get(1);
+
+            if (World.isReservedVariableName(varName)) {
+                ScratchError.throwError(lineNumber, "Global variable '" + varName + "' uses a reserved Scratch variable name.");
+            }
+
+            if (globalVariables.containsKey(varName)) {
+                ScratchError.throwError(lineNumber, "Duplicate global variable '" + varName + "'.");
+            }
+
+            globalVariables.put(varName, new String(value));
+        }
+
+        scanner.close();
+        return globalVariables;
+    }
+
     /*
     Reads a .scratch file line by line and creates Script and Command objects based on the indentation and content of each line. The resulting Script objects are stored in a Program object.
     */
-    public Program buildProgram(File file) throws FileNotFoundException {
+    public static Program buildProgram(File file) throws FileNotFoundException {
         ArrayList<Script> scripts = new ArrayList<Script>();
         Script currentScript = null;
         Command currentCommand = null;
