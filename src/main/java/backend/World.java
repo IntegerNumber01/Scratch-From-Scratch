@@ -134,4 +134,65 @@ public class World {
     {
         return mouseY;
     }
+
+    public List<Sprite[]> isTouching() {
+        List<Sprite[]> touching = new ArrayList<>();
+
+        for (int i = 0; i < sprites.size(); i++) {
+            for (int j = i + 1; j < sprites.size(); j++) {
+                Sprite a = sprites.get(i);
+                Sprite b = sprites.get(j);
+
+                if (spritesOverlap(a, b)) {
+                    touching.add(new Sprite[]{a, b});
+                }
+            }
+        }
+
+        return touching;
+    }
+
+    private boolean spritesOverlap(Sprite a, Sprite b) {
+        double aScale = a.getSize() / 100.0;
+        double bScale = b.getSize() / 100.0;
+
+        int aW = (int)(200 * aScale);
+        int aH = (int)(200 * aScale);
+        int bW = (int)(200 * bScale);
+        int bH = (int)(200 * bScale);
+
+        // find overlapping rectangle
+        int overlapX1 = (int) Math.max(a.getX(), b.getX());
+        int overlapY1 = (int) Math.max(a.getY(), b.getY());
+        int overlapX2 = (int) Math.min(a.getX() + aW, b.getX() + bW);
+        int overlapY2 = (int) Math.min(a.getY() + aH, b.getY() + bH);
+
+        // no overlap at all
+        if (overlapX1 >= overlapX2 || overlapY1 >= overlapY2) return false;
+
+        // load pixel data
+        javafx.scene.image.Image imgA = new javafx.scene.image.Image(a.getCurrentCostume().toURI().toString(), aW, aH, false, false);
+        javafx.scene.image.Image imgB = new javafx.scene.image.Image(b.getCurrentCostume().toURI().toString(), bW, bH, false, false);
+
+        javafx.scene.image.PixelReader readerA = imgA.getPixelReader();
+        javafx.scene.image.PixelReader readerB = imgB.getPixelReader();
+
+        // check every pixel in the overlapping region
+        for (int y = overlapY1; y < overlapY2; y++) {
+            for (int x = overlapX1; x < overlapX2; x++) {
+                int ax = x - (int) a.getX();
+                int ay = y - (int) a.getY();
+                int bx = x - (int) b.getX();
+                int by = y - (int) b.getY();
+
+                // if both pixels are non-transparent, they are touching
+                if (readerA.getArgb(ax, ay) >> 24 != 0 &&
+                    readerB.getArgb(bx, by) >> 24 != 0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
