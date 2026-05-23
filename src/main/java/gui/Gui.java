@@ -104,6 +104,16 @@ public class Gui
             }
         });
 
+        scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent e)
+            {
+                world.setMouseX(e.getX());
+                world.setMouseY(e.getY());
+            }
+        });
+
         Timeline interpreterTimeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             for (Interpreter interpreter : interpreters) {
                 for (int i = 0; i < 5; i++) {
