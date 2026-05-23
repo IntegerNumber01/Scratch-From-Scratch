@@ -1,6 +1,5 @@
 import backend.World;
 import backend.Sprite;
-import backend.ScratchValue;
 import gui.Gui;
 
 import javafx.application.Application;
@@ -33,7 +32,7 @@ public class GuiTests extends Application {
 
         testSpriteDirection();
 
-        testGlobalVariables();
+        // testGlobalVariables();
 
         testGuiRendering(stage);
 

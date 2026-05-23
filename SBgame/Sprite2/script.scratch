@@ -1,8 +1,6 @@
 when_flag_clicked:
     set_x(0)
     set_y(0)
-    switch_costume(airplane.png)
-
     forever():
         go_to(x_position, mouse_y)
         set_x(EVERYBODY_X)
