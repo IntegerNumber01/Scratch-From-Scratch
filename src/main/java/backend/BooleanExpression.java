@@ -137,13 +137,8 @@ public class BooleanExpression
         }
 
         if (expression.equals("mouse_down")) {
-            System.out.println("mouse down value: " + Interpreter.getMouseDownValue());
             return Interpreter.getMouseDownValue(); // works, but not the best design
         }
-
-        // if (expression.startsWith("key_pressed(")) {
-        //     return Interpreter.getKeyPressedValue(expression);
-        // }
 
         return evaluateComparisonExpression(expression);
     }

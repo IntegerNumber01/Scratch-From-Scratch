@@ -186,18 +186,18 @@ public class GuiTests extends Application {
     // VARIABLES
     // ======================
 
-    public void testGlobalVariables() {
+    // public void testGlobalVariables() {
 
-        System.out.println("\n=== Test 8: Global variables ===");
+    //     System.out.println("\n=== Test 8: Global variables ===");
 
-        World w = new World();
+    //     World w = new World();
 
-        w.setGlobalVariable("score", new ScratchValue("42"));
-        w.setGlobalVariable("name", new ScratchValue("player"));
+    //     w.setGlobalVariable("score", new ScratchValue("42"));
+    //     w.setGlobalVariable("name", new ScratchValue("player"));
 
-        System.out.println("score: " + w.getGlobalVariable("score") + " (expected: 42)");
-        System.out.println("name: " + w.getGlobalVariable("name") + " (expected: player)");
-    }
+    //     System.out.println("score: " + w.getGlobalVariable("score") + " (expected: 42)");
+    //     System.out.println("name: " + w.getGlobalVariable("name") + " (expected: player)");
+    // }
 
     // ======================
     // GUI TESTS

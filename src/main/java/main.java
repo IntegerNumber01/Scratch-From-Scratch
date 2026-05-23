@@ -1,7 +1,6 @@
 import backend.Interpreter;
 import backend.Parser;
 import backend.Program;
-import backend.ScratchValue;
 import backend.Sprite;
 import backend.World;
 import gui.Gui;
