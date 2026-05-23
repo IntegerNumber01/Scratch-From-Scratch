@@ -494,7 +494,7 @@ public class Interpreter
                 sprite.setY((int) Double.parseDouble(args.get(0)));
                 break;
             case "switch_costume":
-                sprite.switchCostume(new File(args.get(0)));
+                sprite.switchCostume(args.get(0));
                 break;
             case "next_costume":
                 sprite.nextCostume();

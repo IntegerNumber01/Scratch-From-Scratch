@@ -108,8 +108,8 @@ public class Sprite {
     }
     
     //switches the current costumes to the another costume
-    public void switchCostume(File file) {
-        currentCostume = file;
+    public void switchCostume(String filename) {
+        currentCostume = new File("SBgame/"+name+"/"+filename);
     }
 
     // switches currentcostume to the costume after its index
