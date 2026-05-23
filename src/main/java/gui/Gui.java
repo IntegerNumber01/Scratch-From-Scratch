@@ -129,7 +129,7 @@ public class Gui
         interpreterTimeline.setCycleCount(Timeline.INDEFINITE);
         interpreterTimeline.play();
 
-        Timeline renderTimeline = new Timeline(new KeyFrame(Duration.millis(16), event -> draw(pane)));
+        Timeline renderTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> draw(pane)));
         renderTimeline.setCycleCount(Timeline.INDEFINITE);
         renderTimeline.play();
     }
