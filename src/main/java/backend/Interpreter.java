@@ -47,8 +47,12 @@ public class Interpreter
 
         for (Script function : program.getFunctions()) {
             for (String arg : function.getArgs()) {
-                if (World.isReservedVariableName(arg)) {
+                if (LanguageConfig.isReservedVariableName(arg)) {
                     ScratchError.throwError(function.getLineNumber(), "Function argument " + arg + " uses a reserved Scratch variable name.");
+                }
+
+                if (LanguageConfig.isReservedWord(arg)) {
+                    ScratchError.throwError(function.getLineNumber(), "Function argument " + arg + " uses a reserved language word.");
                 }
 
                 if (world.hasGlobalVariable(arg)) {
@@ -67,8 +71,12 @@ public class Interpreter
             if (command.isPrivate()) {
                 String varName = command.getArgs().get(0);
 
-                if (World.isReservedVariableName(varName)) {
+                if (LanguageConfig.isReservedVariableName(varName)) {
                     ScratchError.throwError(command.getLineNumber(), "Variable " + varName + " uses a reserved Scratch variable name.");
+                }
+
+                if (LanguageConfig.isReservedWord(varName)) {
+                    ScratchError.throwError(command.getLineNumber(), "Variable " + varName + " uses a reserved language word.");
                 }
 
                 if (!world.hasGlobalVariable(varName)) {

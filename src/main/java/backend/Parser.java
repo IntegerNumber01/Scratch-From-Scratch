@@ -149,8 +149,12 @@ public class Parser {
             String varName = command.getArgs().get(0);
             String value = command.getArgs().get(1);
 
-            if (World.isReservedVariableName(varName)) {
+            if (LanguageConfig.isReservedVariableName(varName)) {
                 ScratchError.throwError(lineNumber, "Global variable '" + varName + "' uses a reserved Scratch variable name.");
+            }
+
+            if (LanguageConfig.isReservedWord(varName)) {
+                ScratchError.throwError(lineNumber, "Global variable '" + varName + "' uses a reserved language word.");
             }
 
             if (globalVariables.containsKey(varName)) {
@@ -205,9 +209,13 @@ public class Parser {
                     }
                 }
 
-                if (line.startsWith("define")) {
+                if (line.startsWith(LanguageConfig.DEFINE_KEYWORD)) {
                     // use the parseCommand to obtain name and args, but throw away the command itself
-                    temp = parseCommand(line.substring(7), lineNumber); // remove define
+                    temp = parseCommand(line.substring(LanguageConfig.DEFINE_KEYWORD.length() + 1), lineNumber); // remove define
+
+                    if (LanguageConfig.isReservedWord(temp.getName())) {
+                        ScratchError.throwError(lineNumber, "Function name '" + temp.getName() + "' uses a reserved language word.");
+                    }
 
                     line = temp.getName();
 
@@ -220,7 +228,7 @@ public class Parser {
                 elseStack.clear();
 
             } else {
-                boolean isElse = line.equals("else:");
+                boolean isElse = line.equals(LanguageConfig.ELSE_KEYWORD + ":");
 
                 // remove blocks that are no longer active
                 if (isElse) {

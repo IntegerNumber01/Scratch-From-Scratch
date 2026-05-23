@@ -1,11 +1,24 @@
 package backend;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /*
-This class holds the configuration for the language, such as which commands are action commands, block commands, and events. It also has helper functions to check if a command is an action command, block command, or event.
+    This class holds the configuration for the language, such as which commands are action commands, block commands, and events. It also has helper functions to check if a command is an action command, block command, or event.
+
+    18 action commands
+    4 block commands
+    2 events
+    22 function operators
+    6 built-in variable names
+    3 reserved literals
+    2 structural keywords
+    57 reserved identifier-like words total in the combined set
 */
 public final class LanguageConfig {
+    public static final String DEFINE_KEYWORD = "define";
+    public static final String ELSE_KEYWORD = "else";
+
     private LanguageConfig() {
     }
 
@@ -41,6 +54,28 @@ public final class LanguageConfig {
         "when_flag_clicked",
         "when_clicked"
     );
+
+    public static final Set<String> RESERVED_VARIABLE_NAMES = Set.of(
+        "x_position",
+        "y_position",
+        "direction",
+        "size",
+        "mouse_x",
+        "mouse_y"
+    );
+
+    public static final Set<String> RESERVED_LITERALS = Set.of(
+        "true",
+        "false",
+        "mouse_down"
+    );
+
+    public static final Set<String> STRUCTURAL_KEYWORDS = Set.of(
+        DEFINE_KEYWORD,
+        ELSE_KEYWORD
+    );
+
+    public static final Set<String> RESERVED_WORDS = buildReservedWords();
 
     public static final Set<Character> MATH_OPERATORS = Set.of(
         '*',
@@ -93,6 +128,19 @@ public final class LanguageConfig {
         return MATH_OPERATORS.contains(c);
     }
 
+    private static Set<String> buildReservedWords() {
+        HashSet<String> reservedWords = new HashSet<>();
+        reservedWords.addAll(ACTION_COMMANDS);
+        reservedWords.addAll(BLOCK_COMMANDS);
+        reservedWords.addAll(EVENTS);
+        reservedWords.addAll(FUNCTION_OPERATORS);
+        reservedWords.addAll(BOOL_OPERATORS);
+        reservedWords.addAll(RESERVED_VARIABLE_NAMES);
+        reservedWords.addAll(RESERVED_LITERALS);
+        reservedWords.addAll(STRUCTURAL_KEYWORDS);
+        return Set.copyOf(reservedWords);
+    }
+
     public static boolean isBoolOperator(String c) {
         return BOOL_OPERATORS.contains(c);
     }
@@ -139,6 +187,24 @@ public final class LanguageConfig {
         name = name.trim().toLowerCase();
 
         return EVENTS.contains(name);
+    }
+
+    public static boolean isReservedVariableName(String name) {
+        if (name == null) return false;
+
+        return RESERVED_VARIABLE_NAMES.contains(name.trim().toLowerCase());
+    }
+
+    public static boolean isLiteral(String name) {
+        if (name == null) return false;
+
+        return RESERVED_LITERALS.contains(name.trim().toLowerCase());
+    }
+
+    public static boolean isReservedWord(String name) {
+        if (name == null) return false;
+
+        return RESERVED_WORDS.contains(name.trim().toLowerCase());
     }
 
     public static boolean isValid(String name) {

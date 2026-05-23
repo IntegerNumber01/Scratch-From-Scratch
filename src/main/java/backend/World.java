@@ -3,15 +3,6 @@ package backend;
 import java.util.*;
 
 public class World {
-    private static final String[] RESERVED_VARIABLE_NAMES = {
-        "x_position",
-        "y_position",
-        "direction",
-        "size",
-        "mouse_x",
-        "mouse_y"
-    };
-
     private ArrayList<Sprite> sprites;
     private boolean isRunning;
 
@@ -89,16 +80,6 @@ public class World {
 
     public String getGlobalVariable(String name) {
         return globalVariables.get(name);
-    }
-
-    public static boolean isReservedVariableName(String name) {
-        for (String reservedName : RESERVED_VARIABLE_NAMES) {
-            if (reservedName.equals(name)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     // keyboard inputs
