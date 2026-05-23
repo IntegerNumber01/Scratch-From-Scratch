@@ -100,6 +100,10 @@ public class main extends Application {
                 // Create sprite with its discovered assets
                 Sprite sprite = new Sprite(folderName, new ArrayList<>(sbGameFiles.get(folderName)));
                 world.addSprite(sprite);
+                System.out.println("Costume count: " + sprite.getCostumes().size());
+                for (File f : sprite.getCostumes()) {
+                    System.out.println("  Costume: " + f.getName() + " exists=" + f.exists());
+                }
 
                 // Each sprite gets its own interpreter
                 Interpreter spriteInterpreter = new Interpreter(world);

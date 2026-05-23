@@ -11,6 +11,7 @@ public class Sprite {
     private int dir;
     private ArrayList<File> costumes;
     private File currentCostume ; 
+    private int currentCostumeIndex = 0;
 
     public Sprite(String name, int x, int y, int size, ArrayList<File> costumes) {
         this.name = name;
@@ -109,20 +110,21 @@ public class Sprite {
     
     //switches the current costumes to the another costume
     public void switchCostume(String filename) {
-        currentCostume = new File("SBgame/"+name+"/"+filename);
+        for (int i = 0; i < costumes.size(); i++) {
+            if (costumes.get(i).getName().equals(filename)) {
+                currentCostumeIndex = i;
+                currentCostume = costumes.get(i);
+                return;
+            }
+        }
+        System.out.println("WARNING: costume not found: " + filename);
     }
 
     // switches currentcostume to the costume after its index
     //Ex. currentcostume is the file at index 0 in arraylist, nextCostume() changes currentcostume to the file at index 1
-    public void nextCostume() 
-    {
-        int index = costumes.indexOf(currentCostume) ; 
-        index++ ; 
-        if(index >= costumes.size())
-        {
-            index = 0 ; 
-        }
-        currentCostume = costumes.get(index);
+    public void nextCostume() {
+        currentCostumeIndex = (currentCostumeIndex + 1) % costumes.size();
+        currentCostume = costumes.get(currentCostumeIndex);
     }
 
     //returns the current costume for drawing

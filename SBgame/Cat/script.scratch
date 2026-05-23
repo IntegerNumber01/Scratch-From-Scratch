@@ -6,13 +6,7 @@ when_flag_clicked:
     go_to(0, 0)
     x = 100
     y = 100
-    forever():
-        //go_to(attribute_of_sprite(asd, Sprite2), y)
-        if (key_pressed(w)):
-            y = y +1
-        if (key_pressed(s)):
-            y = y - 1
-        if (key_pressed(a)):
-            EVERYBODY_X = EVERYBODY_X - 1
-        if (key_pressed(d)):
-            EVERYBODY_X = EVERYBODY_X + 1
+    go_to(x, y)
+    repeat(10)
+        move(10)
+

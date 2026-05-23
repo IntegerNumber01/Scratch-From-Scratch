@@ -21,6 +21,8 @@ public class Interpreter
     private boolean initialized;
     private boolean finished;
     private ArrayList<ExecutionFrame> executionStack;
+    private Sprite assignedSprite;
+    private Program assignedProgram;
 
     public Interpreter(World world) {
         this.world = world;
@@ -32,7 +34,10 @@ public class Interpreter
         validateProgramVariables(program);
         programs.put(sprite, program);
         programsBySpriteName.put(sprite.getName(), program);
+        assignedSprite = sprite;   // store directly
+        assignedProgram = program;
     }
+
 
     private void validateProgramVariables(Program program) {
         HashSet<String> localVariables = new HashSet<>();
@@ -96,34 +101,32 @@ public class Interpreter
             return false;
         }
 
-        while (world.isRunning()) {
-            if (executionStack.isEmpty()) {
-                if (!pushNextScript()) {
-                    finished = true;
-                    return false;
-                }
+        if (executionStack.isEmpty()) {
+            if (!pushNextScript()) {
+                finished = true;
+                return false;
             }
+        }
 
-            ExecutionFrame frame = peekFrame();
+        ExecutionFrame frame = peekFrame();
 
-            if (frame.index >= frame.commands.size()) {
-                completeFrame(frame);
-                continue;
-            }
-
-            Command command = frame.commands.get(frame.index++);
-
-            if (command.isBlock()) {
-                enterBlock(command);
-                continue;
-            }
-
-            currentSprite = executeLeafCommand(command, currentSprite);
+        if (frame.index >= frame.commands.size()) {
+            completeFrame(frame);
             return true;
         }
 
-        finished = true;
-        return false;
+        Command command = frame.commands.get(frame.index++);
+
+        // ONLY ENTER BLOCK (no execution yet)
+        if (command.isBlock()) {
+            enterBlock(command);
+            return true;   // IMPORTANT: yield immediately
+        }
+
+        // execute exactly ONE action command
+        executeLeafCommand(command, currentSprite);
+
+        return true;
     }
 
     // nested functions??
@@ -391,12 +394,11 @@ public class Interpreter
                 break;
 
             case "forever":
-                while (world.isRunning()) {
-                    for (Command child : command.getChildren()) {
-                        sprite = executeCommand(child, sprite);
-                    }
+                for (Command child : command.getChildren()) {
+                    sprite = executeCommand(child, sprite);
                 }
                 break;
+
             case "if":
                 String condition = resolveExpressionArg(command.getArgs().get(0), sprite);
                 System.out.println("Eval " + BooleanExpression.evaluate(condition));
@@ -530,20 +532,13 @@ public class Interpreter
     }
 
     private void initializeExecution() {
-        if (initialized) {
-            return;
-        }
-
+        if (initialized) return;
         initialized = true;
-        finished = programs.isEmpty();
+        finished = assignedSprite == null || assignedProgram == null;
+        if (finished) return;
 
-        if (finished) {
-            return;
-        }
-
-        Map.Entry<Sprite, Program> entry = programs.entrySet().iterator().next();
-        currentSprite = entry.getKey();
-        currentProgram = entry.getValue();
+        currentSprite = assignedSprite;
+        currentProgram = assignedProgram;
         currentScriptIndex = 0;
     }
 
