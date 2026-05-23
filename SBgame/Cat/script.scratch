@@ -1,10 +1,10 @@
-when_flag_clicked
+when_flag_clicked:
     forever():
-        if key_pressed("w")
+        if (key_pressed("w")):
             change_y(10)
-        if key_pressed("s")
+        if (key_pressed("s")):
             change_y(-10)
-        if key_pressed("a")
+        if (key_pressed("a")):
             change_x(-10)
-        if key_pressed("d")
+        if (key_pressed("d")):
             change_x(10)
