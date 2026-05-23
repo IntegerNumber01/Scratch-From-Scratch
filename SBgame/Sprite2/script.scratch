@@ -1,5 +1,6 @@
 when_flag_clicked:
     set_x(0)
     set_y(0)
-    switch_costume(airplane.png)
-    
+
+    repeat(100):
+        change_x(1)

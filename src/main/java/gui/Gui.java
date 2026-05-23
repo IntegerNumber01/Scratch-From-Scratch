@@ -23,6 +23,7 @@ import javafx.util.Duration;
 
 public class Gui
 {
+    private static final long INTERPRETER_BUDGET_NANOS = 1_000_000L;
 
     private World world; //holds the game states: sprites, inputs, etc
     private Pane pane; //for the gui so JavaFx knows where to draw the sprites
@@ -116,9 +117,13 @@ public class Gui
 
         Timeline interpreterTimeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             for (Interpreter interpreter : interpreters) {
-                for (int i = 0; i < 5; i++) {
-                        interpreter.tick();
+                long deadline = System.nanoTime() + INTERPRETER_BUDGET_NANOS;
+
+                while (System.nanoTime() < deadline) {
+                    if (!interpreter.tick()) {
+                        break;
                     }
+                }
             }
         }));
         interpreterTimeline.setCycleCount(Timeline.INDEFINITE);
