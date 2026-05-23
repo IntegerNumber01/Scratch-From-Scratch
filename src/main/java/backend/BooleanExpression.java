@@ -146,7 +146,6 @@ public class BooleanExpression
 
     private static String evaluateComparisonExpression(String expression) {
 
-        System.out.println("expression " + expression);
         ArrayList<String> exp = splitComparisonExpression(expression);
 
         exp.set(0, Expression.evaluate(exp.get(0)));

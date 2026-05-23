@@ -176,8 +176,6 @@ public class Interpreter
                     }
                 }
 
-            System.out.println("Executing command");
-            System.out.println(c.toString());
             sprite = executeCommand(c, sprite);
         }
 
@@ -409,7 +407,6 @@ public class Interpreter
 
             case "if":
                 String condition = resolveExpressionArg(command.getArgs().get(0), sprite);
-                System.out.println("Eval " + BooleanExpression.evaluate(condition));
                 if (BooleanExpression.evaluate(condition).equals("true")) {
                     for (Command child : command.getChildren()) {
                         sprite = executeCommand(child, sprite);
