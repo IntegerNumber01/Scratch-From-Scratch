@@ -209,6 +209,13 @@ public class Parser {
                 } else {
 
                     // nested command
+                    if (indentLevel - 2 >= blockStack.size()) {
+                        ScratchError.throwError(
+                        lineNumber,
+                        "Invalid indentation: no enclosing block"
+                        );
+                    }
+
                     Command parent = blockStack.get(indentLevel - 2);
                     if (elseStack.get(indentLevel - 2) && parent.getName().equals("if")) {
                         parent.addElseChild(currentCommand);
