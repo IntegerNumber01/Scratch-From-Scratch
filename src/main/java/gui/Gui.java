@@ -114,11 +114,9 @@ public class Gui
             }
         });
 
-        Timeline interpreterTimeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+        Timeline interpreterTimeline = new Timeline(new KeyFrame(Duration.millis(1000), event -> {
             for (Interpreter interpreter : interpreters) {
-                for (int i = 0; i < 5; i++) {
-                        interpreter.tick();
-                    }
+                interpreter.tick();     
             }
         }));
         interpreterTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -149,11 +147,16 @@ public class Gui
 
         File costume = sprite.getCurrentCostume();
 
-        if(costume == null)
-        {
-            return ;
+        if (costume == null) {
+            System.out.println(sprite.getName() + " costume is NULL");
+            return;
         }
 
+        if (!costume.exists()) {
+            System.out.println(sprite.getName() + " missing costume: " + costume);
+            return;
+        }
+        
         //Path to png file
         String path = costume.toURI().toString();
 
