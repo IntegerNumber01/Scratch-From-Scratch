@@ -1,6 +1,6 @@
 when_flag_clicked:
     forever():
-        go_to(500, 500)
+        go_to(100, 0)
         if (key_pressed(w)):
             change_y(10)
         if (key_pressed(s)):
