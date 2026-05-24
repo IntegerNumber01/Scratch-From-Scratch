@@ -4,4 +4,7 @@ when_flag_clicked:
     repeat(100):
         move(1)
     switch_costume(airplane.png)
-    
+    forever():
+        go_to(mouse_x, mouse_y)
+        if (touching(Cat)):
+            turn_left(100)

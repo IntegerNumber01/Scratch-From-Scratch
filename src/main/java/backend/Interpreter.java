@@ -306,7 +306,7 @@ public class Interpreter
         String protectedExpression = protectAttributeOfSpriteArgs(expression, protectedArgs);
         String resolvedExpression = resolveVariables(protectedExpression, sprite);
         resolvedExpression = restoreProtectedArgs(resolvedExpression, protectedArgs);
-        return OperatorFunctionExpression.evaluate(resolvedExpression, world);
+        return OperatorFunctionExpression.evaluate(resolvedExpression, world, sprite);
     }
 
     private void resolveCommandArgs(Command command, Sprite sprite) {

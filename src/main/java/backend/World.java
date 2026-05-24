@@ -135,17 +135,35 @@ public class World {
         return mouseY;
     }
 
-    public List<Sprite[]> isTouching() {
-        List<Sprite[]> touching = new ArrayList<>();
+    public boolean isTouching(Sprite a, Sprite b) {
+        if (a == null || b == null) {
+            return false;
+        }
 
-        for (int i = 0; i < sprites.size(); i++) {
-            for (int j = i + 1; j < sprites.size(); j++) {
-                Sprite a = sprites.get(i);
-                Sprite b = sprites.get(j);
+        return spritesOverlap(a, b);
+    }
 
-                if (spritesOverlap(a, b)) {
-                    touching.add(new Sprite[]{a, b});
-                }
+    public boolean isTouching(String spriteNameA, String spriteNameB) {
+        Sprite spriteA = null;
+        Sprite spriteB = null;
+
+        for (Sprite sprite : sprites) {
+            if (sprite.getName().equals(spriteNameA)) {
+                spriteA = sprite;
+            } else if (sprite.getName().equals(spriteNameB)) {
+                spriteB = sprite;
+            }
+        }
+
+        return isTouching(spriteA, spriteB);
+    }
+
+    public List<Sprite> getTouchingSprites(Sprite sprite) {
+        List<Sprite> touching = new ArrayList<>();
+
+        for (Sprite other : sprites) {
+            if (other != sprite && isTouching(sprite, other)) {
+                touching.add(other);
             }
         }
 
