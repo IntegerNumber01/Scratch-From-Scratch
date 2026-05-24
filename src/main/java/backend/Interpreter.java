@@ -11,7 +11,7 @@ import java.util.Map;
 public class Interpreter
 {
     private HashMap<Sprite, Program> programs;
-    private static HashMap<String, Program> programsBySpriteName = new HashMap<>();
+    private static HashMap<Integer, Program> programsByInstanceId = new HashMap<>();
     private static World world;
 
     private Sprite currentSprite;
@@ -32,7 +32,7 @@ public class Interpreter
     public void addProgram(Sprite sprite, Program program) {
         validateProgramVariables(program);
         programs.put(sprite, program);
-        programsBySpriteName.put(sprite.getName(), program);
+        programsByInstanceId.put(sprite.getInstanceId(), program);
         assignedSprite = sprite;   // store directly
         assignedProgram = program;
     }
@@ -389,7 +389,7 @@ public class Interpreter
     public static String getSpriteAttribute(String variableName, String spriteName, int lineNumber) {
         for (Sprite sprite : world.getSprites()) {
             if (sprite.getName().equals(spriteName)) {
-                Program program = programsBySpriteName.get(spriteName);
+                Program program = programsByInstanceId.get(sprite.getInstanceId());
 
                 if (program == null) {
                     ScratchError.throwError(lineNumber, "Sprite " + spriteName + " has no program.");

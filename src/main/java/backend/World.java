@@ -158,6 +158,24 @@ public class World {
         return isTouching(spriteA, spriteB);
     }
 
+    public boolean isTouching(Sprite sprite, String otherSpriteName) {
+        if (sprite == null || otherSpriteName == null) {
+            return false;
+        }
+
+        for (Sprite other : sprites) {
+            if (other.getInstanceId() == sprite.getInstanceId()) {
+                continue;
+            }
+
+            if (other.getName().equals(otherSpriteName) && isTouching(sprite, other)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public List<Sprite> getTouchingSprites(Sprite sprite) {
         List<Sprite> touching = new ArrayList<>();
 

@@ -121,7 +121,7 @@ public class OperatorFunctionExpression
                 if (sprite == null) {
                     ScratchError.throwError(command.getLineNumber(), "touching operator function requires a current sprite context");
                 }
-                return String.valueOf(world.isTouching(sprite.getName(), temp.get(0)));
+                return String.valueOf(world.isTouching(sprite, temp.get(0)));
 
             case "pick_random":
                 double a = Double.parseDouble(temp.get(0));
