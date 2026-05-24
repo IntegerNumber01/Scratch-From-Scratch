@@ -1,39 +1,4 @@
 when_flag_clicked:
-<<<<<<< Updated upstream
     go_to(100, 100)
     say_for_time(hello,5)
     think_for_time(hi,5)
-
-=======
-    bird_x = 100
-    bird_y = 180
-    velocity = 0
-    pipe_x = 480
-    pipe_gap_y = 150
-    score = 0
-    alive = true
-    go_to(100,180)
-    forever
-        if(alive)
-            velocity = velocity + 2
-            if (key_pressed(space))
-                velocity = -15
-            bird_y = bird_y + velocity
-            set_y(bird_y)
-            pipe_x = pipe_x - 5
-            if(pipe_x < -20)
-                pipe_x = 480
-                pipe_gap_y = pick_random(60,280)
-                score = score + 1
-                say(join(Score: , score))
-            if (bird_y > 340)
-                alive = false
-                say(Game Over!)
-            if (bird_y < 0) 
-                alive = false 
-                say(Game Over!)
-            if (bird_x < pipe_gap_y - 20 and bird_x < pipe_x + 20)
-                if (bird_y < pipe_gap_y - 60 or bird_y > pipe_gap_y + 60)
-                    alive = false
-                    say(Game Over!)
->>>>>>> Stashed changes

@@ -1,6 +1,5 @@
 package backend;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -122,21 +121,21 @@ public class Interpreter
         {
             if(System.nanoTime() < frame.waitUntil)
             {
-                return true ; 
+                return true ;
             }
 
             else
             {
-                frame.waitUntil = 0 ; 
+                frame.waitUntil = 0 ;
                 if("say".equals(frame.clearAfterWait))
                 {
-                    currentSprite.say("") ; 
+                    currentSprite.say("") ;
                 }
                 else if("think".equals(frame.clearAfterWait))
                 {
-                    currentSprite.think("") ; 
+                    currentSprite.think("") ;
                 }
-                frame.clearAfterWait = null ; 
+                frame.clearAfterWait = null ;
             }
         }
 
@@ -547,16 +546,16 @@ public class Interpreter
                 break;
             case "say_for_time":
                 sprite.sayForTime(args.get(0), (int) Double.parseDouble(args.get(1)));
-                peekFrame().waitUntil = System.nanoTime() + (long)(Double.parseDouble(args.get(1))*1_000_000_000L) ; 
-                peekFrame().clearAfterWait = "say" ; 
+                peekFrame().waitUntil = System.nanoTime() + (long)(Double.parseDouble(args.get(1))*1_000_000_000L) ;
+                peekFrame().clearAfterWait = "say" ;
                 break;
             case "think":
                 sprite.think(args.get(0));
                 break;
             case "think_for_time":
                 sprite.thinkForTime(args.get(0), (int) Double.parseDouble(args.get(1)));
-                peekFrame().waitUntil = System.nanoTime() +  (long)(Double.parseDouble(args.get(1))*1_000_000_000L) ; 
-                peekFrame().clearAfterWait = "think" ; 
+                peekFrame().waitUntil = System.nanoTime() +  (long)(Double.parseDouble(args.get(1))*1_000_000_000L) ;
+                peekFrame().clearAfterWait = "think" ;
                 break;
             case "set_size":
                 sprite.setSize((int) Double.parseDouble(args.get(0)));

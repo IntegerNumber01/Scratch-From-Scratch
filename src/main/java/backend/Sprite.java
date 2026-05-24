@@ -1,30 +1,34 @@
 package backend;
 
 import java.io.File;
-import java.util.* ; 
+import java.util.* ;
 
 public class Sprite {
+    private static int nextInstanceId = 1;
+
+    private final int instanceId;
     private String name;
     private int x;
     private int y;
     private int size;
     private int dir;
     private ArrayList<File> costumes;
-    private File currentCostume ; 
+    private File currentCostume ;
     private int currentCostumeIndex = 0;
     private boolean hidden = false;
-    private String sayText = "" ; 
-    private String thinkText = ""; 
+    private String sayText = "" ;
+    private String thinkText = "";
 
 
     public Sprite(String name, int x, int y, int size, ArrayList<File> costumes) {
+        this.instanceId = nextInstanceId++;
         this.name = name;
         this.x = x;
         this.y = y;
         this.size = size;
         dir = 0;
         //sets the arraylist of costumes for the spriteand the current costume of the sprite
-        this.costumes = costumes ; 
+        this.costumes = costumes ;
         if(costumes != null && !costumes.isEmpty())
         {
             this.currentCostume = costumes.get(0);
@@ -38,6 +42,11 @@ public class Sprite {
     public String getName()
     {
         return name ;
+    }
+
+    public int getInstanceId()
+    {
+        return instanceId;
     }
 
     public int getX()
@@ -110,20 +119,20 @@ public class Sprite {
 
     public void setX(int x)
     {
-        this.x = x ; 
+        this.x = x ;
     }
 
     public void setY(int y)
     {
-        this.y = y ; 
+        this.y = y ;
     }
 
     //adds another costume to the sprite's list of costumes
-    public void addCostume(File file) 
+    public void addCostume(File file)
     {
         costumes.add(file);
     }
-    
+
     //switches the current costumes to the another costume
     public void switchCostume(String filename) {
         for (int i = 0; i < costumes.size(); i++) {
@@ -145,7 +154,7 @@ public class Sprite {
     //returns the current costume for drawing
     public File getCurrentCostume()
     {
-        return currentCostume ; 
+        return currentCostume ;
     }
 
     //returns all the costumes for the sprite
@@ -154,30 +163,30 @@ public class Sprite {
         return costumes;
     }
 
-    public void say(String text) 
+    public void say(String text)
     {
         sayText = text ;
-        thinkText = "" ;  
+        thinkText = "" ;
     }
 
     public String getSayText()
     {
-        return sayText ; 
+        return sayText ;
     }
 
     public void sayForTime(String text, int seconds) {
         say(text);
     }
 
-    public String getThinkText() 
+    public String getThinkText()
     {
         return thinkText;
     }
 
     public void think(String text)
     {
-        thinkText = text ; 
-        sayText = "" ; 
+        thinkText = text ;
+        sayText = "" ;
     }
 
     public void thinkForTime(String text, int seconds) {
@@ -190,12 +199,10 @@ public class Sprite {
 
     public void changeSize(int size) {
         this.size += size;
-            
+
     }
 
     public String toString() {
-        return "SPRITE[" + name + ", " + x + ", " + y + ", " + size + ", " + dir + "]";
+        return "SPRITE[" + name + "#" + instanceId + ", " + x + ", " + y + ", " + size + ", " + dir + "]";
     }
-    
-
 }
