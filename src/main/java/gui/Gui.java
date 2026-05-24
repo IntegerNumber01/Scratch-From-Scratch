@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
-import backend.Interpreter;
-import backend.Sprite;
-import backend.World;
+import backend.* ; 
 
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
@@ -143,10 +141,38 @@ public class Gui
         {
             drawSprite(pane, sprite);
         }
+        drawVariables(pane) ; 
     }
 
     public void setInterpreters(List<Interpreter> interpreters) {
         this.interpreters = interpreters;
+    }
+
+    public void drawVariables(Pane pane)
+    {
+        int yOffset = 10 ; 
+        for(Interpreter interpreter : interpreters)
+        {
+            Program program = interpreter.getProgram() ; 
+            if(program == null) continue ; 
+
+            System.out.println("Visible variables: "+program.getVisibleVariables()) ; 
+            
+            for(String varName: program.getVisibleVariables())
+            {
+                String value = program.getVariableValue(varName) ;
+                System.out.println("Drawing: "+varName + " = " + value) ; 
+                if(value == null) continue ;
+                
+                String spriteName = interpreter.getSprite().getName() ; 
+                javafx.scene.control.Label label = new javafx.scene.control.Label(spriteName + ": " + varName + "  " + value) ; 
+                label.setLayoutX(10) ; 
+                label.setLayoutY(yOffset) ; 
+                label.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-padding: 2 6;") ; 
+                pane.getChildren().add(label) ; 
+                yOffset += 25; 
+            }
+        }
     }
 
     public void drawSprite(Pane pane, Sprite sprite)

@@ -351,6 +351,12 @@ public class Interpreter
     }
 
     private void resolveCommandArgs(Command command, Sprite sprite) {
+        
+        if(command.getName().equals("show_variable")||command.getName().equals("hide_variable"))
+        {
+            return ; 
+        }
+        
         for (int i = 0; i < command.getArgs().size(); i++) {
             if (command.isPrivate() && i == 0) { // variable assignment & LHS
                 continue;
@@ -501,7 +507,7 @@ public class Interpreter
         }
 
         // switch_costume takes a raw filename, not a numeric/string expression
-        if (!name.equals("switch_costume")) {
+        if (!name.equals("switch_costume") && !name.equals("show_variable") && !name.equals("hide_variable")) {
             args = evalArgs(args);
         }
 
@@ -575,6 +581,12 @@ public class Interpreter
             case "point_in_direction":
                 sprite.pointInDirection((int) Double.parseDouble(args.get(0)));
                 break;
+            case "show_variable":
+                programs.get(sprite).showVariable(args.get(0)) ;
+                break ; 
+            case "hide_variable":
+                programs.get(sprite).hideVariable(args.get(0)) ; 
+                break ; 
             default:
                 ScratchError.throwError(command.getLineNumber(), "Unrecognized command " + "'" + name + "'");
                 break;
@@ -706,5 +718,15 @@ public class Interpreter
 
     private void popFrame() {
         executionStack.remove(executionStack.size() - 1);
+    }
+
+    public Program getProgram()
+    {
+        return assignedProgram ; 
+    }
+
+    public Sprite getSprite()
+    {
+        return assignedSprite ; 
     }
 }

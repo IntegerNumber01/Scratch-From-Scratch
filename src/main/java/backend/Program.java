@@ -1,7 +1,6 @@
 package backend;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.* ; 
 
 /*
     This class holds the parsed user code for one sprite
@@ -12,6 +11,7 @@ public class Program
     private ArrayList<Script> scripts;
     private ArrayList<Script> functions;
     private HashMap<String, String> variables;
+    private HashSet<String> visibleVariables = new HashSet<>() ; 
 
     public Program(String name) {
         this.name = name;
@@ -48,6 +48,21 @@ public class Program
 
     public HashMap<String, String> getVariables() {
         return variables;
+    }
+
+    public void showVariable(String name)
+    {
+        visibleVariables.add(name) ; 
+    }
+
+    public void hideVariable(String name)
+    {
+        visibleVariables.remove(name) ; 
+    }
+
+    public HashSet<String> getVisibleVariables()
+    {
+        return visibleVariables ; 
     }
 
     /*
