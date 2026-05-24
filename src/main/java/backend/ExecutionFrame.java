@@ -8,6 +8,8 @@ public class ExecutionFrame {
     public static final String REPEAT = "repeat";
     public static final String REPEAT_UNTIL = "repeat_until";
     public static final String FOREVER = "forever";
+    public long waitUntil = 0 ; 
+    public String clearAfterWait = null;
 
     public ArrayList<Command> commands;
     public String type;

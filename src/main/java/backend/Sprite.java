@@ -13,6 +13,8 @@ public class Sprite {
     private File currentCostume ; 
     private int currentCostumeIndex = 0;
     private boolean hidden = false;
+    private String sayText = "" ; 
+    private String thinkText = ""; 
 
 
     public Sprite(String name, int x, int y, int size, ArrayList<File> costumes) {
@@ -152,32 +154,34 @@ public class Sprite {
         return costumes;
     }
 
-    public String say(String text) {
-        return text;
+    public void say(String text) 
+    {
+        sayText = text ;
+        thinkText = "" ;  
     }
 
-    public void sayForTime(String text, int time) {
+    public String getSayText()
+    {
+        return sayText ; 
+    }
+
+    public void sayForTime(String text, int seconds) {
         say(text);
-        try {
-            Thread.sleep(time * 1000L); // use L to create a long variable instead of an integer and use milliseconds instead of seconds
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // restore previous state if sleep is interrupted 
-        }
-        say(""); // clear once time is over
     }
 
-    public String think(String text) {
-        return text;
+    public String getThinkText() 
+    {
+        return thinkText;
     }
 
-    public void thinkForTime(String text, int time) { // exact same code as previous sayForTime()
+    public void think(String text)
+    {
+        thinkText = text ; 
+        sayText = "" ; 
+    }
+
+    public void thinkForTime(String text, int seconds) {
         think(text);
-        try {
-            Thread.sleep(time * 1000L);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        think("");
     }
 
     public void setSize(int size) {

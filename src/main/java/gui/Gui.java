@@ -184,5 +184,23 @@ public class Gui
         view.setRotate(sprite.getDir());
 
         pane.getChildren().add(view);
+
+        if (!sprite.getSayText().isEmpty()) 
+        {
+            javafx.scene.control.Label label = new javafx.scene.control.Label(sprite.getSayText());
+            label.setLayoutX(sprite.getX());
+            label.setLayoutY(sprite.getY() - 30);
+            label.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 4;");
+            pane.getChildren().add(label);
+        }
+
+        if (!sprite.getThinkText().isEmpty()) 
+        {
+            javafx.scene.control.Label label = new javafx.scene.control.Label(sprite.getThinkText());
+            label.setLayoutX(sprite.getX());
+            label.setLayoutY(sprite.getY() - 30);
+            label.setStyle("-fx-background-color: white; -fx-border-color: gray; -fx-border-style: dashed; -fx-padding: 4;");
+            pane.getChildren().add(label);
+        }
     }
 }

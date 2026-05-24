@@ -118,6 +118,28 @@ public class Interpreter
 
         ExecutionFrame frame = peekFrame();
 
+        if(frame.waitUntil > 0)
+        {
+            if(System.nanoTime() < frame.waitUntil)
+            {
+                return true ; 
+            }
+
+            else
+            {
+                frame.waitUntil = 0 ; 
+                if("say".equals(frame.clearAfterWait))
+                {
+                    currentSprite.say("") ; 
+                }
+                else if("think".equals(frame.clearAfterWait))
+                {
+                    currentSprite.think("") ; 
+                }
+                frame.clearAfterWait = null ; 
+            }
+        }
+
         if (frame.index >= frame.commands.size()) {
             completeFrame(frame);
             return true;
@@ -505,12 +527,16 @@ public class Interpreter
                 break;
             case "say_for_time":
                 sprite.sayForTime(args.get(0), (int) Double.parseDouble(args.get(1)));
+                peekFrame().waitUntil = System.nanoTime() + (long)(Double.parseDouble(args.get(1))*1_000_000_000L) ; 
+                peekFrame().clearAfterWait = "say" ; 
                 break;
             case "think":
                 sprite.think(args.get(0));
                 break;
             case "think_for_time":
                 sprite.thinkForTime(args.get(0), (int) Double.parseDouble(args.get(1)));
+                peekFrame().waitUntil = System.nanoTime() +  (long)(Double.parseDouble(args.get(1))*1_000_000_000L) ; 
+                peekFrame().clearAfterWait = "think" ; 
                 break;
             case "set_size":
                 sprite.setSize((int) Double.parseDouble(args.get(0)));
