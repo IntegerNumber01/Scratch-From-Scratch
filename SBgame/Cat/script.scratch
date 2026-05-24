@@ -1,4 +1,20 @@
 when_flag_clicked:
+    score = 0
+    show_variable(score)
     go_to(100, 100)
+<<<<<<< Updated upstream
     say_for_time(hello,5)
     think_for_time(hi,5)
+=======
+    say_for_time(hello!, 2)
+    think_for_time(where should i go?, 2)
+    repeat(50)
+        move(3)
+    point_in_direction(180)
+    repeat(50)
+        move(3)
+    score = 100
+    say_for_time(i moved back and forth!, 3)
+    hide_variable(score)
+    say(done!)
+>>>>>>> Stashed changes
