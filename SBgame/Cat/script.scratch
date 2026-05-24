@@ -8,4 +8,4 @@ when_flag_clicked:
     go_to(100, 100)
     say_for_time(hello,5)
     think_for_time(hi,5)
-    create_glone()
+    create_clone()
