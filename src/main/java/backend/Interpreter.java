@@ -518,6 +518,18 @@ public class Interpreter
             case "change_size":
                 sprite.changeSize((int) Double.parseDouble(args.get(0)));
                 break;
+            case "hide":
+                sprite.hide();
+                break;
+            case "show":
+                sprite.show();
+                break;
+            case "go_to_random_position":
+                sprite.goToRandomPosition();
+                break;
+            case "point_in_direction":
+                sprite.pointInDirection((int) Double.parseDouble(args.get(0)));
+                break;
             default:
                 ScratchError.throwError(command.getLineNumber(), "Unrecognized command " + "'" + name + "'");
                 break;

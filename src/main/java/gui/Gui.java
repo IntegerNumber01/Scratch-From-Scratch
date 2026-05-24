@@ -154,7 +154,7 @@ public class Gui
 
         File costume = sprite.getCurrentCostume();
 
-        if(costume == null)
+        if(costume == null||sprite.isHidden())
         {
             return ;
         }
@@ -181,6 +181,7 @@ public class Gui
 
         view.setFitWidth(200*scale);
         view.setFitHeight(200*scale);
+        view.setRotate(sprite.getDir());
 
         pane.getChildren().add(view);
     }

@@ -1,6 +1,7 @@
 when_flag_clicked:
     set_x(100)
-    set_y(100)
+    set_y(100) 
+    repeat(100):
+        move(1)
     switch_costume(airplane.png)
-    forever():
-        go_to(mouse_x, mouse_y)
+    

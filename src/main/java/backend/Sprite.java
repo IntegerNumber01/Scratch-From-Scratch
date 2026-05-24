@@ -12,6 +12,8 @@ public class Sprite {
     private ArrayList<File> costumes;
     private File currentCostume ; 
     private int currentCostumeIndex = 0;
+    private boolean hidden = false;
+
 
     public Sprite(String name, int x, int y, int size, ArrayList<File> costumes) {
         this.name = name;
@@ -54,6 +56,18 @@ public class Sprite {
     public int getDir()
     {
         return dir ;
+    }
+
+    public void hide() {
+        hidden = true;
+    }
+
+    public void show() {
+        hidden = false;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 
     public void move(int steps) {
@@ -117,7 +131,6 @@ public class Sprite {
                 return;
             }
         }
-        System.out.println("WARNING: costume not found: " + filename);
     }
 
     // switches currentcostume to the costume after its index
