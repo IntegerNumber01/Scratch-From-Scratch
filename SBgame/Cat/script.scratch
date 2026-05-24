@@ -6,6 +6,5 @@ when_flag_clicked:
     score = 0
     show_variable(score)
     go_to(100, 100)
-    say_for_time(hello,5)
-    think_for_time(hi,5)
     create_clone()
+    go_to(100, 100)

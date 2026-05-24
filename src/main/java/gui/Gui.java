@@ -114,7 +114,7 @@ public class Gui
         });
 
         Timeline interpreterTimeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            for (Interpreter interpreter : interpreters) {
+            for (Interpreter interpreter : new ArrayList<>(interpreters)) {
                 long deadline = System.nanoTime() + INTERPRETER_BUDGET_NANOS;
 
                 while (System.nanoTime() < deadline) {

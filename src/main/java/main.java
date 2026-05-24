@@ -142,6 +142,7 @@ public class main extends Application {
     public void runInterpreter() {
         System.out.println("\n=== INTERPRETER TEST ===");
         System.out.println("Registering " + interpreters.size() + " interpreter(s) with GUI...");
+        Interpreter.setInterpreterRegistry(interpreters);
         gui.setInterpreters(interpreters);
     }
 

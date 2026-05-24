@@ -39,6 +39,21 @@ public class Sprite {
         this(name, 0, 0, 100, costumes);
     }
 
+    public Sprite(Sprite other) {
+        this.instanceId = nextInstanceId++;
+        this.name = other.name;
+        this.x = other.x;
+        this.y = other.y;
+        this.size = other.size;
+        this.dir = other.dir;
+        this.costumes = new ArrayList<>(other.costumes);
+        this.currentCostume = other.currentCostume;
+        this.currentCostumeIndex = other.currentCostumeIndex;
+        this.hidden = other.hidden;
+        this.sayText = other.sayText;
+        this.thinkText = other.thinkText;
+    }
+
     public String getName()
     {
         return name ;

@@ -3,6 +3,7 @@ package backend;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -10,8 +11,12 @@ import java.util.Map;
 */
 public class Interpreter
 {
+    private static final String DEFAULT_START_EVENT = "when_flag_clicked";
+    private static final String CLONE_START_EVENT = "when_i_start_as_clone";
+
     private HashMap<Sprite, Program> programs;
     private static HashMap<Integer, Program> programsByInstanceId = new HashMap<>();
+    private static List<Interpreter> interpreterRegistry = new ArrayList<>();
     private static World world;
 
     private Sprite currentSprite;
@@ -22,11 +27,13 @@ public class Interpreter
     private ArrayList<ExecutionFrame> executionStack;
     private Sprite assignedSprite;
     private Program assignedProgram;
+    private String startEventName;
 
     public Interpreter(World world) {
         this.world = world;
         this.programs = new HashMap<Sprite, Program>();
         this.executionStack = new ArrayList<ExecutionFrame>();
+        this.startEventName = DEFAULT_START_EVENT;
     }
 
     public void addProgram(Sprite sprite, Program program) {
@@ -99,6 +106,14 @@ public class Interpreter
             // Keep advancing until this interpreter runs out of work.
         }
         System.out.println("Finished executing programs.");
+    }
+
+    public void setStartEvent(String eventName) {
+        startEventName = normalizeScriptName(eventName);
+    }
+
+    public static void setInterpreterRegistry(List<Interpreter> interpreters) {
+        interpreterRegistry = interpreters;
     }
 
     public boolean tick() {
@@ -563,6 +578,9 @@ public class Interpreter
                 peekFrame().waitUntil = System.nanoTime() +  (long)(Double.parseDouble(args.get(1))*1_000_000_000L) ;
                 peekFrame().clearAfterWait = "think" ;
                 break;
+            case "create_clone":
+                createClone(sprite);
+                break;
             case "set_size":
                 sprite.setSize((int) Double.parseDouble(args.get(0)));
                 break;
@@ -595,6 +613,24 @@ public class Interpreter
         return sprite;
     }
 
+    private void createClone(Sprite sourceSprite) {
+        Program sourceProgram = programs.get(sourceSprite);
+
+        if (sourceProgram == null) {
+            ScratchError.throwError(-1, "Cannot clone sprite without a program.");
+        }
+
+        Sprite cloneSprite = new Sprite(sourceSprite);
+        Program cloneProgram = new Program(sourceProgram);
+        Interpreter cloneInterpreter = new Interpreter(world);
+
+        cloneInterpreter.setStartEvent(CLONE_START_EVENT);
+        cloneInterpreter.addProgram(cloneSprite, cloneProgram);
+
+        world.addSprite(cloneSprite);
+        interpreterRegistry.add(cloneInterpreter);
+    }
+
     public static String getMouseDownValue() {
         return world.isMouseDown() ? "true" : "false";
     }
@@ -618,10 +654,28 @@ public class Interpreter
         currentScriptIndex = 0;
     }
 
+    private String normalizeScriptName(String scriptName) {
+        if (scriptName == null) {
+            return "";
+        }
+
+        scriptName = scriptName.trim();
+
+        if (scriptName.endsWith(":")) {
+            scriptName = scriptName.substring(0, scriptName.length() - 1).trim();
+        }
+
+        return scriptName;
+    }
+
+    private boolean shouldRunScript(Script script) {
+        return normalizeScriptName(script.getName()).equals(startEventName);
+    }
+
     private boolean pushNextScript() {
         while (currentScriptIndex < currentProgram.getScripts().size()) {
             Script script = currentProgram.getScripts().get(currentScriptIndex++);
-            if (!script.getCommands().isEmpty()) {
+            if (shouldRunScript(script) && !script.getCommands().isEmpty()) {
                 pushFrame(new ExecutionFrame(script.getCommands(), ExecutionFrame.SCRIPT));
                 return true;
             }

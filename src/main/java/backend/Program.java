@@ -20,6 +20,14 @@ public class Program
         variables = new HashMap<String, String>();
     }
 
+    public Program(Program other) {
+        this.name = other.name;
+        this.scripts = new ArrayList<>(other.scripts);
+        this.functions = new ArrayList<>(other.functions);
+        this.variables = new HashMap<>(other.variables);
+        this.visibleVariables = new HashSet<>(other.visibleVariables);
+    }
+
     public void addScript(Script script) {
         scripts.add(script);
     }

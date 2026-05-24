@@ -40,7 +40,8 @@ public final class LanguageConfig {
         "think",
         "think_for_time",
         "set_size",
-        "change_size"
+        "change_size",
+        "create_clone"
     );
 
     public static final Set<String> BLOCK_COMMANDS = Set.of(
@@ -52,7 +53,7 @@ public final class LanguageConfig {
 
     public static final Set<String> EVENTS = Set.of(
         "when_flag_clicked",
-        "when_clicked"
+        "when_i_start_as_clone"
     );
 
     public static final Set<String> RESERVED_VARIABLE_NAMES = Set.of(
