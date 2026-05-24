@@ -176,6 +176,14 @@ public class Interpreter
             }
         }
 
+        if (function.getArgs().size() != newArgs.size()) {
+            ScratchError.throwError(
+                function.getLineNumber(),
+                "Function " + function.getName() + " expected " + function.getArgs().size()
+                    + " argument(s) but got " + newArgs.size() + "."
+            );
+        }
+
         // since we mutate the function by changing all the args, first we must copy it, then change it
         // then execute it, then destroy it
         // this preserves the original function.
@@ -183,21 +191,7 @@ public class Interpreter
         Script functionCopy = new Script(function); // deep copy the function
 
         for (Command c : functionCopy.getCommands()) {
-            // replace ALL args through ALL children
-            for (Command command : c.fullExpansion())
-                // find matching arg inside command & replace with value
-                for (int i = 0; i < functionCopy.getArgs().size(); i++) {
-                    String scriptArg = functionCopy.getArgs().get(i);
-
-                    for (String commandArg : command.getArgs()) {
-                        if (commandArg.contains(scriptArg)) {
-                            // find the index of the arg by name using function args
-                            // use that index on newArgs to get the value
-                            command.replaceArg(functionCopy.getArgs().get(i), newArgs.get(i));
-                        }
-                    }
-                }
-
+            substituteFunctionArgs(c, functionCopy.getArgs(), newArgs);
             sprite = executeCommand(c, sprite);
         }
 
@@ -235,6 +229,32 @@ public class Interpreter
         }
 
         return result.toString();
+    }
+
+    private void substituteFunctionArgs(Command command, ArrayList<String> functionArgs, ArrayList<String> newArgs) {
+        ArrayList<String> commandArgs = command.getArgs();
+
+        for (int argIndex = 0; argIndex < commandArgs.size(); argIndex++) {
+            String resolvedArg = commandArgs.get(argIndex);
+
+            for (int functionArgIndex = 0; functionArgIndex < functionArgs.size(); functionArgIndex++) {
+                resolvedArg = replaceIdentifier(
+                    resolvedArg,
+                    functionArgs.get(functionArgIndex),
+                    newArgs.get(functionArgIndex)
+                );
+            }
+
+            command.setArg(argIndex, resolvedArg);
+        }
+
+        for (Command child : command.getChildren()) {
+            substituteFunctionArgs(child, functionArgs, newArgs);
+        }
+
+        for (Command elseChild : command.getElseChildren()) {
+            substituteFunctionArgs(elseChild, functionArgs, newArgs);
+        }
     }
 
     private String resolveVariables(String expression, Sprite sprite) {
