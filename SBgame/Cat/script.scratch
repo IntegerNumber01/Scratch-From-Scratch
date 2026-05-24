@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 when_flag_clicked:
     score = 0
     show_variable(score)
@@ -13,3 +14,25 @@ when_flag_clicked:
     say_for_time(i moved back and forth!, 3)
     hide_variable(score)
     say(done!)
+=======
+when_flag_clicked
+    score = 0
+    mole_x = 240
+    mole_y = 180
+    mole_size = 40
+    was_down = 0
+    go_to(240, 180)
+    set_size(25)
+    say(join(Score: , score))
+    forever()
+        if(mouse_down and was_down == 0)
+            was_down = 1
+            if(mouse_x > mole_x - mole_size and mouse_x < mole_x + mole_size and mouse_y > mole_y - mole_size and mouse_y < mole_y + mole_size)
+                score = score + 1
+                say(join(Score: , score))
+                go_to_random_position()
+                mole_x = x_position
+                mole_y = y_position
+        if(not mouse_down)
+            was_down = 0
+>>>>>>> Stashed changes
