@@ -262,7 +262,17 @@ public class Gui
                 if (value == null) continue;
 
                 String spriteName = interpreter.getSprite().getName();
-                Label label = new Label(spriteName + ": " + varName + "  " + value);
+                Label label ; 
+                if(world.hasGlobalVariable(varName))
+                {
+                    label = new Label(varName + " " + value) ; 
+                }
+
+                else
+                {
+                    label = new Label(spriteName + "; " + varName + " " + value) ; 
+                }
+                
                 label.setLayoutX(10);
                 label.setLayoutY(yOffset);
                 label.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-padding: 2 6;");
