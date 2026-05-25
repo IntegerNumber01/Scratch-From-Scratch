@@ -43,7 +43,11 @@ public final class LanguageConfig {
         "change_size",
         "create_clone",
         "show_variable",
-        "hide_variable"
+        "hide_variable",
+        "go_to_front_layer",
+        "go_to_back_layer",
+        "go_forward_layers",
+        "go_backward_layers"
     );
 
     public static final Set<String> BLOCK_COMMANDS = Set.of(

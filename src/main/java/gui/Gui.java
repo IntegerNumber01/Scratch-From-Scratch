@@ -187,7 +187,7 @@ public class Gui
     {
         pane.getChildren().clear();
 
-        for (Sprite sprite : world.getSprites())
+        for (Sprite sprite : world.getLayers())
         {
             drawSprite(pane, sprite);
         }

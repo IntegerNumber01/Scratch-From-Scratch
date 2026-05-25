@@ -760,6 +760,18 @@ public class Interpreter
             case "hide_variable":
                 programs.get(sprite).hideVariable(args.get(0)) ;
                 break ;
+            case "go_to_front_layer":
+                world.goToFrontLayer(sprite);
+                break;
+            case "go_to_back_layer":
+                world.goToBackLayer(sprite);
+                break;
+            case "go_forward_layers":
+                world.goForwardLayers(sprite, (int) Double.parseDouble(args.get(0)));
+                break;
+            case "go_backward_layers":
+                world.goBackwardLayers(sprite, (int) Double.parseDouble(args.get(0)));
+                break;
             default:
                 ScratchError.throwError(command.getLineNumber(), "Unrecognized command " + "'" + name + "'");
                 break;

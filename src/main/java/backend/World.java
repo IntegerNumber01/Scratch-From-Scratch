@@ -10,6 +10,7 @@ import java.util.*;
  */
 public class World {
     private ArrayList<Sprite> sprites;
+    private ArrayList<Sprite> layers;
     private boolean isRunning;
 
     private HashMap<String, String> globalVariables;
@@ -27,6 +28,7 @@ public class World {
     public World() 
     {
         sprites = new ArrayList<>();
+        layers = new ArrayList<>();
         isRunning = true;
 
         globalVariables = new HashMap<>();
@@ -63,6 +65,7 @@ public class World {
     public void addSprite(Sprite sprite) 
     {
         sprites.add(sprite);
+        layers.add(sprite);
     }
 
     /**
@@ -73,6 +76,110 @@ public class World {
     public ArrayList<Sprite> getSprites() 
     {
         return sprites;
+    }
+
+    /**
+     * Returns the sprites in back-to-front render order.
+     * The first sprite is drawn behind later sprites.
+     *
+     * @return ordered sprite layer list
+     */
+    public ArrayList<Sprite> getLayers()
+    {
+        return layers;
+    }
+
+    /**
+     * Moves a sprite to the front-most layer.
+     *
+     * @param sprite sprite to reorder
+     */
+    public void goToFrontLayer(Sprite sprite)
+    {
+        moveSpriteToLayerIndex(sprite, layers.size() - 1);
+    }
+
+    /**
+     * Moves a sprite to the back-most layer.
+     *
+     * @param sprite sprite to reorder
+     */
+    public void goToBackLayer(Sprite sprite)
+    {
+        moveSpriteToLayerIndex(sprite, 0);
+    }
+
+    /**
+     * Moves a sprite forward by the requested number of layers.
+     *
+     * @param sprite sprite to reorder
+     * @param amount number of layers to move toward the front
+     */
+    public void goForwardLayers(Sprite sprite, int amount)
+    {
+        if (amount <= 0) {
+            return;
+        }
+
+        int currentIndex = layers.indexOf(sprite);
+        if (currentIndex == -1) {
+            return;
+        }
+
+        moveSpriteToLayerIndex(sprite, Math.min(layers.size() - 1, currentIndex + amount));
+    }
+
+    /**
+     * Moves a sprite backward by the requested number of layers.
+     *
+     * @param sprite sprite to reorder
+     * @param amount number of layers to move toward the back
+     */
+    public void goBackwardLayers(Sprite sprite, int amount)
+    {
+        if (amount <= 0) {
+            return;
+        }
+
+        int currentIndex = layers.indexOf(sprite);
+        if (currentIndex == -1) {
+            return;
+        }
+
+        moveSpriteToLayerIndex(sprite, Math.max(0, currentIndex - amount));
+    }
+
+    /**
+     * Repositions a sprite within the render layer list.
+     *
+     * @param sprite sprite to move
+     * @param targetIndex new index in back-to-front order
+     */
+    private void moveSpriteToLayerIndex(Sprite sprite, int targetIndex)
+    {
+        if (sprite == null) {
+            return;
+        }
+
+        int currentIndex = layers.indexOf(sprite);
+        if (currentIndex == -1) {
+            return;
+        }
+
+        if (targetIndex < 0) {
+            targetIndex = 0;
+        }
+
+        if (targetIndex >= layers.size()) {
+            targetIndex = layers.size() - 1;
+        }
+
+        if (currentIndex == targetIndex) {
+            return;
+        }
+
+        layers.remove(currentIndex);
+        layers.add(targetIndex, sprite);
     }
 
     /**
