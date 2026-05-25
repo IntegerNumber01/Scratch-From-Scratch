@@ -1,8 +1,7 @@
 when_flag_clicked:
-    score = 0
     go_to(120, 90)
     set_size(25)
-    say(join(Score: , score))
+    show_variable(SCORE)
     create_clone()
     create_clone()
     create_clone()
@@ -19,8 +18,7 @@ when_i_start_as_clone:
             if(was_down == 0):
                 was_down = 1
                 if(touching(mouse_pointer)):
-                    score = score + 1
-                    say(join(Score: , score))
+                    SCORE = SCORE + 1
                     go_to_random_position()
                     mole_x = x_position
                     mole_y = y_position
