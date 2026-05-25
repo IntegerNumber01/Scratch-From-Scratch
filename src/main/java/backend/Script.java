@@ -11,6 +11,11 @@
         private ArrayList<String> args;
         private int lineNumber; // for error reporting. Line number in the original .scratch file where this script was defined
 
+        /**
+         * Constructor for creating a new script.
+         * @param name
+         * @param lineNumber
+         */
         public Script(String name, int lineNumber) {
             this.name = name;
             this.args = null;
@@ -18,7 +23,10 @@
             commands = new ArrayList<Command>();
         }
 
-        // use this contructor when deep copying a script
+        /**
+         * Constructor for creating a new script that is a deep copy of another script.
+         * @param other
+         */
         public Script(Script other) {
             this.name = other.name;
             this.args = other.args == null ? null : new ArrayList<>(other.args);
@@ -30,36 +38,69 @@
             }
         }
 
-        // only for functions because functions can have arguments
+        /**
+         * Constructor for creating a new script that represents a function with arguments.
+         * @param name
+         * @param args
+         * @param lineNumber
+         */
         public Script(String name, ArrayList<String> args, int lineNumber) {
             this(name, lineNumber);
             this.args = args;
         }
 
+        /**
+         * Returns name of script.
+         * @return String name of script
+         */
         public String getName() {
             return name;
         }
 
+        /**
+         * Returns list of commands in the script.
+         * @return ArrayList of commands in the script
+         */
         public ArrayList<Command> getCommands() {
             return commands;
         }
 
+        /**
+         * Returns the list of arguments for the script.
+         * @return ArrayList of argument names
+         */
         public ArrayList<String> getArgs() {
             return args;
         }
 
+        /**
+         * Returns the line number of the script.
+         * @return int line number
+         */
         public int getLineNumber() {
             return lineNumber;
         }
 
+        /**
+         * Adds a command to the end of the script's command list.
+         * @param command
+         */
         public void addCommand(Command command) {
             commands.add(command);
         }
 
+        /**
+         * Returns true if this script is a function and false otherwise.
+         * @return boolean indicating if this script is a function
+         */
         public boolean isFunction() {
             return args != null;
         }
 
+        /**
+         * Returns a string representation of the script.
+         * @return String representing the script
+         */
         public String toString() {
             String ans;
             if (args == null)
