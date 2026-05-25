@@ -41,7 +41,9 @@ public final class LanguageConfig {
         "think_for_time",
         "set_size",
         "change_size",
-        "create_clone"
+        "create_clone",
+        "show_variable",
+        "hide_variable"
     );
 
     public static final Set<String> BLOCK_COMMANDS = Set.of(
