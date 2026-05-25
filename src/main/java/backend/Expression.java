@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import java.util.Stack;
 import static backend.Operators.*;
 
+/*
+    I know this is super inefficient, but it works
+*/
 public class Expression
 {
-
-    /*
-        I know this is super inefficient, but it works
-    */
+    /**
+     * Evaluates a mathematical expression and returns the result as a string. The expression can ONLY contain numbers, parentheses, and the operators +, -, *, and /.
+     * The expression is evaluated by first evaluating the innermost parentheses and then working outwards.
+     * The operators are evaluated with the following precedence: * and / > + and -.
+     * @param expression
+     * @return String result of evaluating the expression
+     */
     public static String evaluate(String expression) {
         Stack<String> parens = new Stack<>();
         int startOuterParenIndex = -1;
