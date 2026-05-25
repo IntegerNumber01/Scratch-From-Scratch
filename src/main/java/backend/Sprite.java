@@ -18,18 +18,18 @@ public class Sprite {
     private boolean hidden = false;
     private String sayText = "" ;
     private String thinkText = "";
-    private double costumeWidth = 0 ; 
-    private double costumeHeight = 0 ; 
+    private double costumeWidth = 0 ;
+    private double costumeHeight = 0 ;
 
 
     /**
-     * 
+     *
      * @param name
      * @param x
      * @param y
      * @param size
      * @param costumes
-     * 
+     *
      * Sets the name, x, y, size, and the costumes of the Sprite
      */
     public Sprite(String name, int x, int y, int size, ArrayList<File> costumes) {
@@ -48,10 +48,10 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param name
      * @param costumes
-     * 
+     *
      * Sets the name of the sprite and its costumes
      * Defaults other things
      */
@@ -60,7 +60,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param other
      * Copy constructor for sprites
      */
@@ -77,12 +77,12 @@ public class Sprite {
         this.hidden = other.hidden;
         this.sayText = other.sayText;
         this.thinkText = other.thinkText;
-        costumeWidth = other.costumeWidth ; 
-        costumeHeight = other.costumeHeight ; 
+        costumeWidth = other.costumeWidth ;
+        costumeHeight = other.costumeHeight ;
     }
 
     /**
-     * 
+     *
      * @return String of the Sprite's name
      */
     public String getName()
@@ -91,7 +91,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @return int clones instanceId
      */
     public int getInstanceId()
@@ -100,7 +100,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @return int Sprite's X coordinate
      */
     public int getX()
@@ -109,7 +109,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @return int Sprite's Y coordinate
      */
     public int getY()
@@ -118,7 +118,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @return int Sprite's size
      */
     public int getSize()
@@ -127,7 +127,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @return int Sprite's dir via angles
      */
     public int getDir()
@@ -150,17 +150,17 @@ public class Sprite {
     }
 
     /**
-     * 
-     * @return boolean of if the sprite should be hidden 
+     *
+     * @return boolean of if the sprite should be hidden
      */
     public boolean isHidden() {
         return hidden;
     }
 
     /**
-     * 
+     *
      * @param steps
-     * does math to change the 
+     * does math to change the
      */
     public void move(int steps) {
         // implement moving in direction facing
@@ -169,7 +169,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param myX
      * @param myY
      * Goes to the x,y coordinates provided
@@ -188,7 +188,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param deg
      * Changes the Sprite's direction
      */
@@ -197,7 +197,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param deg
      * Changes the Sprite's direction
      */
@@ -206,7 +206,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param deg
      * Sets the Sprite's direction to the specified degree
      */
@@ -215,7 +215,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param myX
      * Chnages the x by this much
      */
@@ -224,7 +224,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param myY
      * Changes the y by this much
      */
@@ -233,7 +233,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param x
      * Sets the x to this much
      */
@@ -243,7 +243,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param y
      * Sets the y to this much
      */
@@ -253,7 +253,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param file
      * adds another costume to the sprite's list of costumes
      */
@@ -262,7 +262,7 @@ public class Sprite {
         costumes.add(file);
     }
 
-    /** 
+    /**
      * switches the current costumes to the another costume
     */
     public void switchCostume(String filename) {
@@ -285,8 +285,8 @@ public class Sprite {
     }
 
     /**
-     * 
-     * @returnr gives the current costume for drawing
+     *
+     * @return gives the current costume for drawing
      */
     public File getCurrentCostume()
     {
@@ -294,7 +294,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @return all the costumes for the sprite
      */
     public ArrayList<File> getCostumes()
@@ -303,12 +303,12 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param mouseX
      * @param mouseY
      * @return gives a boolean if the mouse is over the sprite or not
      */
-    public boolean isTouchingMouse(double mouseX, double mouseY) 
+    public boolean isTouchingMouse(double mouseX, double mouseY)
     {
         if (hidden || costumeWidth == 0) return false;
         double scale = size / 100.0;
@@ -318,7 +318,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param text
      * Sets the text for what the sprite to say
      */
@@ -329,7 +329,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @return
      * Gives the test for what the sprite to say
      */
@@ -339,7 +339,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param text
      * @param seconds
      * Says the text for this amount of time
@@ -350,7 +350,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @return String text that the Sprite has to think
      */
     public String getThinkText()
@@ -359,7 +359,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param text
      * Sets the text for what the sprite to think
      */
@@ -370,7 +370,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param text
      * @param seconds
      * Thinks the text for this amount of time
@@ -381,7 +381,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param size
      * Sets the size to this amount
      */
@@ -390,7 +390,7 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param size
      * changes the size by this much
      */
@@ -400,16 +400,16 @@ public class Sprite {
     }
 
     /**
-     * 
+     *
      * @param width
      * @param height
-     * 
-     * sets costume dimensions to this 
+     *
+     * sets costume dimensions to this
      */
     public void setCostumeDimensions(double width, double height)
     {
-        costumeWidth = width ; 
-        costumeHeight = height ; 
+        costumeWidth = width ;
+        costumeHeight = height ;
     }
 
     /**
