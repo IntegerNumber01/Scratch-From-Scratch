@@ -203,7 +203,7 @@ public class Gui
      *
      * @param interpreters the list of Interpreter objects to run each tick
      */
-    public void setInterpreters(List<Interpreter> interpreters) 
+    public void setInterpreters(List<Interpreter> interpreters)
     {
         this.interpreters = interpreters;
     }
@@ -226,7 +226,9 @@ public class Gui
 
             for (String varName : program.getVisibleVariables())
             {
-                String value = program.getVariableValue(varName);
+                String value = world.hasGlobalVariable(varName)
+                    ? world.getGlobalVariable(varName)
+                    : program.getVariableValue(varName);
                 if (value == null) continue;
 
                 String spriteName = interpreter.getSprite().getName();
