@@ -10,9 +10,19 @@ import java.util.Scanner;
     This class is responsible for parsing the Scratch code and creating Script objects
 */
 public class Parser {
+    /**
+     * Private constructor to prevent instantiation of this class since all methods are static and it is just a utility class.
+     */
     private Parser() {
     }
 
+    /**
+     * Finds the index of the top-level assignment operator in a line of code.
+     * This is used to determine if a line of code is a variable assignment.
+     * It ignores any assignment operators that are inside parentheses, since those would be part of an expression rather than a variable assignment.
+     * @param line
+     * @return int index of the top-level assignment operator, or -1 if there is no top-level assignment operator
+     */
     private static int findTopLevelAssignmentIndex(String line) {
         int depth = 0;
 
@@ -37,7 +47,11 @@ public class Parser {
         return -1;
     }
 
-    // Assumes each indent is 4 spaces
+    /**
+     * Checks the indentation level of a line of code. Each indent level is determined by 4 spaces.
+     * @param line
+     * @return int indentation level of the line of code, where 0 is top-level, 1 is one indent, etc.
+     */
     private static int checkIndentLevel(String line) {
         int indentLevel = 0;
         int spaces = 0;
@@ -52,7 +66,11 @@ public class Parser {
         return indentLevel;
     }
 
-    // need to split args by comma, dealing with parens inside
+    /**
+     * Splits a string of arguments into a list of individual arguments using commas.
+     * @param argsString
+     * @return ArrayList<String> list of individual arguments
+     */
     private static ArrayList<String> splitArgs(String argsString) {
         ArrayList<String> args = new ArrayList<>();
         int depth = 0; // basically simulates a stack, but I don't like stack
@@ -83,6 +101,11 @@ public class Parser {
         return args;
     }
 
+    /**
+     * Strips comments from a line of code. In Scratch, comments start with a # and continue to the end of the line. Ignores any # that are inside parentheses.
+     * @param line
+     * @return String line of code with comments stripped
+     */
     private static String stripComments(String line) {
         // just checks if the # is on an outer level, if it is, then strip
         int depth = 0;
@@ -103,11 +126,12 @@ public class Parser {
     }
 
 
-    /*
-    Parses a line of code directly from the user .scratch file and converts it into a Command object with parameters. For example, "move(10)" would be converted into a Command with name "move" and args ["10"]
-
-    Made static so that it can be accessed from interpreter when parsing function like operators
-    */
+    /**
+     * Parses a line of code directly from the user .scratch file and converts it into a Command object with parameters. For example, "move(10)" would be converted into a Command with name "move" and args ["10"].
+     * This method also handles variable assignment, which is determined by the presence of a top-level assignment operator (=) that is not part of an expression.
+     * @param lineNumber
+     * @return Command object representing the command in the line of code
+     */
     public static Command parseCommand(String cmd, int lineNumber) {
         int assignmentIndex = findTopLevelAssignmentIndex(cmd);
         int openParen = cmd.indexOf('(');
@@ -140,6 +164,12 @@ public class Parser {
         return null;
     }
 
+    /**
+     * Parses the backdrop.scratch file and returns a HashMap of global variable names to their values. The backdrop.scratch file is expected to only contain variable assignments, and any line that does not follow this format will result in an error.
+     * @param file
+     * @return HashMap of global variable names to their values
+     * @throws FileNotFoundException
+     */
     public static HashMap<String, String> parseBackdrop(File file) throws FileNotFoundException {
         HashMap<String, String> globalVariables = new HashMap<>();
         Scanner scanner = new Scanner(file);
@@ -188,9 +218,13 @@ public class Parser {
         return globalVariables;
     }
 
-    /*
-    Reads a .scratch file line by line and creates Script and Command objects based on the indentation and content of each line. The resulting Script objects are stored in a Program object.
-    */
+
+    /**
+     * Reads a .scratch file line by line and creates Script and Command objects based on the indentation and content of each line. The resulting Script objects are stored in a Program object.
+     * @param file
+     * @return Program object containing the scripts and functions defined in the .scratch file
+     * @throws FileNotFoundException
+     */
     public static Program buildProgram(File file) throws FileNotFoundException {
         ArrayList<Script> scripts = new ArrayList<Script>();
         Script currentScript = null;
