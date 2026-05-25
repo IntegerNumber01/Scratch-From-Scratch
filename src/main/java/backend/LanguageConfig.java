@@ -70,7 +70,8 @@ public final class LanguageConfig {
     public static final Set<String> RESERVED_LITERALS = Set.of(
         "true",
         "false",
-        "mouse_down"
+        "mouse_down",
+        "mouse_pointer"
     );
 
     public static final Set<String> STRUCTURAL_KEYWORDS = Set.of(

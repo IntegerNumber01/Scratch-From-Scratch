@@ -17,7 +17,7 @@ when_i_start_as_clone:
         if(mouse_down):
             if(was_down == 0):
                 was_down = 1
-                if(mouse_x > mole_x - mole_size and mouse_x < mole_x + mole_size and mouse_y > mole_y - mole_size and mouse_y < mole_y + mole_size):
+                if(touching(mouse_pointer)):
                     score = score + 1
                     say(join(Score: , score))
                     go_to_random_position()

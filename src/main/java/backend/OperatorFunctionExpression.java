@@ -121,6 +121,9 @@ public class OperatorFunctionExpression
                 if (sprite == null) {
                     ScratchError.throwError(command.getLineNumber(), "touching operator function requires a current sprite context");
                 }
+                if (temp.get(0).equals("mouse_pointer")) {
+                    return String.valueOf(sprite.isTouchingMouse(world.getMouseX(), world.getMouseY()));
+                }
                 return String.valueOf(world.isTouching(sprite, temp.get(0)));
 
             case "pick_random":
