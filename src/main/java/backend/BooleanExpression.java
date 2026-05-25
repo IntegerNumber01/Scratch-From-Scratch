@@ -3,11 +3,18 @@ package backend;
 import static backend.Operators.*;
 import java.util.*;
 
-/*
-    This class can evaluate/represent boolean expressions that is built with
+/**
+ * This class can evaluate/represent boolean expressions using its evaluate method.
 */
 public class BooleanExpression
 {
+    /**
+     * Evaluates a boolean expression and returns "true" or "false". The expression can contain boolean operators (and, or, not) and comparison expressions (>, <, ==, !=).
+     * The expression can also contain parentheses to indicate precedence. The expression is evaluated by first evaluating the innermost parentheses and then working outwards.
+     * The boolean operators are evaluated with the following precedence: not > and > or. The comparison expressions are evaluated by evaluating the left and right sides and then applying the operator.
+     * @param expression
+     * @return String "true" or "false" depending on the value of the expression
+     */
     public static String evaluate(String expression) {
         Stack<String> parens = new Stack<>();
         int startOuterParenIndex = -1;
@@ -113,6 +120,12 @@ public class BooleanExpression
         return ans;
     }
 
+    /**
+     * Splits a comparison expression into the left and right sides and the operator. For example, "3 > 2" would be split into ["3", ">", "2"].
+     * The operator is determined by checking for the presence of each operator in the expression. This method assumes that there is only one comparison operator in the expression.
+     * @param expression
+     * @return ArrayList<String> with the left side, operator, and right side of the comparison expression
+     */
     private static ArrayList<String> splitComparisonExpression(String expression) {
         for (String op : LanguageConfig.COMPARISON_OPERATORS) {
             if (expression.contains(op)) {
@@ -129,6 +142,12 @@ public class BooleanExpression
         return null;
     }
 
+    /**
+     * Evaluates a boolean term, which is either a boolean literal ("true" or "false"), the value of "mouse_down", or a comparison expression.
+     * A comparison expression is evaluated by evaluating the left and right sides and then applying the operator.
+     * @param expression
+     * @return String "true" or "false" depending on the value of the expression
+     */
     private static String evaluateBooleanTerm(String expression) {
         expression = expression.trim();
 
@@ -144,6 +163,12 @@ public class BooleanExpression
     }
 
 
+    /**
+     * Evaluates a comparison expression by evaluating the left and right sides and then applying the operator.
+     * For example, "3 > 2" would be evaluated by evaluating "3" and "2" and then applying the ">" operator to get "true".
+     * @param expression
+     * @return String "true" or "false" depending on the value of the expression
+     */
     private static String evaluateComparisonExpression(String expression) {
 
         ArrayList<String> exp = splitComparisonExpression(expression);
