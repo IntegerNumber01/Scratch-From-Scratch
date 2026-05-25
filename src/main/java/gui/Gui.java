@@ -231,7 +231,9 @@ public class Gui
                 {
                     for (String varName : program.getVisibleVariables())
                     {
-                        String value = program.getVariableValue(varName);
+                        String value = world.hasGlobalVariable(varName)
+                            ? world.getGlobalVariable(varName)
+                            : program.getVariableValue(varName);
                         if (value == null) continue;
 
                         Label label = new Label(varName + "  " + value);
@@ -242,7 +244,7 @@ public class Gui
                         yOffset += 25;
                     }
                 }
-                break; // Only one backdrop
+                break;
             }
         }
 
@@ -256,9 +258,7 @@ public class Gui
 
             for (String varName : program.getVisibleVariables())
             {
-                String value = world.hasGlobalVariable(varName)
-                    ? world.getGlobalVariable(varName)
-                    : program.getVariableValue(varName);
+                String value = program.getVariableValue(varName);
                 if (value == null) continue;
 
                 String spriteName = interpreter.getSprite().getName();
