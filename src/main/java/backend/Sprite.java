@@ -108,8 +108,8 @@ public class Sprite {
     }
 
     public void goToRandomPosition() { // bounds are 480,360)
-        x = (int)(Math.random() * 481);
-        y = (int)(Math.random()*361);
+        x = (int)(Math.random() * 481) - 240;
+        y = (int)(Math.random()*361) - 180;
     }
 
     public void turnLeft(int deg) {

@@ -197,11 +197,16 @@ public class World {
         int bW = (int)(200 * bScale);
         int bH = (int)(200 * bScale);
 
+        int aScreenX = 240 + a.getX() - aW / 2;
+        int aScreenY = 180 - a.getY() - aH / 2;
+        int bScreenX = 240 + b.getX() - bW / 2;
+        int bScreenY = 180 - b.getY() - bH / 2;
+
         // find overlapping rectangle
-        int overlapX1 = (int) Math.max(a.getX(), b.getX());
-        int overlapY1 = (int) Math.max(a.getY(), b.getY());
-        int overlapX2 = (int) Math.min(a.getX() + aW, b.getX() + bW);
-        int overlapY2 = (int) Math.min(a.getY() + aH, b.getY() + bH);
+        int overlapX1 = Math.max(aScreenX, bScreenX);
+        int overlapY1 = Math.max(aScreenY, bScreenY);
+        int overlapX2 = Math.min(aScreenX + aW, bScreenX + bW);
+        int overlapY2 = Math.min(aScreenY + aH, bScreenY + bH);
 
         // no overlap at all
         if (overlapX1 >= overlapX2 || overlapY1 >= overlapY2) return false;
@@ -216,10 +221,10 @@ public class World {
         // check every pixel in the overlapping region
         for (int y = overlapY1; y < overlapY2; y++) {
             for (int x = overlapX1; x < overlapX2; x++) {
-                int ax = x - (int) a.getX();
-                int ay = y - (int) a.getY();
-                int bx = x - (int) b.getX();
-                int by = y - (int) b.getY();
+                int ax = x - aScreenX;
+                int ay = y - aScreenY;
+                int bx = x - bScreenX;
+                int by = y - bScreenY;
 
                 // if both pixels are non-transparent, they are touching
                 if (readerA.getArgb(ax, ay) >> 24 != 0 &&
