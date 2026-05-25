@@ -6,9 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-/*
-    Supposed to take in a Program object and execute the commands in each Script object based on the event blocks. For example, if a Script has the name "when_flag_clicked", then the commands in that Script would be executed when the user clicks the green flag in the GUI.
-*/
+/**
+ * Runs a sprite's program by stepping through its scripts and commands.
+ * It also manages clone startup, variable resolution, and block execution.
+ */
 public class Interpreter
 {
     private static final String DEFAULT_START_EVENT = "when_flag_clicked";
@@ -29,6 +30,11 @@ public class Interpreter
     private Program assignedProgram;
     private String startEventName;
 
+    /**
+     * Creates an interpreter for the given world.
+     *
+     * @param world world that stores sprites, inputs, and globals
+     */
     public Interpreter(World world) {
         this.world = world;
         this.programs = new HashMap<Sprite, Program>();
@@ -36,6 +42,12 @@ public class Interpreter
         this.startEventName = DEFAULT_START_EVENT;
     }
 
+    /**
+     * Assigns a sprite and program to this interpreter.
+     *
+     * @param sprite sprite to run
+     * @param program parsed program for the sprite
+     */
     public void addProgram(Sprite sprite, Program program) {
         validateProgramVariables(program);
         programs.put(sprite, program);
@@ -45,6 +57,11 @@ public class Interpreter
     }
 
 
+    /**
+     * Checks that program variables and function arguments do not use invalid names.
+     *
+     * @param program program to validate
+     */
     private void validateProgramVariables(Program program) {
         HashSet<String> localVariables = new HashSet<>();
 
@@ -77,6 +94,12 @@ public class Interpreter
         }
     }
 
+    /**
+     * Recursively checks variable assignments inside a list of commands.
+     *
+     * @param commands commands to scan
+     * @param localVariables set of discovered local variable names
+     */
     private void validateVariableNamesInCommands(ArrayList<Command> commands, HashSet<String> localVariables) {
         for (Command command : commands) {
             if (command.isPrivate()) {
@@ -100,6 +123,9 @@ public class Interpreter
         }
     }
 
+    /**
+     * Runs this interpreter until no more work remains.
+     */
     public void execute() {
         System.out.println("Executing programs...");
         while (tick()) {
@@ -108,14 +134,29 @@ public class Interpreter
         System.out.println("Finished executing programs.");
     }
 
+    /**
+     * Sets the event name this interpreter should start from.
+     *
+     * @param eventName event block name
+     */
     public void setStartEvent(String eventName) {
         startEventName = normalizeScriptName(eventName);
     }
 
+    /**
+     * Stores the shared list of active interpreters.
+     *
+     * @param interpreters active interpreters in the world
+     */
     public static void setInterpreterRegistry(List<Interpreter> interpreters) {
         interpreterRegistry = interpreters;
     }
 
+    /**
+     * Advances execution by a small amount.
+     *
+     * @return true if there is still work to do, false otherwise
+     */
     public boolean tick() {
         initializeExecution();
 
@@ -181,13 +222,26 @@ public class Interpreter
         return true;
     }
 
-    // nested functions??
+    /**
+     * Executes every command in a script immediately.
+     *
+     * @param script script to execute
+     * @param sprite sprite the script is running on
+     */
     public void executeScript(Script script, Sprite sprite) {
         for (Command command : script.getCommands()) {
             executeCommand(command, sprite);
         }
     }
 
+    /**
+     * Executes a user-defined function with the given arguments.
+     *
+     * @param function function definition
+     * @param newArgs argument values
+     * @param sprite sprite running the function
+     * @return updated sprite
+     */
     public Sprite executeFunction(Script function, ArrayList<String> newArgs, Sprite sprite) {
         // check if any function args are the same name as variables. if so, thrown an error since that isn't allowd
         for (String arg : function.getArgs()) {
@@ -220,13 +274,24 @@ public class Interpreter
         return sprite;
     }
 
+    /**
+     * Checks whether a character can appear in an identifier.
+     *
+     * @param ch character to test
+     * @return true if the character is part of an identifier
+     */
     private static boolean isIdentifierChar(char ch) {
         return Character.isLetterOrDigit(ch) || ch == '_';
     }
 
-    /*
-        Replaces all instances of target in expression with replacement, but only when target is a standalone identifier (not part of another word). For example, if target is "x", then "x + 1" would become "replacement + 1", but "max + 1" would remain unchanged.
-    */
+    /**
+     * Replaces an identifier in an expression without touching larger names.
+     *
+     * @param expression expression to update
+     * @param target identifier to replace
+     * @param replacement replacement text
+     * @return updated expression
+     */
     private String replaceIdentifier(String expression, String target, String replacement) {
         if (target == null || target.isEmpty()) {
             return expression;
@@ -253,6 +318,13 @@ public class Interpreter
         return result.toString();
     }
 
+    /**
+     * Replaces function argument names throughout a command tree.
+     *
+     * @param command root command to update
+     * @param functionArgs original function argument names
+     * @param newArgs argument values to substitute
+     */
     private void substituteFunctionArgs(Command command, ArrayList<String> functionArgs, ArrayList<String> newArgs) {
         ArrayList<String> commandArgs = command.getArgs();
 
@@ -279,6 +351,13 @@ public class Interpreter
         }
     }
 
+    /**
+     * Replaces known variable names in an expression with their current values.
+     *
+     * @param expression expression to resolve
+     * @param sprite sprite whose variables are used
+     * @return resolved expression
+     */
     private String resolveVariables(String expression, Sprite sprite) {
         String resolved = expression;
         ArrayList<String> variables = new ArrayList<>(programs.get(sprite).getVariables().keySet());
@@ -291,6 +370,13 @@ public class Interpreter
         return resolved;
     }
 
+    /**
+     * Finds the matching closing parenthesis for an opening parenthesis.
+     *
+     * @param expression expression to search
+     * @param openParenIndex index of the opening parenthesis
+     * @return index of the matching closing parenthesis, or -1 if not found
+     */
     private int findMatchingCloseParen(String expression, int openParenIndex) {
         int depth = 0;
 
@@ -309,12 +395,13 @@ public class Interpreter
         return -1;
     }
 
-    /*
-        Uses a cool trick where it hides the args of this special operator function so that it doesn't get replaced
-        in the normal variable replacement loops
-
-        The variables can then be restored using the function below
-    */
+    /**
+     * Temporarily hides attribute_of_sprite arguments during variable replacement.
+     *
+     * @param expression expression to protect
+     * @param protectedArgs map storing placeholder tokens and original values
+     * @return protected expression
+     */
     private String protectAttributeOfSpriteArgs(String expression, HashMap<String, String> protectedArgs) {
         String functionName = "attribute_of_sprite";
         int searchIndex = 0;
@@ -356,6 +443,13 @@ public class Interpreter
         return expression;
     }
 
+    /**
+     * Restores temporarily hidden attribute_of_sprite arguments.
+     *
+     * @param expression expression with placeholders
+     * @param protectedArgs map of placeholder tokens to original values
+     * @return restored expression
+     */
     private String restoreProtectedArgs(String expression, HashMap<String, String> protectedArgs) {
         for (Map.Entry<String, String> entry : protectedArgs.entrySet()) {
             expression = expression.replace(entry.getKey(), entry.getValue());
@@ -364,6 +458,13 @@ public class Interpreter
         return expression;
     }
 
+    /**
+     * Resolves variables and operator functions inside one expression argument.
+     *
+     * @param expression raw expression
+     * @param sprite current sprite
+     * @return resolved value as a string
+     */
     private String resolveExpressionArg(String expression, Sprite sprite) {
         recordSpriteVariables(sprite);
         HashMap<String, String> protectedArgs = new HashMap<>();
@@ -373,6 +474,12 @@ public class Interpreter
         return OperatorFunctionExpression.evaluate(resolvedExpression, world, sprite);
     }
 
+    /**
+     * Resolves all arguments for a command before execution.
+     *
+     * @param command command to update
+     * @param sprite current sprite
+     */
     private void resolveCommandArgs(Command command, Sprite sprite) {
 
         if(command.getName().equals("show_variable")||command.getName().equals("hide_variable"))
@@ -389,10 +496,21 @@ public class Interpreter
         }
     }
 
+    /**
+     * Records built-in sprite values for the current sprite.
+     *
+     * @param sprite sprite whose values should be recorded
+     */
     private void recordSpriteVariables(Sprite sprite) {
         recordSpriteVariables(sprite, programs.get(sprite));
     }
 
+    /**
+     * Writes global variables and built-in sprite values into a program.
+     *
+     * @param sprite sprite whose state is being recorded
+     * @param program program receiving the values
+     */
     private static void recordSpriteVariables(Sprite sprite, Program program) {
         for (Map.Entry<String, String> entry : world.getGlobalVariables().entrySet()) {
             program.setVariableValue(entry.getKey(), entry.getValue());
@@ -409,6 +527,14 @@ public class Interpreter
         program.setVariableValue("mouse_y", getMouseYValue());
     }
 
+    /**
+     * Returns a built-in attribute value from a named sprite.
+     *
+     * @param variableName attribute name
+     * @param spriteName sprite name
+     * @param lineNumber source line for error reporting
+     * @return attribute value as a string
+     */
     public static String getSpriteAttribute(String variableName, String spriteName, int lineNumber) {
         for (Sprite sprite : world.getSprites()) {
             if (sprite.getName().equals(spriteName)) {
@@ -432,6 +558,13 @@ public class Interpreter
         return "";
     }
 
+    /**
+     * Executes one command, including nested blocks if needed.
+     *
+     * @param command command to execute
+     * @param sprite sprite running the command
+     * @return updated sprite
+     */
     public Sprite executeCommand(Command command, Sprite sprite) {
         // replace all the args through all children
         // make a new command using deep copy and use that to execute.
@@ -447,6 +580,13 @@ public class Interpreter
         return sprite;
     }
 
+    /**
+     * Executes a block command immediately.
+     *
+     * @param command block command
+     * @param sprite sprite running the block
+     * @return updated sprite
+     */
     public Sprite executeBlockCommand(Command command, Sprite sprite) {
 
         switch (command.getName()) {
@@ -496,9 +636,12 @@ public class Interpreter
     }
 
 
-    /*
-        evalute all args into a single String value in a ne list
-    */
+    /**
+     * Evaluates a list of expression arguments.
+     *
+     * @param args raw arguments
+     * @return evaluated arguments
+     */
     private ArrayList<String> evalArgs(ArrayList<String> args) {
         ArrayList<String> ans = new ArrayList<>();
 
@@ -509,9 +652,13 @@ public class Interpreter
         return ans;
     }
 
-    /*
-    Take a single command and execute corresponding Scratch functions from Sprite
-    */
+    /**
+     * Executes one non-block command on a sprite.
+     *
+     * @param command command to execute
+     * @param sprite sprite running the command
+     * @return updated sprite
+     */
     public Sprite exectuteActionCommand(Command command, Sprite sprite) {
         // command is action command
         String name = command.getName();
@@ -621,6 +768,11 @@ public class Interpreter
         return sprite;
     }
 
+    /**
+     * Creates a clone of a sprite and registers a new interpreter for it.
+     *
+     * @param sourceSprite sprite being cloned
+     */
     private void createClone(Sprite sourceSprite) {
         Program sourceProgram = programs.get(sourceSprite);
 
@@ -639,18 +791,36 @@ public class Interpreter
         interpreterRegistry.add(cloneInterpreter);
     }
 
+    /**
+     * Returns the current mouse button state.
+     *
+     * @return "true" if the mouse is down, otherwise "false"
+     */
     public static String getMouseDownValue() {
         return world.isMouseDown() ? "true" : "false";
     }
 
+    /**
+     * Returns the current mouse x position.
+     *
+     * @return mouse x position as a string
+     */
     public static String getMouseXValue() {
         return world.getMouseX() + "";
     }
 
+    /**
+     * Returns the current mouse y position.
+     *
+     * @return mouse y position as a string
+     */
     public static String getMouseYValue() {
         return world.getMouseY() + "";
     }
 
+    /**
+     * Performs one-time setup before execution starts.
+     */
     private void initializeExecution() {
         if (initialized) return;
         initialized = true;
@@ -662,6 +832,12 @@ public class Interpreter
         currentScriptIndex = 0;
     }
 
+    /**
+     * Normalizes a script or event name by trimming it and removing a trailing colon.
+     *
+     * @param scriptName raw script name
+     * @return normalized script name
+     */
     private String normalizeScriptName(String scriptName) {
         if (scriptName == null) {
             return "";
@@ -676,10 +852,21 @@ public class Interpreter
         return scriptName;
     }
 
+    /**
+     * Checks whether a script should run for this interpreter's start event.
+     *
+     * @param script script to test
+     * @return true if the script matches the active start event
+     */
     private boolean shouldRunScript(Script script) {
         return normalizeScriptName(script.getName()).equals(startEventName);
     }
 
+    /**
+     * Pushes the next matching script onto the execution stack.
+     *
+     * @return true if a script was pushed, false otherwise
+     */
     private boolean pushNextScript() {
         while (currentScriptIndex < currentProgram.getScripts().size()) {
             Script script = currentProgram.getScripts().get(currentScriptIndex++);
@@ -692,12 +879,24 @@ public class Interpreter
         return false;
     }
 
+    /**
+     * Executes one leaf command after resolving its arguments.
+     *
+     * @param command command to execute
+     * @param sprite sprite running the command
+     * @return updated sprite
+     */
     private Sprite executeLeafCommand(Command command, Sprite sprite) {
         Command commandCopy = new Command(command);
         resolveCommandArgs(commandCopy, sprite);
         return exectuteActionCommand(commandCopy, sprite);
     }
 
+    /**
+     * Enters a block command by pushing the correct execution frame.
+     *
+     * @param command block command to enter
+     */
     private void enterBlock(Command command) {
         switch (command.getName()) {
             case "repeat":
@@ -735,6 +934,13 @@ public class Interpreter
         }
     }
 
+    /**
+     * Finishes the current execution frame and decides whether to yield.
+     *
+     * @param frame frame being completed
+     * @param executedLeafCommand whether this tick already executed a leaf command
+     * @return true if tick should yield, false otherwise
+     */
     private boolean completeFrame(ExecutionFrame frame, boolean executedLeafCommand) {
         switch (frame.type) {
             case ExecutionFrame.SCRIPT:
@@ -773,23 +979,42 @@ public class Interpreter
         }
     }
 
+    /**
+     * Pushes a frame onto the execution stack.
+     * @param frame frame to push
+     */
     private void pushFrame(ExecutionFrame frame) {
         executionStack.add(frame);
     }
 
+    /**
+     * Returns the frame at the top of the execution stack.
+     * @return current execution frame
+     */
     private ExecutionFrame peekFrame() {
         return executionStack.get(executionStack.size() - 1);
     }
 
+    /**
+     * Removes the frame at the top of the execution stack.
+     */
     private void popFrame() {
         executionStack.remove(executionStack.size() - 1);
     }
 
+    /**
+     * Returns the program assigned to this interpreter.
+     * @return assigned program
+     */
     public Program getProgram()
     {
         return assignedProgram ;
     }
 
+    /**
+     * Returns the sprite assigned to this interpreter.
+     * @return assigned sprite
+     */
     public Sprite getSprite()
     {
         return assignedSprite ;
