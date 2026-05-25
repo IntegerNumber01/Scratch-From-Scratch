@@ -25,7 +25,9 @@ public class Program
         this.scripts = new ArrayList<>(other.scripts);
         this.functions = new ArrayList<>(other.functions);
         this.variables = new HashMap<>(other.variables);
-        this.visibleVariables = new HashSet<>(other.visibleVariables);
+        // Variable monitor visibility belongs to the source sprite's UI state,
+        // not to each clone created from that sprite.
+        this.visibleVariables = new HashSet<>();
     }
 
     public void addScript(Script script) {
