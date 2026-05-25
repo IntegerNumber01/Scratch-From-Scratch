@@ -2,12 +2,11 @@ package backend;
 
 public class Operators {
 
-    // new: used in Expression.java
     /**
      * adds (a + b)
      * @param a
      * @param b
-     * @return
+     * @return String result of adding a and b
      */
     public static String add(String a, String b) {
         return Double.toString(Double.parseDouble(a) + Double.parseDouble(b));
@@ -17,8 +16,8 @@ public class Operators {
      * subtracts (a - b)
      * @param a
      * @param b
-     * @return
-     */ 
+     * @return String result of subtracting b from a
+     */
     public static String subtract(String a, String b) {
         return Double.toString(Double.parseDouble(a) - Double.parseDouble(b));
     }
@@ -27,7 +26,7 @@ public class Operators {
      * multiplies (a * b)
      * @param a
      * @param b
-     * @return
+     * @return String result of multiplying a and b
      */
     public static String multiply(String a, String b) {
         return Double.toString(Double.parseDouble(a) * Double.parseDouble(b));
@@ -37,7 +36,7 @@ public class Operators {
      * divides (a / b)
      * @param a
      * @param b
-     * @return
+     * @return String result of dividing a by b
      */
     public static String divide(String a, String b) {
         return Double.toString(Double.parseDouble(a) / Double.parseDouble(b));
@@ -47,7 +46,7 @@ public class Operators {
      * modulo (a % b)
      * @param a
      * @param b
-     * @return
+     * @return String result of a modulo b
      */
     public static String modulo(String a, String b) {
         return Double.toString(Double.parseDouble(a) % Double.parseDouble(b));
@@ -57,7 +56,7 @@ public class Operators {
      * greater than (a > b)
      * @param a
      * @param b
-     * @return
+     * @return String result of checking if a is greater than b
      */
     public static String greaterThan(String a, String b) {
         if (Double.parseDouble(a) > Double.parseDouble(b)) {
@@ -70,7 +69,7 @@ public class Operators {
      * less than (a < b)
      * @param a
      * @param b
-     * @return
+     * @return String result of checking if a is less than b
      */
     public static String lessThan(String a, String b) {
         if (Double.parseDouble(a) < Double.parseDouble(b)) {
@@ -83,7 +82,7 @@ public class Operators {
      * equals (a == b)
      * @param a
      * @param b
-     * @return
+     * @return String result of checking if a is equal to b
      */
     public static String equal(String a, String b) {
         if (Double.parseDouble(a) == Double.parseDouble(b)) {
@@ -96,7 +95,7 @@ public class Operators {
      * not equal (a != b)
      * @param a
      * @param b
-     * @return
+     * @return String result of checking if a is not equal to b
      */
     public static String notEqual(String a, String b) {
         if (Double.parseDouble(a) != Double.parseDouble(b)) {
@@ -108,7 +107,7 @@ public class Operators {
     /**
      * not (!a)
      * @param a
-     * @return
+     * @return String result of checking if a is not true
      */
     public static String not(String a) {
         if (!Boolean.parseBoolean(a)) {
@@ -121,7 +120,7 @@ public class Operators {
      * and (a && b)
      * @param a
      * @param b
-     * @return
+     * @return String result of checking if a and b are both true
      */
     public static String and(String a, String b) {
         if (Boolean.parseBoolean(a) && Boolean.parseBoolean(b)) {
@@ -134,7 +133,7 @@ public class Operators {
      * or (a || b)
      * @param a
      * @param b
-     * @return
+     * @return String result of checking if a or b is true
      */
     public static String or(String a, String b) {
         if (Boolean.parseBoolean(a) || Boolean.parseBoolean(b)) {
