@@ -6,6 +6,7 @@ when_flag_clicked:
     create_clone()
     create_clone()
     create_clone()
+    hide()
 
 when_i_start_as_clone:
     go_to_random_position()
