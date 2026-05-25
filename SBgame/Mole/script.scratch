@@ -1,0 +1,27 @@
+when_flag_clicked:
+    score = 0
+    go_to(120, 90)
+    set_size(25)
+    say(join(Score: , score))
+    create_clone()
+    create_clone()
+    create_clone()
+
+when_i_start_as_clone:
+    go_to_random_position()
+    mole_x = x_position
+    mole_y = y_position
+    mole_size = 40
+    was_down = 0
+    forever():
+        if(mouse_down):
+            if(was_down == 0):
+                was_down = 1
+                if(mouse_x > mole_x - mole_size and mouse_x < mole_x + mole_size and mouse_y > mole_y - mole_size and mouse_y < mole_y + mole_size):
+                    score = score + 1
+                    say(join(Score: , score))
+                    go_to_random_position()
+                    mole_x = x_position
+                    mole_y = y_position
+        else:
+            was_down = 0

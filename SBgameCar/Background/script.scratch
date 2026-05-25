@@ -1,0 +1,2 @@
+when_flag_clicked:
+    go_to(0,0)

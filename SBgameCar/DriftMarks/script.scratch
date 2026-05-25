@@ -1,0 +1,14 @@
+when_flag_clicked:
+    forever():
+        if(mouse_down):
+            create_clone()
+
+when_i_create_clone:
+    x_vel = pick_random(-3, 3)
+    y_vel = pick_random(-3, 3)
+    repeat(75):
+        change_x(x_vel)
+        change_y(y_vel)
+        if(x_position > 240 or x_position < -240 or y_position > 175 or y_position < -175):
+            set_x(0)
+            set_y(0)
