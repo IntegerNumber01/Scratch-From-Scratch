@@ -108,8 +108,8 @@ public class Gui
             @Override
             public void handle(MouseEvent e)
             {
-                world.setMouseX(e.getX());
-                world.setMouseY(e.getY());
+                world.setMouseX(e.getX() - 240);
+                world.setMouseY(180 - e.getY());
             }
         });
 
@@ -197,10 +197,11 @@ public class Gui
 
         ImageView view = new ImageView(image);
 
-        view.setX(sprite.getX());
-        view.setY(sprite.getY());
-
         double scale = sprite.getSize()/100.0 ;
+
+        view.setX(240 + sprite.getX() - 100 * scale);
+        view.setY(180 - sprite.getY() - 100 * scale);
+
 
         view.setFitWidth(200*scale);
         view.setFitHeight(200*scale);
@@ -211,8 +212,8 @@ public class Gui
         if (!sprite.getSayText().isEmpty())
         {
             javafx.scene.control.Label label = new javafx.scene.control.Label(sprite.getSayText());
-            label.setLayoutX(sprite.getX());
-            label.setLayoutY(sprite.getY() - 30);
+            label.setLayoutX(240 + sprite.getX() - 100 * scale);
+            label.setLayoutY(180 - sprite.getY() - 130 * scale);
             label.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-padding: 4;");
             pane.getChildren().add(label);
         }
@@ -220,8 +221,8 @@ public class Gui
         if (!sprite.getThinkText().isEmpty())
         {
             javafx.scene.control.Label label = new javafx.scene.control.Label(sprite.getThinkText());
-            label.setLayoutX(sprite.getX());
-            label.setLayoutY(sprite.getY() - 30);
+            label.setLayoutX(240 + sprite.getX() - 100 * scale);
+            label.setLayoutY(180 - sprite.getY() - 130 * scale);
             label.setStyle("-fx-background-color: white; -fx-border-color: gray; -fx-border-style: dashed; -fx-padding: 4;");
             pane.getChildren().add(label);
         }

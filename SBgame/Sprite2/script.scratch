@@ -1,0 +1,5 @@
+when_flag_clicked:
+    go_to(0, 0)
+    forever():
+        if(touching(Cat)):
+            say(ouch)
