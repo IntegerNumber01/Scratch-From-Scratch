@@ -123,52 +123,60 @@ public class Interpreter
             return false;
         }
 
-        if (executionStack.isEmpty()) {
-            if (!pushNextScript()) {
-                finished = true;
-                return false;
-            }
-        }
+        boolean executedLeafCommand = false;
+        int steps = 0;
 
-        ExecutionFrame frame = peekFrame();
-
-        if(frame.waitUntil > 0)
-        {
-            if(System.nanoTime() < frame.waitUntil)
-            {
-                return true ;
-            }
-
-            else
-            {
-                frame.waitUntil = 0 ;
-                if("say".equals(frame.clearAfterWait))
-                {
-                    currentSprite.say("") ;
+        while (steps++ < 100) { // just a random big number to prevent infinite loops
+            if (executionStack.isEmpty()) {
+                if (!pushNextScript()) {
+                    finished = true;
+                    return false;
                 }
-                else if("think".equals(frame.clearAfterWait))
-                {
-                    currentSprite.think("") ;
-                }
-                frame.clearAfterWait = null ;
             }
-        }
 
-        if (frame.index >= frame.commands.size()) {
-            completeFrame(frame);
+            ExecutionFrame frame = peekFrame();
+
+            if(frame.waitUntil > 0)
+            {
+                if(System.nanoTime() < frame.waitUntil)
+                {
+                    return true ;
+                }
+
+                else
+                {
+                    frame.waitUntil = 0 ;
+                    if("say".equals(frame.clearAfterWait))
+                    {
+                        currentSprite.say("") ;
+                    }
+                    else if("think".equals(frame.clearAfterWait))
+                    {
+                        currentSprite.think("") ;
+                    }
+                    frame.clearAfterWait = null ;
+                }
+            }
+
+            if (frame.index >= frame.commands.size()) {
+                if (completeFrame(frame, executedLeafCommand)) {
+                    return true;
+                }
+                continue;
+            }
+
+            Command command = frame.commands.get(frame.index++);
+
+            // keep walking block structure until we hit a leaf command or need to yield
+            if (command.isBlock()) {
+                enterBlock(command);
+                continue;
+            }
+
+            executeLeafCommand(command, currentSprite);
+            executedLeafCommand = true;
             return true;
         }
-
-        Command command = frame.commands.get(frame.index++);
-
-        // ONLY ENTER BLOCK (no execution yet)
-        if (command.isBlock()) {
-            enterBlock(command);
-            return true;   // IMPORTANT: yield immediately
-        }
-
-        // execute exactly ONE action command
-        executeLeafCommand(command, currentSprite);
 
         return true;
     }
@@ -366,12 +374,12 @@ public class Interpreter
     }
 
     private void resolveCommandArgs(Command command, Sprite sprite) {
-        
+
         if(command.getName().equals("show_variable")||command.getName().equals("hide_variable"))
         {
-            return ; 
+            return ;
         }
-        
+
         for (int i = 0; i < command.getArgs().size(); i++) {
             if (command.isPrivate() && i == 0) { // variable assignment & LHS
                 continue;
@@ -601,10 +609,10 @@ public class Interpreter
                 break;
             case "show_variable":
                 programs.get(sprite).showVariable(args.get(0)) ;
-                break ; 
+                break ;
             case "hide_variable":
-                programs.get(sprite).hideVariable(args.get(0)) ; 
-                break ; 
+                programs.get(sprite).hideVariable(args.get(0)) ;
+                break ;
             default:
                 ScratchError.throwError(command.getLineNumber(), "Unrecognized command " + "'" + name + "'");
                 break;
@@ -727,38 +735,41 @@ public class Interpreter
         }
     }
 
-    private void completeFrame(ExecutionFrame frame) {
+    private boolean completeFrame(ExecutionFrame frame, boolean executedLeafCommand) {
         switch (frame.type) {
             case ExecutionFrame.SCRIPT:
             case ExecutionFrame.IF_BRANCH:
                 popFrame();
-                break;
+                return false;
             case ExecutionFrame.REPEAT:
                 if (frame.remainingIterations > 1) {
                     frame.remainingIterations--;
                     frame.index = 0;
+                    return !executedLeafCommand;
                 } else {
                     popFrame();
                 }
-                break;
+                return false;
             case ExecutionFrame.REPEAT_UNTIL:
                 String condition = resolveExpressionArg(frame.conditionExpression, currentSprite);
                 if (BooleanExpression.evaluate(condition).equals("false")) {
                     frame.index = 0;
+                    return !executedLeafCommand;
                 } else {
                     popFrame();
                 }
-                break;
+                return false;
             case ExecutionFrame.FOREVER:
                 if (world.isRunning()) {
                     frame.index = 0;
+                    return !executedLeafCommand;
                 } else {
                     popFrame();
                 }
-                break;
+                return false;
             default:
                 popFrame();
-                break;
+                return false;
         }
     }
 
@@ -776,11 +787,11 @@ public class Interpreter
 
     public Program getProgram()
     {
-        return assignedProgram ; 
+        return assignedProgram ;
     }
 
     public Sprite getSprite()
     {
-        return assignedSprite ; 
+        return assignedSprite ;
     }
 }
