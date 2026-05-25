@@ -1,0 +1,7 @@
+when_flag_clicked:
+    set_size(70)
+    go_to(0, 0)
+    point_in_direction(90)
+    forever():
+        if(key_pressed(space) or mouse_y > -110 and mouse_y < -30 and mouse_x > -74 and mouse_x < 70 and mouse_down):
+            say(Play!)

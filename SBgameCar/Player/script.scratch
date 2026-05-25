@@ -1,0 +1,23 @@
+when_flag_clicked:
+    level = 0
+    point_in_direction(30)
+    set_size(25)
+    go_to(-30, -240)
+    exp_var1 = 1.2
+    repeat(8):
+        move(exp_var1)
+        exp_var1 = exp_var1 + exp_var1 / 3.5
+        turn_left(1)
+    repeat(3):
+        turn_left(2.2)
+        move(exp_var1)
+        exp_var1 = exp_var1 + exp_var1 / 4
+    repeat(4):
+        turn_left(3.75)
+        move(exp_var1)
+        exp_var1 = exp_var1 + exp_var1 / 7
+    repeat(20):
+        exp_var1 = exp_var1 + exp_var1 / 4.25 * -1
+        move(exp_var1)
+    set_x(0)
+    set_y(0)
