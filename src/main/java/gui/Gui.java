@@ -219,8 +219,38 @@ public class Gui
     public void drawVariables(Pane pane)
     {
         int yOffset = 10;
+
+        // Draw global variables from backdrop (no sprite name prefix)
         for (Interpreter interpreter : interpreters)
         {
+            Sprite sprite = interpreter.getSprite();
+            if (sprite.getName().equals("backdrop"))
+            {
+                Program program = interpreter.getProgram();
+                if (program != null)
+                {
+                    for (String varName : program.getVisibleVariables())
+                    {
+                        String value = program.getVariableValue(varName);
+                        if (value == null) continue;
+
+                        Label label = new Label(varName + "  " + value);
+                        label.setLayoutX(10);
+                        label.setLayoutY(yOffset);
+                        label.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-padding: 2 6;");
+                        pane.getChildren().add(label);
+                        yOffset += 25;
+                    }
+                }
+                break; // Only one backdrop
+            }
+        }
+
+        // Draw sprite-local variables (with sprite name prefix)
+        for (Interpreter interpreter : interpreters)
+        {
+            if (interpreter.getSprite().getName().equals("backdrop")) continue;
+
             Program program = interpreter.getProgram();
             if (program == null) continue;
 
