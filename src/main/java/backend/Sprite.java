@@ -249,9 +249,9 @@ public class Sprite {
     }
 
     /**
-     * Changes the sprite's X position by the given amount.
      *
-     * @param myX the amount to add to X (can be negative)
+     * @param myX
+     * Chnages the x by this much
      */
     public void changeX(int myX) 
     {
@@ -259,9 +259,9 @@ public class Sprite {
     }
 
     /**
-     * Changes the sprite's Y position by the given amount.
      *
-     * @param myY the amount to add to Y (can be negative)
+     * @param myY
+     * Changes the y by this much
      */
     public void changeY(int myY) 
     {
@@ -269,9 +269,9 @@ public class Sprite {
     }
 
     /**
-     * Sets the sprite's X position to an exact value in Scratch coordinates.
      *
-     * @param x the new X position
+     * @param x
+     * Sets the x to this much
      */
     public void setX(int x) 
     {
@@ -279,9 +279,9 @@ public class Sprite {
     }
 
     /**
-     * Sets the sprite's Y position to an exact value in Scratch coordinates.
      *
-     * @param y the new Y position
+     * @param y
+     * Sets the y to this much
      */
     public void setY(int y) 
     {
@@ -289,9 +289,9 @@ public class Sprite {
     }
 
     /**
-     * Adds a new costume image file to this sprite's costume list.
      *
-     * @param file the costume image file to add
+     * @param file
+     * adds another costume to the sprite's list of costumes
      */
     public void addCostume(File file) 
     {
@@ -299,17 +299,11 @@ public class Sprite {
     }
 
     /**
-     * Switches the active costume to the one with the given filename.
-     * If no costume with that filename exists, the current costume is unchanged.
-     *
-     * @param filename the filename of the costume to switch to (e.g. "cat.png")
-     */
-    public void switchCostume(String filename) 
-    {
-        for (int i = 0; i < costumes.size(); i++) 
-            {
-            if (costumes.get(i).getName().equals(filename)) 
-            {
+     * switches the current costumes to the another costume
+    */
+    public void switchCostume(String filename) {
+        for (int i = 0; i < costumes.size(); i++) {
+            if (costumes.get(i).getName().equals(filename)) {
                 currentCostumeIndex = i;
                 currentCostume = costumes.get(i);
                 return;
@@ -356,7 +350,7 @@ public class Sprite {
      * @param mouseY mouse Y position in Scratch coordinates
      * @return true if the mouse is within the sprite's bounding box, false otherwise
      */
-    public boolean isTouchingMouse(double mouseX, double mouseY) 
+    public boolean isTouchingMouse(double mouseX, double mouseY)
     {
         if (hidden || costumeWidth == 0) 
         {
