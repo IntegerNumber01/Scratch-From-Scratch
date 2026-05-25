@@ -1,9 +1,10 @@
 when_flag_clicked:
     switch_costume(Hammer.png)
     go_to(mouse_x, mouse_y)
-    go_to_front_layer()
 
      forever():
+        go_to_front_layer()
+
         go_to(mouse_x, mouse_y)
         if(mouse_down):
             switch_costume(HammerHit.png)
