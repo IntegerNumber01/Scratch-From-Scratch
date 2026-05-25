@@ -1,6 +1,6 @@
 when_flag_clicked:
     go_to(120, 90)
-    set_size(25)
+    set_size(40)
     show_variable(SCORE)
     create_clone()
     create_clone()
