@@ -457,7 +457,7 @@ public class Sprite {
     /**
      * Stores the natural (unscaled) dimensions of the current costume image.
      * Called by the GUI after loading the image so that methods like
-     * {@link #isTouchingMouse} can compute accurate bounding boxes.
+     * isTouchingMouse can compute accurate bounding boxes.
      *
      * @param width  the costume's natural width in pixels
      * @param height the costume's natural height in pixels

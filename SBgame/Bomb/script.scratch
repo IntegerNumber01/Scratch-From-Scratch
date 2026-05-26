@@ -1,0 +1,15 @@
+when_flag_clicked:
+    go_to(140, 100)
+    set_size(1)
+    show_variable(Score)
+    go_to_random_position()
+    was_down = 0
+    forever():
+        if(mouse_down):
+            if(was_down == 0):
+                was_down = 1
+                if(touching(mouse_pointer)):
+                    Score = Score - 5
+                    go_to_random_position()
+        else:
+            was_down = 0
