@@ -9,6 +9,12 @@ import static backend.Operators.*;
 */
 public class Expression
 {
+    private static boolean isStandaloneMathOperatorToken(String token) {
+        return token != null
+            && token.length() == 1
+            && LanguageConfig.isMathOperator(token.charAt(0));
+    }
+
     /**
      * Evaluates a mathematical expression and returns the result as a string. The expression can ONLY contain numbers, parentheses, and the operators +, -, *, and /.
      * The expression is evaluated by first evaluating the innermost parentheses and then working outwards.
@@ -45,7 +51,8 @@ public class Expression
 
             // combine negative numbers
             for (int i = 0; i < container.size(); i++) {
-                if (container.get(i).equals("-") && (i == 0 || LanguageConfig.isMathOperator(container.get(i - 1).charAt(0)))) {
+                if (container.get(i).equals("-")
+                    && (i == 0 || isStandaloneMathOperatorToken(container.get(i - 1)))) {
                     container.set(i + 1, "-" + container.get(i + 1));
                     container.remove(i);
                 }
