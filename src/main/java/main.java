@@ -181,6 +181,9 @@ public class main extends Application {
         return folderFilesMap;
     }
 
+    /**
+     * The entrypoint of the application.
+     */
     public static void main(String[] args) {
         launch(args);
     }

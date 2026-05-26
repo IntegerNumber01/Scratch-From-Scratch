@@ -39,7 +39,7 @@ public class Sprite {
      * @param size     initial size as a percentage (100 = normal size)
      * @param costumes list of costume image files; must not be null or empty
      */
-    public Sprite(String name, int x, int y, int size, ArrayList<File> costumes) 
+    public Sprite(String name, int x, int y, int size, ArrayList<File> costumes)
     {
         this.instanceId = nextInstanceId++;
         this.name = name;
@@ -48,7 +48,7 @@ public class Sprite {
         this.size = size;
         dir = 0;
         this.costumes = costumes;
-        if (costumes != null && !costumes.isEmpty()) 
+        if (costumes != null && !costumes.isEmpty())
             {
             this.currentCostume = costumes.get(0);
         }
@@ -60,7 +60,7 @@ public class Sprite {
      * @param name     the display name of this sprite
      * @param costumes list of costume image files
      */
-    public Sprite(String name, ArrayList<File> costumes) 
+    public Sprite(String name, ArrayList<File> costumes)
     {
         this(name, 0, 0, 100, costumes);
     }
@@ -71,7 +71,7 @@ public class Sprite {
      *
      * @param other the Sprite to copy
      */
-    public Sprite(Sprite other) 
+    public Sprite(Sprite other)
     {
         this.instanceId = nextInstanceId++;
         this.name = other.name;
@@ -95,7 +95,7 @@ public class Sprite {
      *
      * @return the sprite's name
      */
-    public String getName() 
+    public String getName()
     {
         return name;
     }
@@ -107,7 +107,7 @@ public class Sprite {
      *
      * @return the instance ID
      */
-    public int getInstanceId() 
+    public int getInstanceId()
     {
         return instanceId;
     }
@@ -118,7 +118,7 @@ public class Sprite {
      *
      * @return X position
      */
-    public int getX() 
+    public int getX()
     {
         return x;
     }
@@ -129,7 +129,7 @@ public class Sprite {
      *
      * @return Y position
      */
-    public int getY() 
+    public int getY()
     {
         return y;
     }
@@ -140,7 +140,7 @@ public class Sprite {
      *
      * @return size percentage
      */
-    public int getSize() 
+    public int getSize()
     {
         return size;
     }
@@ -151,7 +151,7 @@ public class Sprite {
      *
      * @return direction in degrees
      */
-    public int getDir() 
+    public int getDir()
     {
         return dir;
     }
@@ -159,7 +159,7 @@ public class Sprite {
     /**
      * Hides the sprite so it is not rendered and does not participate in collision detection.
      */
-    public void hide() 
+    public void hide()
     {
         hidden = true;
     }
@@ -167,7 +167,7 @@ public class Sprite {
     /**
      * Makes the sprite visible again after being hidden.
      */
-    public void show() 
+    public void show()
     {
         hidden = false;
     }
@@ -177,7 +177,7 @@ public class Sprite {
      *
      * @return true if hidden, false if visible
      */
-    public boolean isHidden() 
+    public boolean isHidden()
     {
         return hidden;
     }
@@ -189,7 +189,7 @@ public class Sprite {
      *
      * @param steps number of steps to move
      */
-    public void move(int steps) 
+    public void move(int steps)
     {
         x += (int) Math.round(steps * Math.cos(Math.toRadians(90 - dir)));
         y += (int) Math.round(steps * Math.sin(Math.toRadians(90 - dir)));
@@ -201,7 +201,7 @@ public class Sprite {
      * @param myX target X position in Scratch coordinates
      * @param myY target Y position in Scratch coordinates
      */
-    public void goTo(int myX, int myY) 
+    public void goTo(int myX, int myY)
     {
         x = myX;
         y = myY;
@@ -211,7 +211,7 @@ public class Sprite {
      * Moves the sprite to a random position within the Scratch canvas bounds.
      * X is randomly chosen from -240 to 240, Y from -180 to 180.
      */
-    public void goToRandomPosition() 
+    public void goToRandomPosition()
     {
         x = (int)(Math.random() * 481) - 240;
         y = (int)(Math.random() * 361) - 180;
@@ -222,7 +222,7 @@ public class Sprite {
      *
      * @param deg degrees to rotate left
      */
-    public void turnLeft(int deg) 
+    public void turnLeft(int deg)
     {
         dir -= deg;
     }
@@ -232,7 +232,7 @@ public class Sprite {
      *
      * @param deg degrees to rotate right
      */
-    public void turnRight(int deg) 
+    public void turnRight(int deg)
     {
         dir += deg;
     }
@@ -243,7 +243,7 @@ public class Sprite {
      *
      * @param deg the target direction in degrees
      */
-    public void pointInDirection(int deg) 
+    public void pointInDirection(int deg)
     {
         dir = deg;
     }
@@ -253,7 +253,7 @@ public class Sprite {
      * @param myX
      * Chnages the x by this much
      */
-    public void changeX(int myX) 
+    public void changeX(int myX)
     {
         x += myX;
     }
@@ -263,7 +263,7 @@ public class Sprite {
      * @param myY
      * Changes the y by this much
      */
-    public void changeY(int myY) 
+    public void changeY(int myY)
     {
         y += myY;
     }
@@ -273,7 +273,7 @@ public class Sprite {
      * @param x
      * Sets the x to this much
      */
-    public void setX(int x) 
+    public void setX(int x)
     {
         this.x = x;
     }
@@ -283,7 +283,7 @@ public class Sprite {
      * @param y
      * Sets the y to this much
      */
-    public void setY(int y) 
+    public void setY(int y)
     {
         this.y = y;
     }
@@ -293,14 +293,16 @@ public class Sprite {
      * @param file
      * adds another costume to the sprite's list of costumes
      */
-    public void addCostume(File file) 
+    public void addCostume(File file)
     {
         costumes.add(file);
     }
 
     /**
-     * switches the current costumes to the another costume
-    */
+     * Switches the sprite to the costume with the given filename.
+     *
+     * @param filename the name of the costume to switch to
+     */
     public void switchCostume(String filename) {
         for (int i = 0; i < costumes.size(); i++) {
             if (costumes.get(i).getName().equals(filename)) {
@@ -315,7 +317,7 @@ public class Sprite {
      * Advances to the next costume in the list, wrapping back to the first
      * costume after the last one. Used for animation.
      */
-    public void nextCostume() 
+    public void nextCostume()
     {
         currentCostumeIndex = (currentCostumeIndex + 1) % costumes.size();
         currentCostume = costumes.get(currentCostumeIndex);
@@ -326,7 +328,7 @@ public class Sprite {
      *
      * @return the current costume as a File
      */
-    public File getCurrentCostume() 
+    public File getCurrentCostume()
     {
         return currentCostume;
     }
@@ -336,7 +338,7 @@ public class Sprite {
      *
      * @return an ArrayList of all costume Files
      */
-    public ArrayList<File> getCostumes() 
+    public ArrayList<File> getCostumes()
     {
         return costumes;
     }
@@ -352,7 +354,7 @@ public class Sprite {
      */
     public boolean isTouchingMouse(double mouseX, double mouseY)
     {
-        if (hidden || costumeWidth == 0) 
+        if (hidden || costumeWidth == 0)
         {
             return false;
         }
@@ -368,7 +370,7 @@ public class Sprite {
      *
      * @param text the text to say; pass an empty string to clear the bubble
      */
-    public void say(String text) 
+    public void say(String text)
     {
         sayText = text;
         thinkText = "";
@@ -379,7 +381,7 @@ public class Sprite {
      *
      * @return the say text, or an empty string if none
      */
-    public String getSayText() 
+    public String getSayText()
     {
         return sayText;
     }
@@ -392,7 +394,7 @@ public class Sprite {
      * @param text    the text to display
      * @param seconds how long to display it (handled by the Interpreter)
      */
-    public void sayForTime(String text, int seconds) 
+    public void sayForTime(String text, int seconds)
     {
         say(text);
     }
@@ -402,7 +404,7 @@ public class Sprite {
      *
      * @return the think text, or an empty string if none
      */
-    public String getThinkText() 
+    public String getThinkText()
     {
         return thinkText;
     }
@@ -413,7 +415,7 @@ public class Sprite {
      *
      * @param text the text to think; pass an empty string to clear the bubble
      */
-    public void think(String text) 
+    public void think(String text)
     {
         thinkText = text;
         sayText = "";
@@ -427,7 +429,7 @@ public class Sprite {
      * @param text    the text to display
      * @param seconds how long to display it (handled by the Interpreter)
      */
-    public void thinkForTime(String text, int seconds) 
+    public void thinkForTime(String text, int seconds)
     {
         think(text);
     }
@@ -438,7 +440,7 @@ public class Sprite {
      *
      * @param size the new size percentage
      */
-    public void setSize(int size) 
+    public void setSize(int size)
     {
         this.size = size;
     }
@@ -449,7 +451,7 @@ public class Sprite {
      *
      * @param size the amount to add to the current size (can be negative)
      */
-    public void changeSize(int size) 
+    public void changeSize(int size)
     {
         this.size += size;
     }
@@ -462,7 +464,7 @@ public class Sprite {
      * @param width  the costume's natural width in pixels
      * @param height the costume's natural height in pixels
      */
-    public void setCostumeDimensions(double width, double height) 
+    public void setCostumeDimensions(double width, double height)
     {
         costumeWidth = width;
         costumeHeight = height;

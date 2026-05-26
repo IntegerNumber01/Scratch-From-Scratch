@@ -62,6 +62,9 @@ public final class LanguageConfig {
         "when_i_start_as_clone"
     );
 
+    /**
+     * These are variable names that are reserved because they are used by the Scratch engine to represent certain properties of the sprite or the stage.
+    */
     public static final Set<String> RESERVED_VARIABLE_NAMES = Set.of(
         "x_position",
         "y_position",
@@ -135,7 +138,7 @@ public final class LanguageConfig {
 
     /**
      * Checks if a character is a math operator (+, -, *, or /).
-     * @param c
+     * @param c the character to check
      * @return boolean true if the character is a math operator, false otherwise
      */
     public static boolean isMathOperator(char c) {
@@ -161,7 +164,7 @@ public final class LanguageConfig {
 
     /**
      * Checks if a string is a boolean operator (and, or, not).
-     * @param c
+     * @param c the string to check
      * @return boolean true if the string is a boolean operator, false otherwise
      */
     public static boolean isBoolOperator(String c) {
@@ -170,7 +173,7 @@ public final class LanguageConfig {
 
     /**
      * Checks if a string is a comparison operator (>, <, ==).
-     * @param c
+     * @param c the string to check
      * @return boolean true if the string is a comparison operator, false otherwise
      */
     public static boolean isComparisonOperator(String c) {
@@ -179,7 +182,7 @@ public final class LanguageConfig {
 
     /**
      * Given a String varName, check if this variable exists in the program by checking if it is in the variables HashMap. If it does, return its value. If it doesn't, return null.
-     * @param expression
+     * @param expression the string to check
      * @return boolean true if the string is a comparison expression, false otherwise
      */
     public static boolean isComparisonExpression(String expression) {
@@ -194,7 +197,7 @@ public final class LanguageConfig {
 
     /**
      * Checks if a string is a boolean expression by checking if it contains any boolean operators (and, or, not).
-     * @param expression
+     * @param expression the string to check
      * @return boolean true if the string is a boolean expression, false otherwise
      */
     public static boolean isBooleanExpression(String expression) {
@@ -209,7 +212,7 @@ public final class LanguageConfig {
 
     /**
      * Checks if a string is an action command by checking if it is in the ACTION_COMMANDS set.
-     * @param name
+     * @param name the string to check
      * @return boolean true if the string is an action command, false otherwise
      */
     public static boolean isActionCommand(String name) {
@@ -218,7 +221,7 @@ public final class LanguageConfig {
 
     /**
      * Checks if a string is a block command by checking if it is in the BLOCK_COMMANDS set.
-     * @param name
+     * @param name the string to check
      * @return boolean true if the string is a block command, false otherwise
      */
     public static boolean isBlockCommand(String name) {
@@ -231,7 +234,7 @@ public final class LanguageConfig {
 
     /**
      * Checks if a string is an event by checking if it is in the EVENTS set.
-     * @param name
+     * @param name the string to check
      * @return boolean true if the string is an event, false otherwise
      */
     public static boolean isEvent(String name) {
@@ -244,7 +247,7 @@ public final class LanguageConfig {
 
     /**
      * Checks if a string is a reserved variable name by checking if it is in the RESERVED_VARIABLE_NAMES set.
-     * @param name
+     * @param name the string to check
      * @return boolean true if the string is a reserved variable name, false otherwise
      */
     public static boolean isReservedVariableName(String name) {
@@ -255,7 +258,7 @@ public final class LanguageConfig {
 
     /**
      * Checks if a string is a literal by checking if it is in the RESERVED_LITERALS set.
-     * @param name
+     * @param name the string to check
      * @return boolean true if the string is a literal, false otherwise
      */
     public static boolean isLiteral(String name) {
@@ -266,7 +269,7 @@ public final class LanguageConfig {
 
     /**
      * Checks if a string is a reserved word by checking if it is in the RESERVED_WORDS set.
-     * @param name
+     * @param name the string to check
      * @return boolean true if the string is a reserved word, false otherwise
      */
     public static boolean isReservedWord(String name) {
@@ -277,7 +280,7 @@ public final class LanguageConfig {
 
     /**
      * Checks if a string is a valid command, which is defined as being either an action command, block command, or event.
-     * @param name
+     * @param name the string to check
      * @return boolean true if the string is a valid command, false otherwise
      */
     public static boolean isValid(String name) {

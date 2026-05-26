@@ -1,10 +1,13 @@
 package backend;
 
+/**
+ * This class is responsible for handling errors that occur during the parsing and execution of Scratch code. It provides a static method throwError() that takes in the line number, error message, and optionally the column number and length of the error.
+ */
 public class ScratchError {
     /**
      * calls main throwError method with the given parameters, assumes other parameters are -1
-     * @param number
-     * @param errorMsg
+     * @param number line number where the error occurs
+     * @param errorMsg error message to display
      */
     public static void throwError(int number, String errorMsg) {
         throwError(number, errorMsg, -1, -1); // call the main throwError method
@@ -12,9 +15,9 @@ public class ScratchError {
 
     /**
      * calls main throwError method with the given parameters, assumes other parameters are -1
-     * @param number
-     * @param errorMsg
-     * @param col
+     * @param number line number where the error occurs
+     * @param errorMsg error message to display
+     * @param col column number where the error occurs, used for pointing to the error in the line of code
      */
     public static void throwError(int number, String errorMsg, int col) {
         throwError(number, errorMsg, col, -1); // call the main throwError method
@@ -23,10 +26,10 @@ public class ScratchError {
     /**
      * prints the point where the failure occurs in the Scratch code. Printed with a carrot pointing there.
      * If a method is incorrect, it should put carrots under the entirety of the method
-     * @param number
-     * @param errorMsg
-     * @param col
-     * @param length
+     * @param number line number where the error occurs
+     * @param errorMsg error message to display
+     * @param col column number where the error occurs, used for pointing to the error in the line of code
+     * @param length length of the error, used for pointing to the error in the line of code
      */
     public static void throwError(int number, String errorMsg, int col, int length) {
         System.out.println("⚠️  Error on line " + number + ": " + errorMsg);

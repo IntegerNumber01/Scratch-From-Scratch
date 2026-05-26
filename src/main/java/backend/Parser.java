@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-/*
+/**
     This class is responsible for parsing the Scratch code and creating Script objects
 */
 public class Parser {
@@ -49,7 +49,7 @@ public class Parser {
 
     /**
      * Checks the indentation level of a line of code. Each indent level is determined by 4 spaces.
-     * @param line
+     * @param line the line of code to check
      * @return int indentation level of the line of code, where 0 is top-level, 1 is one indent, etc.
      */
     private static int checkIndentLevel(String line) {
@@ -68,7 +68,7 @@ public class Parser {
 
     /**
      * Splits a string of arguments into a list of individual arguments using commas.
-     * @param argsString
+     * @param argsString the string of arguments to split, for example "arg1, arg2, arg3"
      * @return ArrayList<String> list of individual arguments
      */
     private static ArrayList<String> splitArgs(String argsString) {
@@ -103,7 +103,7 @@ public class Parser {
 
     /**
      * Strips comments from a line of code. In Scratch, comments start with a # and continue to the end of the line. Ignores any # that are inside parentheses.
-     * @param line
+     * @param line the line of code to strip comments from
      * @return String line of code with comments stripped
      */
     private static String stripComments(String line) {
@@ -129,7 +129,8 @@ public class Parser {
     /**
      * Parses a line of code directly from the user .scratch file and converts it into a Command object with parameters. For example, "move(10)" would be converted into a Command with name "move" and args ["10"].
      * This method also handles variable assignment, which is determined by the presence of a top-level assignment operator (=) that is not part of an expression.
-     * @param lineNumber
+     * @param lineNumber the line number of the line of code being parsed, used for error reporting
+     * @param cmd the line of code to parse
      * @return Command object representing the command in the line of code
      */
     public static Command parseCommand(String cmd, int lineNumber) {
@@ -166,7 +167,7 @@ public class Parser {
 
     /**
      * Parses the backdrop.scratch file and returns a HashMap of global variable names to their values. The backdrop.scratch file is expected to only contain variable assignments, and any line that does not follow this format will result in an error.
-     * @param file
+     * @param file the backdrop.scratch file to parse
      * @return HashMap of global variable names to their values
      * @throws FileNotFoundException
      */
@@ -221,7 +222,7 @@ public class Parser {
 
     /**
      * Reads a .scratch file line by line and creates Script and Command objects based on the indentation and content of each line. The resulting Script objects are stored in a Program object.
-     * @param file
+     * @param file the .scratch file to parse
      * @return Program object containing the scripts and functions defined in the .scratch file
      * @throws FileNotFoundException
      */

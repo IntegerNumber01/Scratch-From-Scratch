@@ -24,9 +24,9 @@ public class Command
 
     /**
      * Creates a new Command with the given name, arguments, and line number. The isPrivate field is set to false by default because it refers to variable assignment.
-     * @param name
-     * @param args
-     * @param lineNumber
+     * @param name the name of the command
+     * @param args arguments of command
+     * @param lineNumber line number of original .scratch file
      */
     public Command(String name, ArrayList<String> args, int lineNumber) {
         this.name = name;
@@ -41,10 +41,10 @@ public class Command
 
     /**
      * Creates a new Command with the given name, arguments, line number, and isPrivate field. This constructor should only be used for variable assignment commands, which are the only commands that should have isPrivate set to true.
-     * @param name
-     * @param args
-     * @param lineNumber
-     * @param isPrivate
+     * @param name the name of the command
+     * @param args arguments of command
+     * @param lineNumber line number of original .scratch file
+     * @param isPrivate true if it is a variable declaration, false otherwise
      */
     public Command(String name, ArrayList<String> args, int lineNumber, boolean isPrivate) {
         this(name, args, lineNumber);
@@ -53,7 +53,7 @@ public class Command
 
     /**
      * Creates a new Command that is a deep copy of the given Command.
-     * @param other
+     * @param other other Command
      */
     public Command(Command other) {
         this.name = other.name;
@@ -160,8 +160,8 @@ public class Command
     /**
      * Replaces the VALUE of an arg by name with a new value. Can replace the arg in an expression as well.
      * This is used for variable assignment, where we want to replace all instances of a variable with its new value.
-     * @param oldArg
-     * @param newArg
+     * @param oldArg the name of the argument to replace
+     * @param newArg the new value for the argument
      */
     public void replaceArg(String oldArg, String newArg) {
         for (int i = 0; i < args.size(); i++) {
@@ -175,8 +175,8 @@ public class Command
 
     /**
      * Sets the argument at the given index to the new value. This is used for function argument replacement, where we want to replace the argument with the value passed in by the user.
-     * @param index
-     * @param newValue
+     * @param index the index of the argument to replace
+     * @param newValue the new value for the argument
      */
     public void setArg(int index, String newValue) {
         args.set(index, newValue);
@@ -201,7 +201,7 @@ public class Command
     /**
      * Adds a child command to this command. This is only allowed if this command is a block command, which is determined by the LanguageConfig.
      * If this command is not a block command, this method will print an error message and return false.
-     * @param child
+     * @param child the child command to add
      * @return boolean true if addChild worked. False otherwise. Only works if the command is deemed as a block type
      */
     public boolean addChild(Command child) {
@@ -217,7 +217,7 @@ public class Command
    /**
     * Adds an else child command to this command. This is only allowed if this command is a block command and is an "if" command, which is determined by the LanguageConfig.
     * If this command is not an "if" block command, this method will print an error message and return false.
-    * @param child
+    * @param child the child command to add as an else child
     * @return boolean true if addElseChild worked. False otherwise. Only works if the command is deemed as an "if" block type
     */
     public boolean addElseChild(Command child) {
@@ -246,7 +246,7 @@ public class Command
 
     /**
      * Helper method for toString that takes in the current depth of the command in the command tree. This is used for indentation in the string representation.
-     * @param depth
+     * @param depth the current depth of the command in the command tree
      * @return String string representation of this command and its children with indentation based on depth
      */
     private String toStringHelper(int depth) {

@@ -1,7 +1,7 @@
     package backend;
 
     import java.util.*;
-    /*
+    /**
         This class holds scripts that start with an event block such as "when_flag_clicked"
     */
     public class Script
@@ -13,8 +13,8 @@
 
         /**
          * Constructor for creating a new script.
-         * @param name
-         * @param lineNumber
+         * @param name name of the script, which is typically the event that triggers the script such as "when_flag_clicked"
+         * @param lineNumber line number in the original .scratch file where this script was defined
          */
         public Script(String name, int lineNumber) {
             this.name = name;
@@ -25,7 +25,7 @@
 
         /**
          * Constructor for creating a new script that is a deep copy of another script.
-         * @param other
+         * @param other the script to copy
          */
         public Script(Script other) {
             this.name = other.name;
@@ -40,9 +40,9 @@
 
         /**
          * Constructor for creating a new script that represents a function with arguments.
-         * @param name
-         * @param args
-         * @param lineNumber
+         * @param name name of the function
+         * @param args list of argument names for the function
+         * @param lineNumber line number in the original .scratch file where this script was defined
          */
         public Script(String name, ArrayList<String> args, int lineNumber) {
             this(name, lineNumber);
@@ -83,7 +83,7 @@
 
         /**
          * Adds a command to the end of the script's command list.
-         * @param command
+         * @param command the command to add
          */
         public void addCommand(Command command) {
             commands.add(command);
