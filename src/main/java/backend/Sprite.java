@@ -469,6 +469,26 @@ public class Sprite {
     }
 
     /**
+     * Returns the natural width of the current costume image in pixels.
+     *
+     * @return costume width, or 0 if it has not been measured yet
+     */
+    public double getCostumeWidth()
+    {
+        return costumeWidth;
+    }
+
+    /**
+     * Returns the natural height of the current costume image in pixels.
+     *
+     * @return costume height, or 0 if it has not been measured yet
+     */
+    public double getCostumeHeight()
+    {
+        return costumeHeight;
+    }
+
+    /**
      * Returns a debug string showing the sprite's name, instance ID, position, size, and direction.
      *
      * @return a human-readable summary of this sprite's state

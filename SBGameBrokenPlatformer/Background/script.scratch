@@ -1,0 +1,16 @@
+when_flag_clicked:
+    setup_background()
+    hide()
+    #forever():
+    #    follow_background()
+
+define setup_background():
+    switch_costume(background.png)
+    set_size(100)
+    go_to_back_layer()
+    set_y(0)
+    set_x(0 - camera_x / 4)
+
+define follow_background():
+    set_y(0)
+    set_x(0 - camera_x / 4)

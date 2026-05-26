@@ -54,6 +54,14 @@ public class World {
         for (char c = '0'; c <= '9'; c++) {
             keysPressed.put(String.valueOf(c), false);
         }
+
+        keysPressed.put("left", false);
+        keysPressed.put("right", false);
+        keysPressed.put("up", false);
+        keysPressed.put("down", false);
+        keysPressed.put("space", false);
+        keysPressed.put("enter", false);
+        keysPressed.put("shift", false);
     }
 
     /**
@@ -480,10 +488,33 @@ public class World {
         double aScale = a.getSize() / 100.0;
         double bScale = b.getSize() / 100.0;
 
-        int aW = (int)(200 * aScale);
-        int aH = (int)(200 * aScale);
-        int bW = (int)(200 * bScale);
-        int bH = (int)(200 * bScale);
+        if (a.getCurrentCostume() == null || b.getCurrentCostume() == null) {
+            return false;
+        }
+
+        double aBaseW = a.getCostumeWidth();
+        double aBaseH = a.getCostumeHeight();
+        double bBaseW = b.getCostumeWidth();
+        double bBaseH = b.getCostumeHeight();
+
+        if (aBaseW <= 0 || aBaseH <= 0) {
+            javafx.scene.image.Image imageA = new javafx.scene.image.Image(a.getCurrentCostume().toURI().toString());
+            aBaseW = imageA.getWidth();
+            aBaseH = imageA.getHeight();
+            a.setCostumeDimensions(aBaseW, aBaseH);
+        }
+
+        if (bBaseW <= 0 || bBaseH <= 0) {
+            javafx.scene.image.Image imageB = new javafx.scene.image.Image(b.getCurrentCostume().toURI().toString());
+            bBaseW = imageB.getWidth();
+            bBaseH = imageB.getHeight();
+            b.setCostumeDimensions(bBaseW, bBaseH);
+        }
+
+        int aW = Math.max(1, (int)Math.round(aBaseW * aScale));
+        int aH = Math.max(1, (int)Math.round(aBaseH * aScale));
+        int bW = Math.max(1, (int)Math.round(bBaseW * bScale));
+        int bH = Math.max(1, (int)Math.round(bBaseH * bScale));
 
         // convert Scratch coords to screen coords (top-left corner of sprite image)
         int aScreenX = 240 + a.getX() - aW / 2;

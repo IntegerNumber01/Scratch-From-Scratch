@@ -1,0 +1,16 @@
+when_flag_clicked:
+    setup_level()
+    forever():
+        follow_camera()
+
+define setup_level():
+    switch_costume(mole.png)
+    set_size(100)
+    go_to_back_layer()
+    go_forward_layers(1)
+    set_y(-120)
+    set_x(0 - camera_x)
+
+define follow_camera():
+    set_y(-120)
+    set_x(0 - camera_x)

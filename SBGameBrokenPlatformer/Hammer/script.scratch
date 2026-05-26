@@ -1,0 +1,133 @@
+when_flag_clicked:
+    setup_player()
+    forever():
+        step()
+
+define setup_player():
+    switch_costume(Hammer.png)
+    set_size(40)
+    point_in_direction(0)
+    go_to_front_layer()
+    move_left = 0
+    move_right = 0
+    jump_pressed = 0
+    jump_lock = 0
+    respawn()
+
+define respawn():
+    player_world_x = spawn_x
+    player_world_y = spawn_y
+    player_vx = 0
+    player_vy = 0
+    grounded = 0
+    update_camera()
+    sync_player_to_camera()
+
+define step():
+    if(key_pressed(r)):
+        respawn()
+    else:
+        read_input()
+        update_horizontal_speed()
+        update_jump()
+        apply_gravity()
+        move_horizontal()
+        move_vertical()
+        clamp_position()
+        if(player_world_y < -260):
+            respawn()
+        else:
+            update_camera()
+            sync_player_to_camera()
+
+define read_input():
+    move_left = 0
+    if(key_pressed(left) or key_pressed(a)):
+        move_left = 1
+    move_right = 0
+    if(key_pressed(right) or key_pressed(d)):
+        move_right = 1
+    jump_pressed = 0
+    if(key_pressed(up) or key_pressed(w) or key_pressed(space)):
+        jump_pressed = 1
+
+define update_horizontal_speed():
+    if(move_left == 1 and move_right == 0):
+        player_vx = player_vx - 2
+    if(move_right == 1 and move_left == 0):
+        player_vx = player_vx + 2
+    if(move_left == move_right):
+        if(player_vx > 0):
+            player_vx = player_vx - 1
+        if(player_vx < 0):
+            player_vx = player_vx + 1
+    if(player_vx > 6):
+        player_vx = 6
+    if(player_vx < -6):
+        player_vx = -6
+
+define update_jump():
+    if(jump_pressed == 1 and grounded == 1 and jump_lock == 0):
+        player_vy = 13
+        grounded = 0
+        jump_lock = 1
+    if(jump_pressed == 0):
+        jump_lock = 0
+
+define apply_gravity():
+    player_vy = player_vy - 2
+    if(player_vy < -14):
+        player_vy = -14
+
+define move_horizontal():
+    current_camera = camera_x
+    player_world_x = player_world_x + player_vx
+    set_x(player_world_x - current_camera)
+    if(touching(Mole)):
+        if(player_vx > 0):
+            repeat_until(not touching(Mole)):
+                player_world_x = player_world_x - 1
+                set_x(player_world_x - current_camera)
+        else:
+            if(player_vx < 0):
+                repeat_until(not touching(Mole)):
+                    player_world_x = player_world_x + 1
+                    set_x(player_world_x - current_camera)
+        player_vx = 0
+
+define move_vertical():
+    grounded = 0
+    player_world_y = player_world_y + player_vy
+    set_y(player_world_y)
+    if(touching(Mole)):
+        if(player_vy > 0):
+            repeat_until(not touching(Mole)):
+                player_world_y = player_world_y - 1
+                set_y(player_world_y)
+            player_vy = 0
+        else:
+            repeat_until(not touching(Mole)):
+                player_world_y = player_world_y + 1
+                set_y(player_world_y)
+            player_vy = 0
+            grounded = 1
+
+define clamp_position():
+    if(player_world_x < player_min_x):
+        player_world_x = player_min_x
+        player_vx = 0
+    if(player_world_x > player_max_x):
+        player_world_x = player_max_x
+        player_vx = 0
+
+define update_camera():
+    next_camera = player_world_x - camera_target_x
+    if(next_camera < camera_min):
+        next_camera = camera_min
+    if(next_camera > camera_max):
+        next_camera = camera_max
+    camera_x = next_camera
+
+define sync_player_to_camera():
+    set_x(player_world_x - camera_x)
+    set_y(player_world_y)

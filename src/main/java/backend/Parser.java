@@ -340,7 +340,11 @@ public class Parser {
         }
 
         if (currentScript != null) {
-            scripts.add(currentScript);
+            if (currentScript.isFunction()) {
+                functions.add(currentScript);
+            } else {
+                scripts.add(currentScript);
+            }
         }
 
         scanner.close();

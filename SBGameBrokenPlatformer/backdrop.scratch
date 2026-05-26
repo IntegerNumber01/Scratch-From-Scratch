@@ -1,0 +1,8 @@
+camera_x = -300
+camera_min = -560
+camera_max = 560
+camera_target_x = -120
+player_min_x = -760
+player_max_x = 760
+spawn_x = -420
+spawn_y = -80
