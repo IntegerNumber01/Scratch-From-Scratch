@@ -2,6 +2,7 @@ package backend;
 
 import java.io.File;
 import java.util.*;
+import javafx.scene.image.Image;
 
 /**
  * Represents the shared game world that all sprites and interpreters operate in.
@@ -22,10 +23,10 @@ public class World {
     private double mouseY;
 
     /** Caches costume images by URI to avoid repeated disk loads during collisions. */
-    private HashMap<String, javafx.scene.image.Image> costumeImageCache;
+    private HashMap<String, Image> costumeImageCache;
 
     /** Caches scaled costume images by URI and target size for collision checks. */
-    private HashMap<String, javafx.scene.image.Image> scaledCollisionImageCache;
+    private HashMap<String, Image> scaledCollisionImageCache;
 
     /**
      * Constructs a new World with default state.
@@ -577,13 +578,13 @@ public class World {
      * @param costume costume file
      * @return cached JavaFX image
      */
-    private javafx.scene.image.Image getCostumeImage(File costume)
+    private Image getCostumeImage(File costume)
     {
         String path = costume.toURI().toString();
-        javafx.scene.image.Image image = costumeImageCache.get(path);
+        Image image = costumeImageCache.get(path);
 
         if (image == null) {
-            image = new javafx.scene.image.Image(path);
+            image = new Image(path);
             costumeImageCache.put(path, image);
         }
 
@@ -598,13 +599,13 @@ public class World {
      * @param height target height
      * @return cached scaled JavaFX image
      */
-    private javafx.scene.image.Image getScaledCollisionImage(File costume, int width, int height)
+    private Image getScaledCollisionImage(File costume, int width, int height)
     {
         String key = costume.toURI().toString() + "#" + width + "x" + height;
-        javafx.scene.image.Image image = scaledCollisionImageCache.get(key);
+        Image image = scaledCollisionImageCache.get(key);
 
         if (image == null) {
-            image = new javafx.scene.image.Image(costume.toURI().toString(), width, height, false, false);
+            image = new Image(costume.toURI().toString(), width, height, false, false);
             scaledCollisionImageCache.put(key, image);
         }
 
