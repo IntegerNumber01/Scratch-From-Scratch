@@ -19,6 +19,7 @@ when_i_start_as_clone:
                 was_down = 1
                 if(touching(mouse_pointer)):
                     Score = Score + 1
+                    say_for_time(ouch!, 1)
                     go_to_random_position()
                     mole_x = x_position
                     mole_y = y_position
