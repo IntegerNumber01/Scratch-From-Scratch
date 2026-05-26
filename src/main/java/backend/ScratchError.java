@@ -1,14 +1,33 @@
 package backend;
 
 public class ScratchError {
+    /**
+     * calls main throwError method with the given parameters, assumes other parameters are -1
+     * @param number
+     * @param errorMsg
+     */
     public static void throwError(int number, String errorMsg) {
         throwError(number, errorMsg, -1, -1); // call the main throwError method
     }
 
+    /**
+     * calls main throwError method with the given parameters, assumes other parameters are -1
+     * @param number
+     * @param errorMsg
+     * @param col
+     */
     public static void throwError(int number, String errorMsg, int col) {
         throwError(number, errorMsg, col, -1); // call the main throwError method
     }
 
+    /**
+     * prints the point where the failure occurs in the Scratch code. Printed with a carrot pointing there.
+     * If a method is incorrect, it should put carrots under the entirety of the method
+     * @param number
+     * @param errorMsg
+     * @param col
+     * @param length
+     */
     public static void throwError(int number, String errorMsg, int col, int length) {
         System.out.println("⚠️  Error on line " + number + ": " + errorMsg);
 
