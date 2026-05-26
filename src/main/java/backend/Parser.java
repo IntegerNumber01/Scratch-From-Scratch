@@ -352,16 +352,16 @@ public class Parser {
         Program program = new Program(file.getName());
 
 
-        System.out.println("-- SCRIPTS --");
+        // System.out.println("-- SCRIPTS --");
         for (Script s : scripts) {
-            System.out.println(s.toString());
+            // System.out.println(s.toString());
             program.addScript(s);
         }
-        System.out.println();
-        System.out.println("-- FUNCTIONS --");
+        // System.out.println();
+        // System.out.println("-- FUNCTIONS --");
 
         for (Script f : functions) {
-            System.out.println(f.toString());
+            // System.out.println(f.toString());
             program.addFunction(f);
         }
 

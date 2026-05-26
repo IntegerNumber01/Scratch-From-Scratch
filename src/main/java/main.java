@@ -47,7 +47,7 @@ public class main extends Application {
     // BACKEND SETUP
     // ==================================================
     public void setupBackend() {
-        System.out.println("\n=== BACKEND SETUP ===");
+        // System.out.println("\n=== BACKEND SETUP ===");
         world = new World();
         sbGameFiles = getSBGameFolderFiles(SB_GAME_FOLDER_NAME);
 
@@ -60,26 +60,22 @@ public class main extends Application {
             e.printStackTrace();
         }
 
-        System.out.println("Loaded folders: " + sbGameFiles.keySet());
+        // System.out.println("Loaded folders: " + sbGameFiles.keySet());
     }
 
     // ==================================================
     // GUI SETUP
     // ==================================================
     public void launchGui(Stage stage) {
-        System.out.println("\n=== GUI TEST ===");
         gui = new Gui(world);
         stage.setTitle("Scratch-From-Scratch");
         gui.refresh_and_draw(stage);
-        System.out.println("GUI launched");
     }
 
     // ==================================================
     // PARSER TEST
     // ==================================================
     public void testParser() {
-        System.out.println("\n=== PARSER TEST ===");
-
         for (String folderName : sbGameFiles.keySet()) {
             // Skip the root folder directory
             if (folderName.equals(SB_GAME_FOLDER_NAME)) {
@@ -95,15 +91,15 @@ public class main extends Application {
                 }
 
                 Program program = Parser.buildProgram(scriptFile);
-                System.out.println("RUNNING " + scriptFile.toString());
+                // System.out.println("RUNNING " + scriptFile.toString());
 
                 // Create sprite with its discovered assets
                 Sprite sprite = new Sprite(folderName, new ArrayList<>(sbGameFiles.get(folderName)));
                 world.addSprite(sprite);
-                System.out.println("Costume count: " + sprite.getCostumes().size());
-                for (File f : sprite.getCostumes()) {
-                    System.out.println("  Costume: " + f.getName() + " exists=" + f.exists());
-                }
+                // System.out.println("Costume count: " + sprite.getCostumes().size());
+                // for (File f : sprite.getCostumes()) {
+                //     System.out.println("  Costume: " + f.getName() + " exists=" + f.exists());
+                // }
 
                 // Each sprite gets its own interpreter
                 Interpreter spriteInterpreter = new Interpreter(world);
@@ -123,25 +119,23 @@ public class main extends Application {
     // SPRITE TEST
     // ==================================================
     public void testSpritesLoaded() {
-        System.out.println("\n=== SPRITE TEST ===");
         System.out.println("Sprite count: " + world.getSprites().size());
 
-        for (Sprite sprite : world.getSprites()) {
-            System.out.println("----------------");
-            System.out.println("Name: " + sprite.getName());
-            System.out.println("X: " + sprite.getX());
-            System.out.println("Y: " + sprite.getY());
-            System.out.println("Direction: " + sprite.getDir());
-            System.out.println("Costume count: " + sprite.getCostumes().size());
-        }
+        // for (Sprite sprite : world.getSprites()) {
+        //     System.out.println("----------------");
+        //     System.out.println("Name: " + sprite.getName());
+        //     System.out.println("X: " + sprite.getX());
+        //     System.out.println("Y: " + sprite.getY());
+        //     System.out.println("Direction: " + sprite.getDir());
+        //     System.out.println("Costume count: " + sprite.getCostumes().size());
+        // }
     }
 
     // ==================================================
     // INTERPRETER - GUI drives each interpreter at a fixed tick rate
     // ==================================================
     public void runInterpreter() {
-        System.out.println("\n=== INTERPRETER TEST ===");
-        System.out.println("Registering " + interpreters.size() + " interpreter(s) with GUI...");
+        // System.out.println("Registering " + interpreters.size() + " interpreter(s) with GUI...");
         Interpreter.setInterpreterRegistry(interpreters);
         gui.setInterpreters(interpreters);
     }
