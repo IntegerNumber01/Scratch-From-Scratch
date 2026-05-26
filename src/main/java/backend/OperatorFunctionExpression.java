@@ -2,11 +2,24 @@ package backend;
 
 import java.util.ArrayList;
 
-/*
-    This class can evaluate/represent operator functions that are built with
-*/
+/**
+ * Resolves function-style operator calls inside an expression string.
+ * <p>
+ * It evaluates supported operator functions such as {@code round(...)},
+ * {@code join(...)}, or {@code touching(...)} and replaces each call with
+ * its resulting value. It does not evaluate the full math or boolean
+ * expression by itself.
+ */
 public class OperatorFunctionExpression
 {
+    /**
+     * Evaluates all operator-function calls inside the given expression.
+     *
+     * @param expression expression that may contain operator functions
+     * @param world world used by operators that depend on global state
+     * @param sprite current sprite used by sprite-specific operators
+     * @return the expression with operator functions replaced by their values
+     */
     public static String evaluate(String expression, World world, Sprite sprite) {
         int startFunctionIndex = -1;
         int openParenIndex = -1;
@@ -66,6 +79,12 @@ public class OperatorFunctionExpression
         return ans;
     }
 
+    /**
+     * Checks whether an expression contains any supported operator function.
+     *
+     * @param expression expression to scan
+     * @return true if an operator function call is present
+     */
     private static boolean containsOperatorFunction(String expression) {
         for (int i = 0; i < expression.length(); i++) {
             for (String op : LanguageConfig.FUNCTION_OPERATORS) {
@@ -80,6 +99,13 @@ public class OperatorFunctionExpression
         return false;
     }
 
+    /**
+     * Finds the matching closing parenthesis for a given opening parenthesis.
+     *
+     * @param expression expression being scanned
+     * @param openParenIndex index of the opening parenthesis
+     * @return index of the matching closing parenthesis, or -1 if none exists
+     */
     private static int findMatchingCloseParen(String expression, int openParenIndex) {
         int depth = 0;
 
@@ -98,6 +124,24 @@ public class OperatorFunctionExpression
         return -1;
     }
 
+    /**
+     * Evaluates a numeric argument as a math expression and converts it to a double.
+     *
+     * @param expression numeric argument expression
+     * @return numeric value of the expression
+     */
+    private static double evaluateNumericArg(String expression) {
+        return Double.parseDouble(Expression.evaluate(expression));
+    }
+
+    /**
+     * Evaluates one parsed operator function command.
+     *
+     * @param command parsed operator function
+     * @param world world used by stateful operators
+     * @param sprite current sprite context
+     * @return evaluated value as a string
+     */
     private static String evaluateOperatorFunction(Command command, World world, Sprite sprite) {
         ArrayList<String> temp = command.getArgs();
 
@@ -127,54 +171,54 @@ public class OperatorFunctionExpression
                 return String.valueOf(world.isTouching(sprite, temp.get(0)));
 
             case "pick_random":
-                double a = Double.parseDouble(temp.get(0));
-                double b = Double.parseDouble(temp.get(1));
+                double a = evaluateNumericArg(temp.get(0));
+                double b = evaluateNumericArg(temp.get(1));
                 return String.valueOf((int) (Math.random() * (b - a + 1) + a));
 
             case "join":
                 return temp.get(0) + temp.get(1);
 
             case "letter_of":
-                return String.valueOf(temp.get(1).charAt((int) Double.parseDouble(temp.get(0)) - 1));
+                return String.valueOf(temp.get(1).charAt((int) evaluateNumericArg(temp.get(0)) - 1));
 
             case "length_of":
                 return String.valueOf(temp.get(0).length());
 
             case "round":
-                return String.valueOf(Math.round(Double.parseDouble(temp.get(0))));
+                return String.valueOf(Math.round(evaluateNumericArg(temp.get(0))));
             case "mod":
-                return String.valueOf(Double.parseDouble(temp.get(0)) % Double.parseDouble(temp.get(1)));
+                return String.valueOf(evaluateNumericArg(temp.get(0)) % evaluateNumericArg(temp.get(1)));
 
 
             // math time
             case "abs":
-                return String.valueOf(Math.abs(Double.parseDouble(temp.get(0))));
+                return String.valueOf(Math.abs(evaluateNumericArg(temp.get(0))));
             case "floor":
-                return String.valueOf(Math.floor(Double.parseDouble(temp.get(0))));
+                return String.valueOf(Math.floor(evaluateNumericArg(temp.get(0))));
             case "ceiling":
-                return String.valueOf(Math.ceil(Double.parseDouble(temp.get(0))));
+                return String.valueOf(Math.ceil(evaluateNumericArg(temp.get(0))));
             case "sqrt":
-                return String.valueOf(Math.sqrt(Double.parseDouble(temp.get(0))));
+                return String.valueOf(Math.sqrt(evaluateNumericArg(temp.get(0))));
             case "sin":
-                return String.valueOf(Math.sin(Math.toRadians(Double.parseDouble(temp.get(0)))));
+                return String.valueOf(Math.sin(Math.toRadians(evaluateNumericArg(temp.get(0)))));
             case "cos":
-                return String.valueOf(Math.cos(Math.toRadians(Double.parseDouble(temp.get(0)))));
+                return String.valueOf(Math.cos(Math.toRadians(evaluateNumericArg(temp.get(0)))));
             case "tan":
-                return String.valueOf(Math.tan(Math.toRadians(Double.parseDouble(temp.get(0)))));
+                return String.valueOf(Math.tan(Math.toRadians(evaluateNumericArg(temp.get(0)))));
             case "asin":
-                return String.valueOf(Math.asin(Math.toRadians(Double.parseDouble(temp.get(0)))));
+                return String.valueOf(Math.asin(Math.toRadians(evaluateNumericArg(temp.get(0)))));
             case "acos":
-                return String.valueOf(Math.acos(Math.toRadians(Double.parseDouble(temp.get(0)))));
+                return String.valueOf(Math.acos(Math.toRadians(evaluateNumericArg(temp.get(0)))));
             case "atan":
-                return String.valueOf(Math.atan(Math.toRadians(Double.parseDouble(temp.get(0)))));
+                return String.valueOf(Math.atan(Math.toRadians(evaluateNumericArg(temp.get(0)))));
             case "ln":
-                return String.valueOf(Math.log(Double.parseDouble(temp.get(0))));
+                return String.valueOf(Math.log(evaluateNumericArg(temp.get(0))));
             case "log":
-                return String.valueOf(Math.log10(Double.parseDouble(temp.get(0))));
+                return String.valueOf(Math.log10(evaluateNumericArg(temp.get(0))));
             case "e^":
-                return String.valueOf(Math.exp(Double.parseDouble(temp.get(0))));
+                return String.valueOf(Math.exp(evaluateNumericArg(temp.get(0))));
             case "10^":
-                return String.valueOf(Math.pow(10, Double.parseDouble(temp.get(0))));
+                return String.valueOf(Math.pow(10, evaluateNumericArg(temp.get(0))));
 
             default:
                 ScratchError.throwError(command.getLineNumber(), "Unknown operator function " + command.getName());
