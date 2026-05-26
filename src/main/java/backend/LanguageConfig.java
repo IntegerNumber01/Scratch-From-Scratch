@@ -3,18 +3,11 @@ package backend;
 import java.util.HashSet;
 import java.util.Set;
 
-/*
-    This class holds the configuration for the language, such as which commands are action commands, block commands, and events. It also has helper functions to check if a command is an action command, block command, or event.
-
-    18 action commands
-    4 block commands
-    2 events
-    22 function operators
-    6 built-in variable names
-    3 reserved literals
-    2 structural keywords
-    57 reserved identifier-like words total in the combined set
-*/
+/**
+ * Holds the configuration for the language, such as which commands are action
+ * commands, block commands, and events. It also provides helper methods to
+ * check whether a token belongs to one of those groups.
+ */
 public final class LanguageConfig {
     public static final String DEFINE_KEYWORD = "define";
     public static final String ELSE_KEYWORD = "else";
@@ -146,8 +139,10 @@ public final class LanguageConfig {
     }
 
     /**
-     * Builds the set of reserved words by combining all the individual sets of reserved words (action commands, block commands, events, function operators, boolean operators, reserved variable names, reserved literals, and structural keywords).
-     * @return Set<String> the set of reserved words
+     * Builds the set of reserved words by combining all the individual sets of
+     * reserved words.
+     *
+     * @return the combined set of reserved words
      */
     private static Set<String> buildReservedWords() {
         HashSet<String> reservedWords = new HashSet<>();
@@ -172,9 +167,11 @@ public final class LanguageConfig {
     }
 
     /**
-     * Checks if a string is a comparison operator (>, <, ==).
+     * Checks if a string is a comparison operator ({@code >}, {@code <}, or
+     * {@code ==}).
+     *
      * @param c the string to check
-     * @return boolean true if the string is a comparison operator, false otherwise
+     * @return {@code true} if the string is a comparison operator; otherwise {@code false}
      */
     public static boolean isComparisonOperator(String c) {
         return COMPARISON_OPERATORS.contains(c);

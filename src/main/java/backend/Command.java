@@ -3,9 +3,12 @@ package backend;
 
 import java.util.*;
 
-/*
-    This class represents a command in the Scratch language. It has a name, a list of arguments, and a list of child commands if it is a block command. For example, an "if" command would have child commands that represent the commands inside the "if" block.
-*/
+/**
+ * Represents a command in the Scratch language.
+ * A command has a name, a list of arguments, and a list of child commands if it
+ * is a block command. For example, an {@code "if"} command has child commands
+ * that represent the commands inside the block.
+ */
 public class Command
 {
     private String name;
@@ -77,8 +80,9 @@ public class Command
     }
 
     /**
-     * Returns name of command
-     * @return String name of command
+     * Returns the name of this command.
+     *
+     * @return the name of this command
      */
     public String getName() {
         return name;
@@ -86,7 +90,8 @@ public class Command
 
     /**
      * Returns list of arguments for this command.
-     * @return ArrayList<String> arguments for this command
+     *
+     * @return the arguments for this command
      */
     public ArrayList<String> getArgs() {
         return args;
@@ -126,7 +131,8 @@ public class Command
 
     /**
      * Returns list of child commands for this command. If this command is not a block command, this method will return an empty list.
-     * @return ArrayList<Command> child commands for this command
+     *
+     * @return the else child commands for this command
      */
     public ArrayList<Command> getElseChildren() {
         return elseChildren;
@@ -134,7 +140,8 @@ public class Command
 
     /**
      * Returns list of child commands for this command. If this command is not a block command, this method will return an empty list.
-     * @return ArrayList<Command> child commands for this command
+     *
+     * @return the child commands for this command
      */
     public ArrayList<Command> getChildren() {
         return children;
@@ -185,7 +192,8 @@ public class Command
     /**
      * Returns a list of all commands in this command's subtree, including itself.
      * It is used for function argument replacement.
-     * @return ArrayList<Command> list of all commands in the subtree
+     *
+     * @return all commands in the subtree rooted at this command
      */
     public ArrayList<Command> fullExpansion() {
         ArrayList<Command> ans = new ArrayList<>();

@@ -2,6 +2,10 @@ package backend;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the execution state for a script or block while the interpreter is
+ * running it.
+ */
 public class ExecutionFrame {
     public static final String SCRIPT = "script";
     public static final String IF_BRANCH = "if_branch";
@@ -19,8 +23,9 @@ public class ExecutionFrame {
 
     /**
      * Creates a new ExecutionFrame with the given list of commands and type. The index is initialized to 0, remainingIterations is initialized to 0, and conditionExpression is initialized to null.
-     * @param commands
-     * @param type
+     *
+     * @param commands the commands to execute in this frame
+     * @param type the type of execution frame
      */
     public ExecutionFrame(ArrayList<Command> commands, String type) {
         this.commands = commands;

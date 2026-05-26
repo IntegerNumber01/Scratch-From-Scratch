@@ -20,8 +20,9 @@ public class Parser {
      * Finds the index of the top-level assignment operator in a line of code.
      * This is used to determine if a line of code is a variable assignment.
      * It ignores any assignment operators that are inside parentheses, since those would be part of an expression rather than a variable assignment.
-     * @param line
-     * @return int index of the top-level assignment operator, or -1 if there is no top-level assignment operator
+     *
+     * @param line the line of code to inspect
+     * @return the index of the top-level assignment operator, or {@code -1} if there is none
      */
     private static int findTopLevelAssignmentIndex(String line) {
         int depth = 0;
@@ -69,7 +70,7 @@ public class Parser {
     /**
      * Splits a string of arguments into a list of individual arguments using commas.
      * @param argsString the string of arguments to split, for example "arg1, arg2, arg3"
-     * @return ArrayList<String> list of individual arguments
+     * @return the list of individual arguments
      */
     private static ArrayList<String> splitArgs(String argsString) {
         ArrayList<String> args = new ArrayList<>();

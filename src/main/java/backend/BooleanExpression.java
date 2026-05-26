@@ -9,11 +9,17 @@ import java.util.*;
 public class BooleanExpression
 {
     /**
-     * Evaluates a boolean expression and returns "true" or "false". The expression can contain boolean operators (and, or, not) and comparison expressions (>, <, ==, !=).
-     * The expression can also contain parentheses to indicate precedence. The expression is evaluated by first evaluating the innermost parentheses and then working outwards.
-     * The boolean operators are evaluated with the following precedence: not > and > or. The comparison expressions are evaluated by evaluating the left and right sides and then applying the operator.
+     * Evaluates a boolean expression and returns {@code "true"} or {@code "false"}.
+     * The expression can contain boolean operators ({@code and}, {@code or}, {@code not})
+     * and comparison expressions ({@code >}, {@code <}, {@code ==}, {@code !=}).
+     * The expression can also contain parentheses to indicate precedence. The
+     * expression is evaluated by first evaluating the innermost parentheses and then
+     * working outwards. The boolean operators are evaluated with the following
+     * precedence: {@code not > and > or}. Comparison expressions are evaluated by
+     * evaluating the left and right sides and then applying the operator.
+     *
      * @param expression the raw expression to evaluate
-     * @return String "true" or "false" depending on the value of the expression
+     * @return {@code "true"} or {@code "false"} depending on the value of the expression
      */
     public static String evaluate(String expression) {
         Stack<String> parens = new Stack<>();
@@ -121,10 +127,14 @@ public class BooleanExpression
     }
 
     /**
-     * Splits a comparison expression into the left and right sides and the operator. For example, "3 > 2" would be split into ["3", ">", "2"].
-     * The operator is determined by checking for the presence of each operator in the expression. This method assumes that there is only one comparison operator in the expression.
+     * Splits a comparison expression into the left and right sides and the operator.
+     * For example, {@code "3 > 2"} would be split into
+     * {@code ["3", ">", "2"]}. The operator is determined by checking for the
+     * presence of each operator in the expression. This method assumes that there is
+     * only one comparison operator in the expression.
+     *
      * @param expression the comparison expression to split
-     * @return ArrayList<String> with the left side, operator, and right side of the comparison expression
+     * @return a list containing the left side, operator, and right side of the comparison expression
      */
     private static ArrayList<String> splitComparisonExpression(String expression) {
         for (String op : LanguageConfig.COMPARISON_OPERATORS) {
@@ -143,10 +153,13 @@ public class BooleanExpression
     }
 
     /**
-     * Evaluates a boolean term, which is either a boolean literal ("true" or "false"), the value of "mouse_down", or a comparison expression.
-     * A comparison expression is evaluated by evaluating the left and right sides and then applying the operator.
+     * Evaluates a boolean term, which is either a boolean literal
+     * ({@code "true"} or {@code "false"}), the value of {@code "mouse_down"}, or a
+     * comparison expression. A comparison expression is evaluated by evaluating the
+     * left and right sides and then applying the operator.
+     *
      * @param expression the boolean term to evaluate
-     * @return String "true" or "false" depending on the value of the expression
+     * @return {@code "true"} or {@code "false"} depending on the value of the expression
      */
     private static String evaluateBooleanTerm(String expression) {
         expression = expression.trim();
@@ -164,10 +177,13 @@ public class BooleanExpression
 
 
     /**
-     * Evaluates a comparison expression by evaluating the left and right sides and then applying the operator.
-     * For example, "3 > 2" would be evaluated by evaluating "3" and "2" and then applying the ">" operator to get "true".
+     * Evaluates a comparison expression by evaluating the left and right sides and
+     * then applying the operator. For example, {@code "3 > 2"} would be evaluated
+     * by evaluating {@code "3"} and {@code "2"} and then applying the
+     * {@code ">"} operator to get {@code "true"}.
+     *
      * @param expression the comparison expression to evaluate
-     * @return String "true" or "false" depending on the value of the expression
+     * @return {@code "true"} or {@code "false"} depending on the value of the expression
      */
     private static String evaluateComparisonExpression(String expression) {
 

@@ -57,10 +57,11 @@ public class Operators {
     }
 
     /**
-     * greater than (a > b)
+     * Greater-than comparison ({@code a > b}).
+     *
      * @param a the first operand
      * @param b the second operand
-     * @return String result of checking if a is greater than b
+     * @return the result of checking whether {@code a} is greater than {@code b}
      */
     public static String greaterThan(String a, String b) {
         if (Double.parseDouble(a) > Double.parseDouble(b)) {
@@ -70,10 +71,11 @@ public class Operators {
     }
 
     /**
-     * less than (a < b)
+     * Less-than comparison ({@code a < b}).
+     *
      * @param a the first operand
      * @param b the second operand
-     * @return String result of checking if a is less than b
+     * @return the result of checking whether {@code a} is less than {@code b}
      */
     public static String lessThan(String a, String b) {
         if (Double.parseDouble(a) < Double.parseDouble(b)) {
@@ -121,10 +123,11 @@ public class Operators {
     }
 
     /**
-     * and (a && b)
+     * Logical AND ({@code a && b}).
+     *
      * @param a the first operand
      * @param b the second operand
-     * @return String result of checking if a and b are both true
+     * @return the result of checking whether both {@code a} and {@code b} are true
      */
     public static String and(String a, String b) {
         if (Boolean.parseBoolean(a) && Boolean.parseBoolean(b)) {
@@ -134,10 +137,11 @@ public class Operators {
     }
 
     /**
-     * or (a || b)
+     * Logical OR ({@code a || b}).
+     *
      * @param a the first operand
      * @param b the second operand
-     * @return String result of checking if a or b is true
+     * @return the result of checking whether {@code a} or {@code b} is true
      */
     public static String or(String a, String b) {
         if (Boolean.parseBoolean(a) || Boolean.parseBoolean(b)) {
