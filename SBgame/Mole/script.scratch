@@ -22,7 +22,5 @@ when_i_start_as_clone:
                     go_to_random_position()
                     mole_x = x_position
                     mole_y = y_position
-                else:
-                    Score = Score - 1
         else:
             was_down = 0
