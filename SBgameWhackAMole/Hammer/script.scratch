@@ -1,0 +1,20 @@
+when_flag_clicked:
+    switch_costume(Hammer.png)
+    go_to(mouse_x, mouse_y)
+    was_down = 0
+
+     forever():
+        go_to_front_layer()
+
+        go_to(mouse_x, mouse_y)
+        if(mouse_down):
+            if(was_down == 0):
+                was_down = 1
+                if(not touching(Mole)):
+                    Score = Score - 1
+            switch_costume(HammerHit.png)
+            set_size(13)
+        else:
+            was_down = 0
+            switch_costume(Hammer.png)
+            set_size(50)
