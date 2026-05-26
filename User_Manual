@@ -1,0 +1,109 @@
+Events:
+“when_flag_clicked” - upon clicking the flag added code will run
+“when_i_start_as_clone” - tells the clone what to do
+
+Global Variables:
+	To create global variables, you must make a file named “backdrop.scratch” and create your new global variables inside
+
+Independent State Variables:
+	“x_position” - the current position of the x value
+	“y_position” - the current position of the y value
+	“mouse_x” - the current x position of the mouse
+	“mouse_y” - the current y position of the mouse
+	“size” - the current size
+	“direction” - the direction the sprite is facing
+	“mouse_down” - true if mouse is currently pressed
+	“global” - call before a variable to make the variable called everywhere
+
+Method Creation:
+	“define myMethod(String a, int b)” - user can create a method that can be called at any point afterwards given the parameters the user sets
+
+Math Operators:
+	“+” - adds values together
+“-” - subtracts given values
+“*” - multiples given values
+“/” - divides given values 
+
+Block Commands:
+	“if()” - if value is true run code block
+	“repeat(double x)” - repeat given code block amount of times as the parameter
+	“repeat_until()” - repeat given code block until given parameter is true
+	“forever()” repeat given code block infinitely
+
+Comparison Operators:	
+	“>” - checks if left side is greater than right side
+	“<” - checks if left side is less than right side
+	“==” - checks if left side is equal to right side
+
+Action Commands:
+	“go_to_front_layer()” - moves the current sprite to the front layer
+	“hide()” - hides the sprite
+	“create_clone()” - creates a clone of the sprite
+	“move(double x)” - moves x units forward in the direction
+“go_to(double x, double y)” - goes to the given coordinates (x, y) 
+“turn_right(double dir)” turns right by dir
+“turn_left(double dir)” turns left by dir
+“point_in_direction(int dir)” - sets direction to dir
+“change_x(double x)” - sets x value to int x
+“change_y(double y)” - sets y value to int y
+“go_to_random_position()” - sets (x, y) to a random position
+“set_x(double x)” - sets the x value to the given double x
+“set_y(double y)” - sets the y value to the given double y
+“set_size(double size)” sets the size to the given double size
+“change_size(double size)” increases the size to by the given double size
+“say(String text)” - creates a text bubble that prints string text
+“think(String text)” - creates a thought bubble that prints string text
+
+Boolean Operators:
+	“and” - checks if left side and right side are true
+	“or” - checks if left side or right side are true
+	“not” - checks to see if the value is not true or not false
+
+Function Operators:
+	“pick_random(double x, double y)” - picks a random value between y and x (y > x)
+	“join(String str1, String str2)” - concatenates str1 and str2
+	“letter_of(double x, String str1)” - gets the character of str1 at double x 
+	“length_of(String str)” - gets the length of the string str
+“round(function)” - rounds the math function, if function’s decimal places are ≥ 0.5 round up, else if the function’s decimal places are < 0.5 then round down
+	“mod(double val1, double val2)” - takes val1 % val2
+	“abs(function)” - gets the absolute value of the math function
+“floor(function)” - rounds the given math function’s double down to an int
+“ceiling(function)” - rounds the given math function’s double up to an int
+“sqrt(function)” - gets the square root of the math function
+“sin(function)” - plugs the function into sin
+“cos(function)” - plugs the function into cos
+“tan(function)” - plugs the function into tan
+“asin(function)” - plugs the function into arcsin
+“acos(function)” - plugs the function into arccos
+“atan(function)” - plugs the function into arctan
+“ln(function)” - plugs the function into ln
+“log(function)” - plugs the function into log
+“e^(function)” - puts e to the power of function
+“10^(function)” - puts 10 to the power of function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Example Code:
+when_flag_clicked 
+	go_to(0, 0)
+	point_in_direction(90)
+	count = 0
+	repeat_until(x_position == 240) 
+		move(5)
+		count = count + 1
+		say(count)
+	say(All Done!)
+
+
