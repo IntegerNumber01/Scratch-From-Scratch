@@ -222,33 +222,21 @@ public class Gui
     {
         int yOffset = 10;
 
-        // Draw global variables from backdrop (no sprite name prefix)
-        for (Interpreter interpreter : interpreters)
+        // Draw global variables first
+        for (String varName : world.getGlobalVariables().keySet())
         {
-            Sprite sprite = interpreter.getSprite();
-            if (sprite.getName().equals("backdrop"))
-            {
-                Program program = interpreter.getProgram();
-                if (program != null)
-                {
-                    for (String varName : program.getVisibleVariables())
-                    {
-                        String value = program.getVariableValue(varName);
-                        if (value == null) continue;
+            String value = world.getGlobalVariable(varName);
+            if (value == null) continue;
 
-                        Label label = new Label(varName + "  " + value);
-                        label.setLayoutX(10);
-                        label.setLayoutY(yOffset);
-                        label.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-padding: 2 6;");
-                        pane.getChildren().add(label);
-                        yOffset += 25;
-                    }
-                }
-                break; // Only one backdrop
-            }
+            Label label = new Label(varName + "  " + value);
+            label.setLayoutX(10);
+            label.setLayoutY(yOffset);
+            label.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-padding: 2 6;");
+            pane.getChildren().add(label);
+            yOffset += 25;
         }
 
-        // Draw sprite-local variables (with sprite name prefix)
+        // Draw sprite-local variables only
         for (Interpreter interpreter : interpreters)
         {
             if (interpreter.getSprite().getName().equals("backdrop")) continue;
@@ -258,23 +246,13 @@ public class Gui
 
             for (String varName : program.getVisibleVariables())
             {
-                String value = world.hasGlobalVariable(varName)
-                    ? world.getGlobalVariable(varName)
-                    : program.getVariableValue(varName);
+                if (world.hasGlobalVariable(varName)) continue;
+
+                String value = program.getVariableValue(varName);
                 if (value == null) continue;
 
                 String spriteName = interpreter.getSprite().getName();
-                Label label;
-                if(world.hasGlobalVariable(varName))
-                {
-                    label = new Label(varName + " " + value);
-                }
-
-                else
-                {
-                    label = new Label(spriteName + "; " + varName + " " + value);
-                }
-
+                Label label = new Label(spriteName + "; " + varName + "  " + value);
                 label.setLayoutX(10);
                 label.setLayoutY(yOffset);
                 label.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-padding: 2 6;");
