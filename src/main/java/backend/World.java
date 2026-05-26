@@ -1,5 +1,6 @@
 package backend;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -20,6 +21,12 @@ public class World {
     private double mouseX;
     private double mouseY;
 
+    /** Caches costume images by URI to avoid repeated disk loads during collisions. */
+    private HashMap<String, javafx.scene.image.Image> costumeImageCache;
+
+    /** Caches scaled costume images by URI and target size for collision checks. */
+    private HashMap<String, javafx.scene.image.Image> scaledCollisionImageCache;
+
     /**
      * Constructs a new World with default state.
      * All sprites start empty, the program starts running, all keys start unpressed,
@@ -39,6 +46,9 @@ public class World {
         mouseDown = false;
         mouseX = 0;
         mouseY = 0;
+
+        costumeImageCache = new HashMap<>();
+        scaledCollisionImageCache = new HashMap<>();
     }
 
     /**
@@ -485,6 +495,10 @@ public class World {
      */
     private boolean spritesOverlap(Sprite a, Sprite b) 
     {
+        if (a.isHidden() || b.isHidden()) {
+            return false;
+        }
+
         double aScale = a.getSize() / 100.0;
         double bScale = b.getSize() / 100.0;
 
@@ -498,14 +512,14 @@ public class World {
         double bBaseH = b.getCostumeHeight();
 
         if (aBaseW <= 0 || aBaseH <= 0) {
-            javafx.scene.image.Image imageA = new javafx.scene.image.Image(a.getCurrentCostume().toURI().toString());
+            javafx.scene.image.Image imageA = getCostumeImage(a.getCurrentCostume());
             aBaseW = imageA.getWidth();
             aBaseH = imageA.getHeight();
             a.setCostumeDimensions(aBaseW, aBaseH);
         }
 
         if (bBaseW <= 0 || bBaseH <= 0) {
-            javafx.scene.image.Image imageB = new javafx.scene.image.Image(b.getCurrentCostume().toURI().toString());
+            javafx.scene.image.Image imageB = getCostumeImage(b.getCurrentCostume());
             bBaseW = imageB.getWidth();
             bBaseH = imageB.getHeight();
             b.setCostumeDimensions(bBaseW, bBaseH);
@@ -531,9 +545,9 @@ public class World {
         // no overlap at all
         if (overlapX1 >= overlapX2 || overlapY1 >= overlapY2) return false;
 
-        // load pixel data at the scaled size
-        javafx.scene.image.Image imgA = new javafx.scene.image.Image(a.getCurrentCostume().toURI().toString(), aW, aH, false, false);
-        javafx.scene.image.Image imgB = new javafx.scene.image.Image(b.getCurrentCostume().toURI().toString(), bW, bH, false, false);
+        // Load pixel data at the scaled size from cache.
+        javafx.scene.image.Image imgA = getScaledCollisionImage(a.getCurrentCostume(), aW, aH);
+        javafx.scene.image.Image imgB = getScaledCollisionImage(b.getCurrentCostume(), bW, bH);
 
         javafx.scene.image.PixelReader readerA = imgA.getPixelReader();
         javafx.scene.image.PixelReader readerB = imgB.getPixelReader();
@@ -555,5 +569,45 @@ public class World {
         }
 
         return false;
+    }
+
+    /**
+     * Returns a cached unscaled costume image.
+     *
+     * @param costume costume file
+     * @return cached JavaFX image
+     */
+    private javafx.scene.image.Image getCostumeImage(File costume)
+    {
+        String path = costume.toURI().toString();
+        javafx.scene.image.Image image = costumeImageCache.get(path);
+
+        if (image == null) {
+            image = new javafx.scene.image.Image(path);
+            costumeImageCache.put(path, image);
+        }
+
+        return image;
+    }
+
+    /**
+     * Returns a cached scaled costume image for collision detection.
+     *
+     * @param costume costume file
+     * @param width target width
+     * @param height target height
+     * @return cached scaled JavaFX image
+     */
+    private javafx.scene.image.Image getScaledCollisionImage(File costume, int width, int height)
+    {
+        String key = costume.toURI().toString() + "#" + width + "x" + height;
+        javafx.scene.image.Image image = scaledCollisionImageCache.get(key);
+
+        if (image == null) {
+            image = new javafx.scene.image.Image(costume.toURI().toString(), width, height, false, false);
+            scaledCollisionImageCache.put(key, image);
+        }
+
+        return image;
     }
 }

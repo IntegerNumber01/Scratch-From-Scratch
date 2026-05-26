@@ -33,10 +33,13 @@ import javafx.scene.control.Label;
 public class Gui
 {
     /**
-     * Maximum time in nanoseconds the interpreter is allowed to run per timer tick (10ms).
-     * Prevents the interpreter from blocking the JavaFX thread for too long on heavy scripts.
+     * Maximum time in nanoseconds the interpreter is allowed to run per timer tick.
+     * Keeping this small prevents script execution from stalling the JavaFX UI thread.
      */
-    private static final long INTERPRETER_BUDGET_NANOS = 10_000_000L;
+    private static final long INTERPRETER_BUDGET_NANOS = 2_000_000L;
+
+    /** Run logic and rendering at the same cadence to avoid visible desync. */
+    private static final double FRAME_INTERVAL_MILLIS = 16.0;
 
     /** Holds the shared game state: all sprites, global variables, and input state. */
     private World world;
@@ -74,11 +77,10 @@ public class Gui
      * node consumes them. Keyboard events update the World's key state. Mouse events
      * convert JavaFX screen coordinates to Scratch coordinates before storing them in the World.
      *
-     * Two JavaFX Timeline objects drive the main loop. The interpreterTimeline fires every 50ms
-     * and repeatedly calls Interpreter.tick() for each interpreter until it finishes or the
-     * time budget (INTERPRETER_BUDGET_NANOS) runs out, which prevents forever loops from
-     * blocking the UI thread. The renderTimeline fires every 100ms and calls draw() to
-     * redraw all sprites and variable displays.
+     * Two JavaFX Timeline objects drive the main loop. Both fire every ~16ms so
+     * logic and rendering stay visually aligned. The interpreter timeline repeatedly
+     * calls Interpreter.tick() for each interpreter until it finishes or the time
+     * budget runs out, which prevents forever loops from blocking the UI thread.
      *
      * @param stage the primary JavaFX Stage provided by the application entry point
      */
@@ -92,7 +94,7 @@ public class Gui
         // Ensure keyboard events are received even without a focused child node.
         scene.getRoot().requestFocus();
 
-        // KEY PRESSED — mark key as held down in the World.
+        // KEY PRESSED - mark key as held down in the World.
         scene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>()
         {
             @Override
@@ -102,7 +104,7 @@ public class Gui
             }
         });
 
-        // KEY RELEASED — mark key as no longer held in the World.
+        // KEY RELEASED - mark key as no longer held in the World.
         scene.addEventFilter(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>()
         {
             @Override
@@ -112,7 +114,7 @@ public class Gui
             }
         });
 
-        // MOUSE PRESSED — record mouse down and update position in Scratch coordinates.
+        // MOUSE PRESSED - record mouse down and update position in Scratch coordinates.
         scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>()
         {
             @Override
@@ -124,7 +126,7 @@ public class Gui
             }
         });
 
-        // MOUSE RELEASED — record mouse up.
+        // MOUSE RELEASED - record mouse up.
         scene.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>()
         {
             @Override
@@ -134,7 +136,7 @@ public class Gui
             }
         });
 
-        // MOUSE MOVED — update mouse position in Scratch coordinates (no button held).
+        // MOUSE MOVED - update mouse position in Scratch coordinates (no button held).
         scene.addEventFilter(MouseEvent.MOUSE_MOVED, new EventHandler<MouseEvent>()
         {
             @Override
@@ -145,7 +147,7 @@ public class Gui
             }
         });
 
-        // MOUSE DRAGGED — update mouse position in Scratch coordinates (button held).
+        // MOUSE DRAGGED - update mouse position in Scratch coordinates (button held).
         scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>()
         {
             @Override
@@ -156,8 +158,8 @@ public class Gui
             }
         });
 
-        // Interpreter loop: runs every 50ms, advancing each interpreter within its time budget.
-        Timeline interpreterTimeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+        // Interpreter loop: runs at the same cadence as rendering, but with a tight time budget.
+        Timeline interpreterTimeline = new Timeline(new KeyFrame(Duration.millis(FRAME_INTERVAL_MILLIS), event -> {
             for (Interpreter interpreter : new ArrayList<>(interpreters)) {
                 long deadline = System.nanoTime() + INTERPRETER_BUDGET_NANOS;
 
@@ -171,15 +173,15 @@ public class Gui
         interpreterTimeline.setCycleCount(Timeline.INDEFINITE);
         interpreterTimeline.play();
 
-        // Render loop: redraws all sprites and variables every 100ms.
-        Timeline renderTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> draw(pane)));
+        // Render loop: redraws all sprites and variables at the same cadence as logic.
+        Timeline renderTimeline = new Timeline(new KeyFrame(Duration.millis(FRAME_INTERVAL_MILLIS), event -> draw(pane)));
         renderTimeline.setCycleCount(Timeline.INDEFINITE);
         renderTimeline.play();
     }
 
     /**
      * Clears the pane and redraws every sprite and all visible variables.
-     * Called by the render timeline every 100ms.
+     * Called by the render timeline every frame.
      *
      * @param pane the JavaFX Pane to draw onto
      */
@@ -262,17 +264,17 @@ public class Gui
                 if (value == null) continue;
 
                 String spriteName = interpreter.getSprite().getName();
-                Label label ; 
+                Label label;
                 if(world.hasGlobalVariable(varName))
                 {
-                    label = new Label(varName + " " + value) ; 
+                    label = new Label(varName + " " + value);
                 }
 
                 else
                 {
-                    label = new Label(spriteName + "; " + varName + " " + value) ; 
+                    label = new Label(spriteName + "; " + varName + " " + value);
                 }
-                
+
                 label.setLayoutX(10);
                 label.setLayoutY(yOffset);
                 label.setStyle("-fx-background-color: orange; -fx-text-fill: white; -fx-padding: 2 6;");
