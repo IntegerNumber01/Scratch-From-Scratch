@@ -1,14 +1,14 @@
 when_flag_clicked:
     go_to(140, 100)
-    set_size(1)
+    set_size(10)
     show_variable(Score)
     create_clone()
     create_clone()
     hide()
 
 when_i_start_as_clone:
+    go_to_random_position()
     was_down = 0
-
     forever():
         if(mouse_down):
             if(was_down == 0):
