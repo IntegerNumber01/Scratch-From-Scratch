@@ -15,7 +15,10 @@ public class Interpreter
     private static final String DEFAULT_START_EVENT = "when_flag_clicked";
     private static final String CLONE_START_EVENT = "when_i_start_as_clone";
 
-    private HashMap<Sprite, Program> programs;
+
+    // Shifted to a one interpreter per sprite model, so alot of things might look strange since
+    // we were originally planning on 1 interpreter for the whole world.
+    private HashMap<Sprite, Program> programs; // that means this should only store one pair
     private static HashMap<Integer, Program> programsByInstanceId = new HashMap<>();
     private static List<Interpreter> interpreterRegistry = new ArrayList<>();
     private static World world;
